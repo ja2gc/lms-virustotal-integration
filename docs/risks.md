@@ -1,0 +1,27 @@
+# RMMM register
+
+The supplied Module 7 slides describe risk identification, likelihood/impact scoring, response, monitoring, owners and dates. They are not the group's completed historical register. This is a **new planning baseline**; merge the original register if provided, retain its IDs/predictions and map duplicates rather than rewriting history.
+
+## Review process and scoring
+
+Review at kickoff, each merge affecting a boundary, and before the final demo. Every member reports new risks with a concrete cause/consequence. At kickoff assign a named owner and calendar due date to each row; role owners and delivery gates below are provisional. Set likelihood and impact on defined 1-5 scales using project evidence; priority is their product. Numeric values are intentionally unscored until the team supplies evidence and deadline information. Do not let AI-generated category assumptions masquerade as observed likelihood.
+
+Likelihood scale: 1 rare/no local indication; 2 plausible with strong prevention; 3 credible with limited evidence; 4 recurring observed precursor; 5 happening or consistently reproducible. Impact: 1 minor inconvenience; 2 local repair under an agreed work session; 3 feature/rehearsal delay; 4 blocks required evidence or core workflow; 5 loss/exposure of data or inability to present the required integrated system. Refine effort boundaries with the actual schedule before scoring.
+
+## Register
+
+| ID / category | Risk and evidence | Provisional owner / due gate | Mitigation | Indicator and trigger | Contingency | Current status |
+| --- | --- | --- | --- | --- | --- | --- |
+| RK01 product/project | Doodle core pages fail; nine controller files fail class-load checks | Baseline repair owner / before feature merges | Fix common rendering conflict, bootstrap and grade route; regression checks | Any scoped controller/installer/smoke check fails | Repair scoped blockers; reassess baseline if repairs exceed agreed time budget | Materialized; current failure recorded, no earlier prediction claimed |
+| RK02 external/integration | VT minute/day quota limits scanning throughput | Worker owner / before live test | Shared persisted budget, slow polling, limited synthetic smoke checks | 429 or pending age beyond measured expected bound | Defer work; show fixture paths and prior labeled live evidence; do not claim fixture as live | Still open |
+| RK03 external | Provider timeout or account-key failure | Adapter owner / before integration acceptance | Timeouts, normalized reasons, bounded read retry, provider pause | Repeated transient failure or one auth rejection | Preserve submissions; correct account configuration and resume reads | Still open; injected failures are planned |
+| RK04 security/privacy | Files/indicators may be shared externally; upstream attachments have public URLs | File-access owner / before uploads/live requests | Synthetic-only policy, private storage and authorization, no sensitive indicators | Any real/private file proposed or unauthorized static URL works | Stop external requests/exposure; remove access path; document actual event if it occurs | Still open |
+| RK05 product | Old result overwrites new file or duplicate job corrupts state | Persistence owner / before worker merge | Revision/attempt identity, lease-token writes and unique request keys | IT02/IT03 failure | Pause worker and repair state-selection bug before demo | Still open |
+| RK06 project | Contract drift and merge conflicts across four members | Integration coordinator / before parallel work | Agree interfaces, common seam PR, focused branches and peer review | Two incompatible result/route/status definitions or repeated shared-file conflict | Resolve contract first; integrate smallest vertical slice before more feature work | Still open |
+| RK07 project/evidence | Historical artifacts and deadline not yet supplied; original component/transcript absent | Integration coordinator / before final documentation freeze | Request/reconcile T1, T4, original RMMM and technical artifacts; maintain traceability | Required source missing at rehearsal | Disclose gap and obtain instructor/team clarification; do not invent evidence | Still open |
+| RK08 product | Conservative classifier often returns Unresolved for unsupported engines | Component owner / before acceptance | Exercise real synthetic sample and all engine-category fixtures; show reasons/counts | Non-detection cases mostly inconclusive | Review policy explicitly with team; record semantic/versioning change before altering it | Still open |
+| RK09 project/operations | Local setup or internet fails on finals day | Demo coordinator / rehearsal before submission | Second-machine setup, offline fixtures, preserved sanitized live evidence, restore test | Rehearsal cannot reproduce or live provider unavailable | Use clearly labeled deterministic demo plus actual prior live evidence; report live outage honestly | Still open |
+
+## Final closure format
+
+For each risk append final status exactly `materialized`, `mitigated`, `still open` or `closed`; original prediction; what actually occurred; response taken; residual exposure; evidence reference; named reviewer and review date. A passing fixture test mitigates a path but does not close external provider availability. New risks need a real prediction recorded before the outcome; do not backdate this baseline or claim RK01 was predicted before inspection.

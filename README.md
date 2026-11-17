@@ -1,3 +1,13 @@
+# LMS with VirusTotal Integration
+
+This course project extends Doodle. Start with the [project foundation and guide index](docs/README.md) and [agent instructions](AGENTS.md).
+
+Technical 3's original title is *Secure File Submission System with VirusTotal Integration*. The GitHub repository name is `lms-virustotal-integration`.
+
+The selected target is one PHP application plus a background scan worker, demonstrated on localhost. The VirusTotal integration and baseline repairs are planned, not implemented. The [baseline audit](docs/baseline-audit.md) records known upstream failures; upstream installation/security claims below have not been validated as a working release of this project.
+
+Original Doodle history, license and notices are retained. The remainder of this README is upstream reference material.
+
 # doodle
 
 **The most feature-complete open-source LMS — Moodle-like, but better, with a built-in AI learning assistant.**
