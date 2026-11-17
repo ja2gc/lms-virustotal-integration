@@ -1,29 +1,55 @@
-# Project foundation
+# Documentation map: every member starts here
 
-**LMS with VirusTotal Integration** extends [Doodle](https://github.com/deathlegionteamlk/doodle). Technical 3's original title is *Secure File Submission System with VirusTotal Integration*. The agreed direction is one PHP application, a background scan worker from the same codebase, SQLite for the local demonstration, and VirusTotal as the external service.
+This repository is the planning/source foundation for **LMS with VirusTotal Integration**. Doodle provides existing LMS code; the group builds and proves the assignment-security integration. Implementation has not been completed. Read the [root README](../README.md) for current status and repository locations.
 
-## Read in this order
+## Shared must-reads, in order
 
-1. [Scope and final deliverable mapping](project-scope.md)
-2. [Inspected baseline and known defects](baseline-audit.md)
-3. [Architecture, diagrams and decisions](architecture.md)
-4. [Data model and ERD](data-model.md)
-5. [Integration register and reusable contract](integrations.md)
-6. [Development, UI conventions and collaboration](development.md)
-7. [Security controls](security.md)
-8. [Implementation plan](implementation-plan.md)
-9. [Validation and evidence](validation.md)
-10. [Local release and demonstration](release.md)
-11. [Trends and case-based lessons](evaluation.md)
-12. [Risk register](risks.md)
-13. [AI-use record](ai-use.md)
+| Read | Why every member needs it |
+| --- | --- |
+| [AGENTS.md](../AGENTS.md) and [workflow rules](../.agents/rules/workflow.md) | Required agent context, reuse/security/verification rules and scope authority |
+| [Approved features and user workflow](feature-scope.md) | What remains, what is excluded, and the assignment-only assessment decision |
+| [Demo manual](demo-manual.md) | The end-goal scenarios, expected proof, rehearsal and scope stop rule |
+| [Team guide](team-guide.md) | Which stream owns each area, what can start now, what must wait, and how to prompt your own agent |
+| [Baseline audit](baseline-audit.md) | Real upstream blockers and limits of the checks already executed; prevents starting from a false working-system assumption |
+| [Implementation plan](implementation-plan.md) | Read the dependency/ownership sections and your own task details, rather than executing the entire plan |
 
-For the scope-removal discussion, read [Doodle's extra features and recommendations](feature-scope.md). No optional module has been removed or disabled yet.
+## Then read for your workstream
 
-## Status of this foundation
+| Workstream | Additional must-reads | Task IDs |
+| --- | --- | --- |
+| Foundation/data | [Architecture](architecture.md), [data model](data-model.md), [integration/repository contracts](integrations.md), [security](security.md) | P0a, P1 |
+| Scanning engine | [Architecture](architecture.md), [integration contracts](integrations.md), [data model](data-model.md), [validation](validation.md), [security](security.md) | P2, P3 |
+| LMS interface | [Development/UI](development.md), [integration JSON/status meanings](integrations.md), [security](security.md) | P4 |
+| HTTP/access/local delivery | [Integration contracts](integrations.md), [data model](data-model.md), [security](security.md), [release/local setup](release.md) | P0b, P5 |
 
-These guides specify work to build. No VirusTotal feature, database migration, worker, new UI, application repair or end-to-end demonstration has been implemented by this documentation session. [Baseline evidence](../evidence/baseline/php-checks.json) records real checks, including failures.
+Everyone participates in P6/P7 integrated evidence and rehearsal. You do not need to master every implementation detail before starting your own stream, but you must understand its producer/consumer interfaces. No one should wait idle when the team guide lists independent preparation/isolation work.
 
-Agreed by the project coordinator: Doodle baseline; one application plus worker; localhost demonstration. Technical policies below are proposed engineering defaults unless explicitly described as agreed. Validate them in the first implementation PR; record any material change in the [decision log](architecture.md#decisions-and-divergences).
+## Purpose of every project guide
 
-Keep task-to-person assignments in team communication. Repository tasks describe interfaces and acceptance criteria without assigning classmates by name.
+| Guide | Authoritative purpose | Read especially when |
+| --- | --- | --- |
+| [Project scope](project-scope.md) | R01-R15 acceptance criteria, final Parts A-F mapping and missing historical artifacts | Checking requirements or final completeness |
+| [Feature scope](feature-scope.md) | Approved website features, exclusions, role workflow and date/scope assumptions | Changing any page, navigation or feature |
+| [Architecture](architecture.md) | System boundaries, diagrams, failure flow, decisions and divergences | Changing responsibility or shared behavior |
+| [Data model](data-model.md) | ERD, field meanings, ownership, state transitions, concurrency and migration rules | Reading/writing submission/file/attempt data |
+| [Integrations](integrations.md) | Complete boundary register, reusable interface, repository methods, JSON, semantics and retry/quota policy | Connecting modules or changing APIs/fields/statuses |
+| [Development](development.md) | Existing code locations, reusable UI patterns, screen states and collaboration conventions | Working on controllers, screens or shared helpers |
+| [Security](security.md) | Controls per integration point, private files, authorization, secrets and local serving | Any boundary, upload, download, result or rescan change |
+| [Implementation plan](implementation-plan.md) | Task files/interfaces/tests, ownership boundaries and build order | Planning or implementing the assigned work |
+| [Team guide](team-guide.md) | Four workstreams, start/wait rules, safe handoffs and lightweight prompting help | Coordinating with classmates/agents |
+| [Validation](validation.md) | Test IDs, load/fault/recovery/security experiments and required raw evidence | Proving behavior and preparing final Part C |
+| [Release](release.md) | Local dependency/configuration/setup contract, migration/recovery/release gates | Making another machine/panel run the system |
+| [Demo manual](demo-manual.md) | DM01-DM12 presenter sequence and shared acceptance end goal | Building toward the end result or rehearsing |
+| [Evaluation](evaluation.md) | Trends decisions and two sourced cases with traceable design effects | Preparing final Parts D/E |
+| [Risks](risks.md) | RMMM baseline, indicators, contingencies and closure format | Updating actual risks and final Part F |
+| [AI-use](ai-use.md) | Actual AI assistance, human decisions, corrections and disclosure | Recording AI-assisted work/final Part F |
+| [Baseline audit](baseline-audit.md) | Inspected source provenance, reproduced failures and unverified areas | Repairing upstream issues or interpreting old claims |
+| [Upstream Doodle reference](upstream-doodle.md) | Original product README retained for provenance; not our scope or verified instructions | Looking up original behavior/credits only |
+
+## How to interpret status and evidence
+
+Guides specify the target unless they explicitly cite executed evidence. Existing app source does not prove the screen works; an API description does not prove a real request; a fixture pass does not prove provider availability. [Baseline JSON](../evidence/baseline/php-checks.json) records actual checks and failures. Future evidence is added when real tests run.
+
+Preserve one authoritative guide per topic. Ask its owner/coordinator before changing a shared contract or approved scope. Keep task-to-person names in team communication; numbered workstreams are defined in the team guide. Use a single reviewed handoff instead of copying conflicting implementations between branches.
+
+Technical 3's original project title was *Secure File Submission System with VirusTotal Integration*. The agreed target is Doodle, one application plus background worker, SQLite and localhost, with assignment-focused assessment and retained useful LMS support. Detailed numerical defaults remain implementation hypotheses to validate. T1/T4, the original populated RMMM and original reusable-component/transcript artifacts still need reconciliation before final submission.

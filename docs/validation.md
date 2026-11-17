@@ -29,6 +29,8 @@ Create a minimal runnable PHP harness under `tests/` as part of implementation. 
 | ST02 | CSRF rejected, rescan requires POST, forged file paths/IDs denied, MIME mismatch and oversized uploads rejected, failed move does not report success. |
 | ST03 | Serving command denies direct `.git`, DB, configuration and private-file paths. Logs/status HTML/JSON contain no API key/cookie/raw file or provider body. |
 | UI01 | Student and teacher screens show pending, retry, unresolved, malicious, suspicious and no-detection labels; grade state stays separate; narrow/keyboard/error states work. |
+| UI02 | Course catalog/enrollment/materials, assignment calendar/deadlines, dashboards, announcements, notifications, profiles, submissions/grading/feedback remain reachable for correct roles. No quiz or excluded-module links appear in assessed menus, gradebook or dashboards. |
+| ST04 | Excluded direct routes and quiz actions within retained controllers are denied. Hiding links alone cannot pass. Retained course/calendar/announcement/notification and new scan/download routes still enforce authorization. |
 | LIVE01 | One limited real synthetic-file flow obtains a real analysis ID, retrieves evidence, and verifies file relationship. Record sanitized request types/status/times; redact credentials. |
 | RESTORE01 | Restore a disposable copy of DB + private files; verify a harmless attachment's bytes/hash, ownership and advisory linkage. |
 
@@ -53,3 +55,7 @@ For malformed evidence the desired recovery can be a terminal Unresolved outcome
 Store sanitized commands/configuration summaries and raw CSV/JSON/text under `evidence/contracts/`, `evidence/reliability/`, `evidence/performance/`, `evidence/security/`, `evidence/live/` and `evidence/release/` when those runs actually happen. Include a small manifest: test ID, time, source revision, environment, invocation, expected behavior, observed behavior, pass/fail and linked raw output. Screenshots supplement structured evidence; they do not replace measurements. Do not commit credentials, real identities, local DBs, backups or uploads.
 
 Before release, trace every R-ID to implementation and evidence; explain any failed/untested requirement rather than relabeling it as complete.
+
+## Team handoff verification
+
+Producer and consumer run the same fixture/JSON examples before merge. Check application camelCase versus SQL columns, nullability, exact status strings, seconds/bytes/UTC, identity types and normalized errors. Both reusable consumers exercise the same classifier. Test rescan token replay returns the original attempt and actual state, and result/lifecycle writes are atomic under the lease. Each stream adds focused test files to the common discovery runner. Final proof is an integrated role workflow and actual provider evidence, not four independently green modules.

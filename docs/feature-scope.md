@@ -1,42 +1,76 @@
-# Doodle features versus the supplied technical scope
+# Approved website scope and workflow
 
-Comparison is against the supplied Technical 2 and Technical 3, not missing Technical 1/4 or an unseen requirements document. A controller/schema/template establishes source presence, not a working feature. No optional feature has been removed or disabled during the foundation session.
+The coordinator approved an assignment-focused LMS with VirusTotal integration. Quizzes are excluded, including quiz creation, quiz-taking and quiz auto-grading. Assignment scores, teacher feedback and the student gradebook remain in scope. This is the target feature set; no upstream module has yet been deleted or disabled in code.
 
-## Core to retain and extend
+Comparison is based on the supplied Technical 2 and revised Technical 3. Technical 1/4 were not supplied. Source presence is not proof of a working feature; existing paths must pass baseline smoke checks.
 
-Keep accounts/roles, course ownership/enrollment, assignments/deadlines, written/file submissions, teacher review/grading, student feedback, minimum administration and existing in-app feedback/notifications needed by that workflow. Extend these with the new security integration. Course lessons/catalog can remain supporting LMS structure; do not rebuild them.
+## Retain and verify
 
-## Extras not required by the supplied technical documents
-
-| Extra | Source evidence | Recommendation for this course build |
+| Area | Approved behavior | Work boundary |
 | --- | --- | --- |
-| AI study assistant: chat, summaries, generated practice quizzes | `AIController.php`, `AIEngine.php`, `app/views/ai/` | Exclude from assessed scope and navigation; no external LLM integration needed |
-| Gamification: points, badges, streaks, leaderboard | `GamificationController.php`, `Gamification.php`, v2 schema | Exclude visible feature; preserve shared calls until deliberately decoupled |
-| Spaced-repetition flashcards | `FlashcardController.php`, views and v2 schema | Exclude; remove sidebar due-count queries if hiding the feature |
-| Direct messaging | `MessageController.php`, views and sidebar unread counts | Exclude; remove associated header queries as part of a scoped simplification |
-| Calendar and calendar export | `CalendarController.php`, views | Exclude separate calendar UI; retain assignment due dates |
-| Certificates and public verification | `CertificateController.php`, views | Exclude; do not spend effort repairing this optional controller's runtime path |
-| Polls and surveys | `PollController.php`, views | Exclude |
-| Learning paths across courses | `LearningPathController.php`, views | Exclude |
-| Extended analytics dashboards | `AnalyticsController.php`, views | Exclude feature dashboards; keep the project's operational scan/test measurements |
-| Discussion forums | `ForumController.php`, views | Exclude |
-| Quiz bank, timed quizzes and auto-grading | `QuizController.php`, TeacherController quiz actions, views | Exclude quizzes; retain assignment grading, which is a different workflow |
-| Course reviews/ratings, private notes, bookmarks and global search | `ReviewController.php`, review views | Exclude these destinations; avoid deleting shared course data blindly |
-| Collaborative whiteboard | `WhiteboardController.php`, views | Exclude |
-| Code exercises/playground | `CodeController.php`, views, v2/v3 schema | Exclude; no code-execution feature is needed for file advisory integration |
-| Course wiki and student groups | Classes in `WikiGroupPushBackupController.php`, wiki/group views | Exclude; combined controller filename also requires routing/loading review before these could be called functional |
-| Google/GitHub OAuth sign-in | `OAuthController.php` | Leave unconfigured; local session login is sufficient and does not add another assessed external API |
-| Generic mobile/consumer REST API and user API tokens | `ApiController.php`, API-token view | Exclude generic token-management UI; retain the new scoped session-protected status/rescan routes |
-| Web-push and email delivery | Push class/v3 schema; release notes describe incomplete sending work | Exclude external delivery; these are not proven working integrations and need not be completed |
-| PWA/service-worker behavior | `public/sw.js`, manifest, header registration | Optional; ensure it cannot cache private status/downloads or stale demo pages; disable registration for the assessed build if not verified |
-| Dark mode and general profile styling | Existing header/theme actions | Low-cost to retain if already working; no redesign or new effort required |
-| Two-factor setup | Auth/Security and setup view | Optional setup UI; do not weaken login/session/password protection while simplifying navigation |
-| Bulk CSV import, backup UI, maintenance tools and announcements | Admin code/views and combined backup controller | Keep only needed administration; use the verified local recovery procedure regardless of optional backup UI |
+| Accounts | Student, teacher and admin login/roles; basic profiles | Reuse existing auth and verify object permissions |
+| Courses | Catalog, enrollment, basic lessons and learning materials | Reuse the existing teaching context; no course-engine redesign |
+| Assignments | Instructions, deadlines, written/file submissions and resubmission | Primary assessment workflow; strengthen upload handling |
+| Grading | Teacher scores/feedback and student assignment gradebook | Keep assignment grading; remove quiz-specific panels/links from the assessed interface |
+| Communication | Announcements and in-app notifications | Reuse existing behavior; do not add external email or messaging |
+| Organization | Role dashboards and existing assignment calendar | Retain useful existing views; no new calendar integration or expanded analytics |
+| Convenience | Basic profiles and existing theme switch | Preserve if working; no redesign or new customization work |
 
-## Removal decision
+If a retained supporting feature fails its smoke check, report the blocker and agree the smallest repair or deferment. Do not independently remove an approved feature or expand its implementation.
 
-Recommended first step: keep upstream history/source, restrict the assessed workflow and navigation, and stop claiming/supporting unrelated extras. Hiding a link is a presentation choice, **not** endpoint disabling or a security control. If the team chooses actual disabling, add a small explicit route/action allowlist and test direct URLs as well as menus. Do not introduce a general plugin/feature-flag framework for this.
+## Implement the missing integration
 
-Deletion is a separate scope decision. Before deleting a module, inspect its callers, hooks, schema foreign keys, shared header counters and side effects. For example, submitting an assignment calls `Gamification::award(...)`; deleting its file without removing/replacing that call would break the retained workflow. Keep already-applied schema history and migrate forward if data shape must change.
+| New capability | Required result |
+| --- | --- |
+| Automatic VirusTotal analysis | Save submission first, then process its attachment asynchronously |
+| Advisory display | Separate processing state from Flagged, Review Recommended, No Detections Reported and Unresolved |
+| Teacher-requested fresh rescan | Create a new attempt and obtain a new analysis ID through the same result component |
+| Correct result ownership | Bind evidence to the exact submission/file revision/current attempt; late results cannot replace newer evidence |
+| Reliability and quota handling | Durable work, bounded read retry, shared pacing, explicit unresolved failures, restart recovery |
+| Protected attachments | Private storage and authorized downloads; provider failures do not delete saved submissions |
+| Minimal scan history/details | Teacher sees relevant counts, reason, time and prior attempts inside review; no separate analytics product |
 
-This comparison supports a team decision. It does not expand the course project's requirements or assert that all these upstream features work.
+The reusable result component has two real consumers: automatic submission processing and teacher-requested processing. See [contracts](integrations.md) and [implementation plan](implementation-plan.md).
+
+## Exclude from the assessed interface
+
+| Area | Upstream source | Approved treatment |
+| --- | --- | --- |
+| Quizzes | `QuizController.php`, teacher quiz actions/views | Exclude creation, taking, auto-grading and quiz-specific gradebook/dashboard content |
+| AI study tools | `AIController.php`, `AIEngine.php`, AI views | Exclude chatbot, summaries and generated study/practice content |
+| Gamification and flashcards | Gamification/Flashcard controllers, core helper, views | Exclude points/badges/streaks/leaderboard and flashcard UI |
+| Social features | Message/Forum controllers and views | Exclude direct messages and discussion forums |
+| Course extras | Certificate/Poll/LearningPath controllers and views | Exclude certificates, polls/surveys and multi-course learning paths |
+| Collaboration/programming | Whiteboard/Code controllers; Wiki/Group classes in combined file | Exclude whiteboards, wiki/group workflows and code exercises |
+| Extended analytics | `AnalyticsController.php` and views | Exclude engagement dashboards; required integration measurements remain deliverables |
+| Generic API tokens | `ApiController.php` and token-management view | Exclude generic consumer/mobile API UI; retain new session-protected scan/status routes |
+| Reviews/study utilities | `ReviewController.php` and views | Exclude ratings, personal notes, bookmarks and global study search |
+| Extra external providers | OAuth, email and push code/schema | Leave OAuth/email/push unconfigured; VirusTotal is the only assessed external provider |
+
+No new PWA/offline feature or two-factor implementation is planned. Preserve existing login/session/password/CSRF protection. If the upstream service worker could cache private or stale responses, repair its behavior or disable that registration with a documented security reason; do not claim offline support without testing it.
+
+## How scope reduction is implemented later
+
+Remove excluded menu/dashboard links and unnecessary header queries, and deny excluded direct routes/actions through a small explicit action allowlist. Hiding is not endpoint disabling. The route owner and UI owner use the same approved feature list. Verify that retained courses, assignments, calendar, announcements, notifications, profiles and grading remain reachable.
+
+Do not bulk-delete upstream files or schema history. Trace callers first: assignment submission currently calls `Gamification::award(...)`. Source files/shared helpers may remain internally while their excluded UI/routes are disabled. Avoid a generalized plugin/feature-flag framework. Any further deletion or scope change needs a concrete proposal before editing.
+
+## User workflows
+
+**Teacher:** log in -> create course/materials -> publish assignment and deadline -> review submissions/advisories -> inspect counts/history or request rescan -> download an authorized attachment -> grade and give feedback.
+
+**Student:** log in/enroll -> view materials and deadlines -> submit text/file -> receive saved confirmation and pending scan -> view advisory -> resubmit where allowed -> read grade/feedback and in-app notifications.
+
+**Admin:** manage the fictional local users, roles, courses, announcements and basic settings needed to support that workflow. Provider credentials remain server-side, not a new admin settings form.
+
+**Background:** worker claims durable work -> requests a new VirusTotal analysis -> reads and validates evidence -> checks file identity -> stores guarded result. Outage or malformed evidence preserves the submission and produces waiting/Unresolved behavior, never an invented favorable advisory.
+
+## Schedule and demonstration
+
+Finish target: **November 20, 2026**. Working presentation/submission date: **November 21, 2026**, inferred from the coordinator's November correction; check the class notice because the message still contained October 21 for the final date.
+
+Proposed sequence: Nov 18 baseline/common-contract handoff; Nov 19 parallel module work and first integrated workflow; Nov 20 complete required evidence/documentation, freeze features and rehearse. This is a planning target, not a guarantee that unimplemented work will meet it.
+
+Recommended demonstration: teacher publishes an assignment -> student submits -> advisory appears -> teacher requests rescan/reviews/grades -> student sees feedback. Then show one injected failure retaining the submission, correct replacement-file linkage and a denied cross-user read. Clearly label fixtures and show sanitized real VirusTotal evidence. Mention retained supporting features briefly rather than demonstrating every page. Confirm the allotted presentation duration before fixing timings.
+
+PHP 8.3.30 is the only runtime checked so far. PHP 8.5 compatibility is an optional baseline investigation, not an approved upgrade or deadline prerequisite. Freeze one supported, patched and tested runtime for all members. No PHP installation was changed in this planning session.

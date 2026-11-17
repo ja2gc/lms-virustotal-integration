@@ -70,9 +70,61 @@ The host also uses `polling_exhausted` for the persisted wall-clock deadline. Be
 
 ### Host orchestration
 
-`ScanSubmissionService::saveFileRevision(int $submissionId, array $validatedUpload): int` returns the new revision ID after file storage and DB commit; `ScanAttemptService::requestRescan(int $submissionId, int $actorId, string $requestToken): int` returns an existing/new attempt ID after authorization. A `ScanWorker::runOnce(): bool` claim processes one due step and reports whether work was claimed. These are proposed public host signatures; refine in the first contract PR before parallel implementation.
+`ScanSubmissionService::saveFileRevision(int $submissionId, array $validatedUpload): int` returns the new revision ID after file storage and DB commit. `ScanAttemptService::requestRescan(int $submissionId, int $actorId, string $requestToken): array` authorizes and returns `attemptId` (integer), `created` (Boolean), and `processingState` (string). The latter describes the actual existing/new attempt, not an assumed queued state. `ScanWorker::runOnce(): bool` processes one due step and reports whether work was claimed. These are target contracts; implement and compatibility-test them before parallel consumers merge.
 
-Status JSON v1 contains `contractVersion`, `submissionId`, nullable `fileId`, nullable `attemptId`, `processingState`, nullable `advisoryStatus`, `reason`, and nullable UTC `checkedAt`. Do not send disk paths, API keys or raw provider payloads. `processingState=not_applicable` is allowed for text-only submissions; advisory remains null. Rescan returns 202 with `attemptId` and `processingState=queued`, or the prior attempt for the same token. Error JSON contains stable `error.code` and useful `error.message` only.
+Status JSON v1 contains `contractVersion`, `submissionId`, nullable `fileId`, nullable `attemptId`, `processingState`, nullable `advisoryStatus`, `reason`, and nullable UTC `checkedAt`. IDs and contractVersion are integers. Do not send disk paths, API keys or raw provider payloads. `processingState=not_applicable` is allowed for text-only submissions; advisory remains null. Rescan returns HTTP 202 for newly queued work, or 200 for a repeated token returning the same attempt and its actual state; JSON contains `contractVersion`, `attemptId`, `created`, and `processingState`. It never starts another attempt merely because a request is repeated. Error JSON contains stable `error.code` and useful `error.message` only.
+
+### Shared host repository contract
+
+These methods belong to `ScanAttemptRepository` in the foundation/data stream. Implement and test them in P1 before consumers merge. Other streams request contract changes rather than creating parallel table writers.
+
+| Method | Consumer / required semantics |
+| --- | --- |
+| `claimDue(string $leaseToken, string $nowUtc, string $leaseUntilUtc): ?array` | Worker; atomically claim one eligible step, null if none. Expired uncertain starts are failed conservatively, never selected for replay. |
+| `saveProgress(int $attemptId, string $leaseToken, array $changes): bool` | Worker; lease-guarded allowlisted step/state/scheduling changes. False means claim no longer owned. |
+| `saveResult(int $attemptId, string $leaseToken, array $result, array $transition): bool` | Both result consumers; normalized result and resulting lifecycle/schedule are stored in one guarded transaction. No half-updated advisory is published. |
+| `getSubmissionContext(int $submissionId): ?array` | HTTP service; internal current projection plus student/course/teacher ownership IDs. Caller authorizes before disclosure. |
+| `getFileContext(int $fileId): ?array` | Download service; internal file metadata/storage key and ownership IDs. Never expose this whole object to the browser. |
+| `getAttemptHistory(int $fileId): array` | Already-authorized teacher review; normalized attempt records newest first. |
+| `requestRescan(int $submissionId, int $actorId, string $requestToken): array` | Authorized host service; transactionally reuse a token or create an attempt/current pointer. Return `attemptId`, `created`, `processingState` as defined above. Repository enforces row/token consistency; service enforces authorization. |
+
+Claim rows use camelCase keys: `attemptId`, `fileId`, `submissionId`, `origin`, `state`, `step`, nullable `analysisId`, `sha256`, `storageKey`, `leaseToken`, nullable `pollDeadlineAt`, Boolean `startInFlight`, nullable `nextRunAt`, and integer `failureCount`. Map SQL snake_case inside the repository. `saveProgress` allows only `state`, `step`, `analysisId`, `startInFlight`, `pollDeadlineAt`, `nextRunAt`, `failureCount`, `reason`, and `leaseUntil`; identity/current pointers are not arbitrary update fields.
+
+`saveResult` takes the unchanged four-field component result plus optional component fields. Its explicit host `transition` has `state` (waiting, completed or failed), nullable `nextRunAt`, nonnegative `failureCount`, and nullable `completedAt`. Terminal states require completedAt and null nextRunAt; waiting requires nextRunAt and null completedAt. Only completed, validated, non-retryable evidence can publish a favorable advisory. The host chooses scheduling; the repository validates consistency and writes atomically. Invalid input throws a validation exception; false is reserved for stale/missing claim ownership.
+
+Submission context contains IP09 fields plus `studentId`, `courseId` and `teacherId`. File context contains `fileId`, `submissionId`, `studentId`, `courseId`, `teacherId`, `storageKey`, `originalName`, `mimeType` and `sizeBytes`. History records contain attempt ID/origin/state/advisory/reason/counts and requested/completed UTC times; no raw provider payload. Never use ownership fields supplied by the browser in place of these authoritative joins.
+
+### Shared pending-response example
+
+```json
+{
+  "contractVersion": 1,
+  "submissionId": 101,
+  "fileId": 7,
+  "attemptId": 42,
+  "processingState": "queued",
+  "advisoryStatus": null,
+  "reason": "scan_queued",
+  "checkedAt": null
+}
+```
+
+`scan_queued` is a host reason, not a provider finding. UI, HTTP and worker teams use the same synthetic examples. Also test every advisory, Unresolved failure and text-only not_applicable response.
+
+### Semantics gate
+
+| Value | Exact meaning |
+| --- | --- |
+| Submission ID | One student's academic submission to an assignment |
+| File ID | Immutable attachment revision; equal hashes do not imply equal file IDs |
+| Attempt ID | One automatic or teacher-requested operation on that revision |
+| Analysis ID | External handle returned by a newly requested provider analysis; not a file hash |
+| processingState | Host lifecycle, independent of grade and advisory |
+| advisoryStatus | Exact Technical 3 normalized label; null before an advisory exists; only the component classifies evidence |
+| SHA-256 | 64 lowercase hexadecimal characters, checked against exact file bytes |
+| Time / size | UTC timestamps; durations/retry hints in seconds; file sizes in bytes |
+
+Written contracts reduce ambiguity but do not prove runtime interoperability. Handoff requires shared fixture compatibility, the complete submission-to-result vertical slice, and limited real provider evidence. No API integration has been executed by this planning session.
 
 ## Scheduling defaults and capacity
 

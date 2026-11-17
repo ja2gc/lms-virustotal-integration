@@ -10,6 +10,8 @@ This final project permits AI assistance and requires disclosure. Human contribu
 | 2026-11-18 | Compared Doodle/Moodle candidates, downloaded Doodle source and searched for scan integration | Coordinator selected Doodle, one app plus background worker, and localhost only | Source search found no scanning integration; PHP syntax and controller-class checks recorded under `evidence/baseline/`; no app repairs or live scan |
 | 2026-11-18 | Drafted architecture, contracts, ERD, security, test/release plans and team handoff foundation | Coordinator approved architectural direction; detailed numerical policies remain proposed implementation defaults | Source found fatal inherited-method conflicts; MIME validation helper exists but is not called on the submission path; grade action link mismatch recorded |
 | 2026-11-18 | A read-only agent reviewed the design for material builder gaps | Coordinator approved the written design baseline before the implementation plan | Review identified ambiguous POST crash recovery and quota/polling-deadline interaction; durable start marker, deadline rules and IT06 were added. Review did not execute or certify product behavior. |
+| 2026-11-18 | Compared upstream extras and technical requirements; revised scope, workflow and handoff contracts | Coordinator approved assignment-only assessments with retained LMS support; clarified that work should be divided by safe ownership/handoffs rather than contribution size | Documentation separates planned exclusions from actual source changes; shared repository, status JSON and rescan replay semantics were made explicit. Application code and PHP installation remain unchanged. |
+| 2026-11-18 | Added a documentation navigation README, team/dependency/prompting guide and demo acceptance manual | Coordinator requested member-led planning rather than scripted conversations; demo scenarios should bound implementation and prevent scope growth | Optional openers give goals/boundaries, not follow-up scripts. DM01-DM12 map to tasks/requirements. Upstream README was preserved as reference; new implementation and demo outcomes remain unverified. |
 
 ## Corrections to AI assumptions
 
@@ -21,6 +23,8 @@ This final project permits AI assistance and requires disclosure. Human contribu
 - Do not treat prior prose stating tests passed as current reproducible results.
 - Do not treat old reports/hash cache hits as a fresh teacher-requested scan.
 - Do not treat GitHub Pages as a PHP runtime or introduce cloud deployment after the coordinator selected localhost.
+- Do not add quizzes to the scope; assignment grading is separate. Retain approved course/calendar/announcement/notification support rather than stripping the LMS to an upload form.
+- Do not optimize team assignments for one member's contribution size or split shared student/teacher templates and HTTP controller edits across competing owners.
 
 ## Continue this log during team implementation
 

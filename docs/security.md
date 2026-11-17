@@ -2,6 +2,8 @@
 
 Target controls. No row below is a claim of an implemented or validated control. Reassess every row against final code and attach evidence before submission.
 
+Apply [approved assignment-only scope](feature-scope.md) through explicit allowed actions as well as menus. Deny quiz actions on the retained Teacher controller. Preserve authorized calendar, announcements, notifications and course-material actions; scope reduction must not become an access-control bypass or unapproved removal. P0b/P5 own route/access controls; P4 owns navigation/templates; both verify ST04.
+
 ## Boundary assessment
 
 | Integration point | Authentication / authorization | Transport | Input / output control | Logging and residual risk |

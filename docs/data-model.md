@@ -2,6 +2,8 @@
 
 Target schema additions; no migration has been applied. Reuse existing users, courses, assignments and submissions. Keep `submissions.status` for the existing academic workflow (`submitted` / `graded`); never write a scan verdict into it.
 
+The foundation/data stream owns these migrations and submission/revision/attempt SQL. Consumers use the [shared host repository contract](integrations.md#shared-host-repository-contract); it maps stored snake_case to published camelCase. Scanning owns provider-budget access to the separately defined singleton. No quiz schema expansion or destructive deletion of upstream schema is required by the assignment-only scope.
+
 ## ERD
 
 ```mermaid

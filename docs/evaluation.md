@@ -2,6 +2,8 @@
 
 Planning evaluation. Update adopted/rejected status and add implementation/evidence links at release; the integration is not built yet.
 
+Evaluate the approved assignment workflow, retained supporting LMS features and new scan integration, not every feature advertised by upstream Doodle. Excluded quizzes/AI/social modules do not become integration achievements. API-first design will be evidenced through the shared component/repository/JSON contracts and connected tests, not the existence of this prose alone.
+
 ## Required trends
 
 | Trend | Decision for this scope | Engineering reason and release proof |

@@ -19,6 +19,10 @@ Proposed shared view: `app/views/scan/_status.php`; JavaScript polling: `public/
 
 ## Screen behavior
 
+Read [approved features](feature-scope.md): retain courses/materials/enrollment, assignments/deadlines, grading/feedback, dashboards, announcements, in-app notifications, existing calendar and basic profile/theme behavior. Exclude quiz creation/taking/auto-grading and the listed unrelated modules. No source removal has occurred in this planning session.
+
+The UI stream owns all student/teacher templates, status/history partials, navigation and CSS/JS. HTTP/access owns status/rescan/download controllers and the action map. Foundation/data owns submission/revision/attempt SQL and the Student controller's submission seam; scanning owns adapter/worker logic. Follow [exact boundaries](implementation-plan.md#workstream-boundaries-and-safe-handoffs), not separate competing student/teacher implementations.
+
 - Submission confirmation means saved, with a separate scan-pending display. No attachment means Not applicable. Preserve fields when validation fails.
 - Show queued, checking, waiting/retrying, completed or unresolved processing information separately from the four advisory labels. A completed check can be inconclusive.
 - Student sees only their submission's current file revision and permitted result summary. Teacher/admin sees authorized review details, counts, checked time, prior attempts and a rescan action. Never show a previous file's result as the replacement's result.
@@ -36,6 +40,8 @@ Proposed shared view: `app/views/scan/_status.php`; JavaScript polling: `public/
 5. Sync with main frequently. Avoid simultaneous edits to the same controller/helper. When two tasks need one file, merge its common seam first rather than maintaining divergent versions.
 6. Each implementer supplies their own tests and evidence. One member may coordinate validation/release; quality is shared.
 7. Keep numeric evidence, risk updates and actual AI-use notes with the relevant change. At release reconcile planned versus built behavior rather than retaining outdated promises.
+8. Handoff a merged revision with signatures/JSON examples, migration/config needs, real test output and limitations. Producers update contracts before consumers switch. Request a missing repository/route capability from its owner rather than editing another stream's source concurrently.
+9. Merge P0a's rendering/installer sweep first; P0b's local serving/action boundary and P1's shared schema/interface can then proceed in parallel on their owned files. Both must be ready before dependent endpoints/whole-flow acceptance. Use fixtures during isolated work and integrate a complete vertical slice before UI polish. All members supply their own tests/evidence; no commit-count or line-count target applies.
 
 ## Agent task prompt template
 

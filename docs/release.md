@@ -25,13 +25,18 @@ Do not copy a generic README quick-start and label it verified: source inspectio
 
 ## Demo sequence
 
-1. Show student submission, successful local save and pending advisory while the worker is stopped.
-2. Start worker in deterministic fixture mode; show result tied to the right revision. Clearly label simulated provider behavior.
-3. Show teacher review and a new teacher-requested analysis, with history retained.
-4. Replace a file while its previous scan is pending; show the old result cannot become the replacement's advisory.
-5. Inject timeout, error and malformed response; show saved work, unresolved/waiting state and measured recovery behavior.
-6. Demonstrate denied cross-user/course reads/downloads/rescans.
-7. Show sanitized evidence from a real VirusTotal request. If internet/key is available, run one limited live synthetic demonstration; otherwise label prior evidence and fixture behavior honestly. A fixture-only run does not prove live integration.
+Use [the demo manual](demo-manual.md) as the canonical presenter script and acceptance checklist. The steps below summarize its release connection; setup/run commands remain authoritative in this release guide.
+
+1. Teacher opens a course/material and publishes an assignment/deadline. Briefly establish retained dashboards, calendar, announcements and notifications; avoid a tour of unrelated pages.
+2. Student submits text/file, sees successful local save and pending advisory while the worker is stopped.
+3. Start worker in fixture mode and show the result bound to the correct revision. Clearly label simulated provider behavior.
+4. Teacher sees counts/history, requests a fresh rescan, grades and gives feedback. Student sees grade/feedback and the in-app notification. No quizzes are in scope.
+5. Replace a file mid-scan and show an old result cannot become the replacement's advisory.
+6. Show one injected failure and retained submission; use prepared measurements for the other timeout/error/malformed-response/recovery cases rather than waiting through all retries on stage.
+7. Show denied cross-user/course access and excluded direct routes.
+8. Show sanitized real VirusTotal evidence. Run one limited live synthetic check if internet/key permit; otherwise distinguish prior real evidence from fixtures. A fixture-only run does not prove live integration.
+
+Follow the November 20 finish target and working presentation-date assumption in [feature scope](feature-scope.md). Reserve the final working session for evidence, second-machine setup and rehearsal, not optional features or a PHP migration. Confirm the panel's allotted time. Every member explains their owned module using the same fixture accounts/files/status meanings.
 
 ## Release gate and rollback
 

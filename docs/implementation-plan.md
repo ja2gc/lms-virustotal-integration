@@ -32,29 +32,57 @@
 
 ## Dependency order
 
-`P0 -> P1 -> {P2, P4, P5} -> P3 integration -> P6 -> P7`.
+`P0a -> {P0b, P1}; P1 -> {P2, P3 with fixtures}; {P0b, P1} -> P5; {P2, P1} -> connected P3; {P3, P5} -> connected P4; integrated P3/P4/P5 -> P6 -> P7`.
+
+P0b and P1 can proceed in parallel after P0a because they own different files. Isolated provider fixtures/UI partials/route planning can start immediately. See [the team guide](team-guide.md) for exactly when to wait and [the demo manual](demo-manual.md) for the shared acceptance scenarios.
 
 P3 can build its orchestration tests with the published provider fake after P1; merge its live adapter connection after P2. P4/P5 use the shared schema/status response contract while the real worker is under construction. Merge common seams before touching the same controller/helper concurrently. Assign people in team chat, not in this file.
 
+## Workstream boundaries and safe handoffs
+
+These are task/file boundaries, not assignments to named members or contribution-size targets. Map the four workstreams to classmates in team communication.
+
+| Stream | Primary ownership | Requests to other streams |
+| --- | --- | --- |
+| Foundation and data | P0a; P1; submission/revision/attempt migrations and repository; submission service; `StudentController.php`; initial CLI/web scan bootstrap seam | Provider/HTTP streams request new repository methods here rather than editing SQL/migrations concurrently |
+| Scanning engine | P2/P3; adapter, transport, provider budget, worker, both result consumers, CLI worker and provider fixtures | Uses frozen repository methods; does not edit student/teacher templates or HTTP controllers |
+| LMS interface | P4; all student/teacher scan templates including history; shared header/navigation, dashboards, CSS/JS and label formatter | Requests backend changes through the HTTP stream; does not duplicate authorization or provider classification |
+| HTTP, access and local delivery | P0b; P5; Router/action map, local server router, scan/status/rescan/download controllers, authorization, rescan service and local setup evidence | Uses data repository; does not write submission/scan SQL or edit templates owned by UI |
+
+P0a's mechanical rendering sweep touches existing controllers and some grade links once, **before** feature branches edit them. After that merge, hand those files to their listed stream. P0b changes routing in its own PR while P1 publishes bootstrap/schema/test seams in a separate PR. Do not work concurrently on the same file merely because changes seem small.
+
+The shared test runner from P0a discovers `tests/*Test.php`. Each test file returns `['group' => '<group>', 'tests' => ['test name' => callable]]`; supported groups are baseline, routing, persistence, adapter, worker, ui, status and access. The runner supports `--group=<group>` and exits nonzero on failure. Other streams add their own test files without editing this runner. This is a planned convention, not an existing harness.
+
+**Handoff package for every PR:** source revision/branch; changed files; exact provided/consumed signatures or JSON example; migration/config effects; focused test command and real result; sanitized fixture/evidence locations; known limitations; affected downstream task. Review and merge that package before a consumer depends on it.
+
+**Contract gate:** P1 publishes the repository/interface below; P2 publishes provider fixtures; P5 publishes status/rescan examples; P4 consumes those exact examples. Contract changes need the producer and consumer to agree and update docs/tests together. Never independently rename a key, status or time unit. A complete vertical slice (saved file -> durable attempt -> adapter -> validated result -> authorized UI) must pass before final evidence/rehearsal.
+
+All streams supply tests, documentation and evidence for their own work. P6/P7 are shared integration/release gates; coordinating evidence does not transfer everyone's testing to one person.
+
 ## P0: Make the scoped Doodle baseline reproducible
 
-**Files:** modify `app/core/Controller.php`, its rendering calls throughout `app/controllers/`, scoped teacher view links, `install.php`, `.gitignore`, `README.md`; create `router.local.php`, `tests/run.php`, `tests/BaselineTest.php`, `dependencies.md` and `config/scan.example.php`.
+**P0a files (foundation first):** modify `app/core/Controller.php`, its rendering calls throughout `app/controllers/`, scoped teacher view links, `install.php`, `.gitignore`, `README.md`; create `tests/run.php`, `tests/BaselineTest.php`, `dependencies.md` and `config/scan.example.php`.
+
+**P0b files (HTTP/access after P0a merge):** modify `app/core/Router.php`; create `router.local.php`, `config/routes.php` and `tests/RoutingTest.php`. The explicit action map retains the approved features and denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
 
 **Interfaces:** preserve public `*/view/{id}` actions; rename the protected rendering helper to `render(string $view, array $data = []): void` and update every internal `$this->view(...)` render call. Preserve `viewRaw`. Align teacher URLs/forms with existing `gradeSubmission(int $id)`. Define CLI-safe loading in P1 rather than requiring `index.php` from jobs.
 
-- [ ] Write controller-load checks for all 26 files, plus baseline installation and grade-route checks. The runner must throw/report nonzero without relying on PHP `assert()` settings.
+- [ ] Write controller-load checks for all 26 files, plus baseline installation and grade-route checks. The runner follows the discovery contract above and must throw/report nonzero without relying on PHP `assert()` settings.
 - [ ] Run `php tests/run.php --group=baseline`; observe the reproduced class conflict. Execute the installer in a disposable target to reproduce B07 before fixing bootstrap loading.
-- [ ] Rename the common renderer and callers, repair grade links/forms and proven installer loading defects. Implement a safe loopback router that blocks hidden/config/DB/private/docs/evidence paths and serves intended public assets/actions only. Ignore local sessions/install/migration flags and every real secret/data file.
+- [ ] In P0a rename the common renderer/callers and repair grade links/forms and proven installer defects; ignore local sessions/install/migration flags and secrets/data. Verify and merge this baseline sweep before other streams edit controllers/templates.
+- [ ] In P0b write failing routing tests, then implement the safe loopback router and action map: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
 - [ ] Rerun baseline checks; verify login, enrollment, assignment view, save, teacher review/grading and student feedback through a browser. Test direct protected paths under the actual router command.
 - [ ] Add exact local dependency/setup commands to README/release guide, retaining unverified limitations. Commit only this repair task, with evidence; no scanning feature is implied by a green baseline.
 
-**Acceptance:** BT01/BT02 and basic ST03 pass; a second member can reproduce installation. Record additional scoped blockers rather than expanding into every upstream feature.
+**Acceptance:** BT01/BT02, UI02's retained-route smoke check and ST03/ST04 pass; a second member can reproduce installation. No quiz page/action is included in the target interface. Record additional scoped blockers rather than expanding into every upstream feature.
 
 ## P1: Establish revision, attempt and shared contract foundation
 
 **Files:** create `database/migrations/001_scan_foundation.php`, `bin/migrate.php`, `app/scan/bootstrap.php`, `app/scan/FileScanProvider.php`, `app/scan/ScanSubmissionService.php`, `app/scan/ScanAttemptRepository.php`, `tests/ScanPersistenceTest.php`; modify web bootstrap and `StudentController.php` at the agreed service seam.
 
-**Interfaces:** `ScanSubmissionService::saveFileRevision(int $submissionId, array $validatedUpload): int` accepts normalized keys `tmpPath`, `originalName`, `sizeBytes`, `mimeType` after PHP-upload validation; returns immutable revision ID. `ScanAttemptRepository::saveResult(int $attemptId, string $leaseToken, array $result): bool` guards lease ownership and preserves current-pointer invariants. Publish `FileScanProvider::getResult(string $analysisId, string $expectedSha256): array` exactly as specified. Host services receive PDO/private-root/clock explicitly; no session dependency in reusable component.
+**Interfaces:** `ScanSubmissionService::saveFileRevision(int $submissionId, array $validatedUpload): int` accepts normalized keys `tmpPath`, `originalName`, `sizeBytes`, `mimeType` after PHP-upload validation; returns immutable revision ID. `ScanAttemptRepository::saveResult(int $attemptId, string $leaseToken, array $result, array $transition): bool` guards lease ownership and persists result/lifecycle atomically. Publish `FileScanProvider::getResult(string $analysisId, string $expectedSha256): array` exactly as specified. Host services receive PDO/private-root/clock explicitly; no session dependency in reusable component.
+
+Freeze the additional repository contract in [integrations](integrations.md#shared-host-repository-contract) before handing off to scanning/HTTP work. The foundation stream owns submission/revision/attempt SQL; the scanning stream owns request-budget access to `scan_provider_state`. Do not create a second repository/parallel migration to resolve a consumer mismatch.
 
 - [ ] Write failing tests for repeatable migrations, same hash across submissions, revision replacement, pointer ownership, one automatic attempt/revision, file-write and transaction failures, and text-only updates retaining the existing file.
 - [ ] Run `php tests/run.php --group=persistence` and record the missing behavior failure.
@@ -90,35 +118,35 @@ P3 can build its orchestration tests with the published provider fake after P1; 
 - [ ] Rerun worker checks and crash/restart tests. Verify every VT request is counted; terminal/old results cannot replace current status. Measure queue recovery using fake delays, clearly labeled.
 - [ ] Commit orchestration and update actual recovery/contract details in canonical docs.
 
-**Acceptance:** CT04, IT03/IT04/IT05/IT06 and FT01-FT03 pass in fixtures. This task is substantial backend implementation, not coordination-only work.
+**Acceptance:** CT04, IT03/IT04/IT05/IT06 and FT01-FT03 pass in fixtures. Provider and worker orchestration have one stream owner; contribution size is not an acceptance criterion.
 
-## P4: Add student advisory status and minimal shared UI
+## P4: Add the assignment-focused LMS interface and scan views
 
-**Files:** create `app/controllers/ScanController.php` status action, `app/views/scan/_status.php`, `public/js/scan-status.js`, `tests/ScanStatusTest.php`; modify student/assignment templates and shared styles only as needed.
+**Files:** create `app/views/scan/_status.php`, `app/views/scan/_history.php`, `public/js/scan-status.js`, `tests/ScanViewTest.php`, and UI fixtures under `tests/fixtures/status/`; modify retained student/assignment/teacher templates, shared header/navigation, dashboards, `app/helpers/functions.php` presentation helpers and styles as needed. No HTTP controller is owned by this task.
 
-**Interfaces:** `ScanController::status(int $submissionId): void` implements IP09's exact authorized JSON contract; P5 adds its rescan action after this common controller seam is merged. Reuse a single advisory formatter/partial.
+**Interfaces:** consume IP09 status JSON and P5's rescan/download routes exactly as published; use fixture examples while endpoints are built. Own both student and teacher presentation to prevent competing edits to shared partials. Reuse one advisory formatter; never reclassify provider counts in JavaScript.
 
-- [ ] Write failing status/authorization tests: pending/retry/completed/Unresolved, no file -> not_applicable, replacement freshness, unknown stored status -> Unresolved, no raw provider/path fields.
-- [ ] Run `php tests/run.php --group=status` and confirm failures.
-- [ ] Implement scoped status route and minimal template additions; keep grade state separate. Add 15-second active-only polling with hidden-tab pause, backoff and terminal stop; never trigger provider requests from polling.
-- [ ] Rerun status tests; check UI01 at narrow/wide widths, keyboard use, long names and failed refresh. Preserve entered submission data on validation errors.
+- [ ] Write failing view tests for pending/retry/completed/Unresolved, text-only not_applicable, replacement freshness, escaped long filenames and preserved form fields. Include approved menu destinations and absence of quiz/excluded links.
+- [ ] Run `php tests/run.php --group=ui` and confirm failures.
+- [ ] Implement student and teacher views including small scan history, grade/feedback and rescan form consuming P5 endpoints. Retain the approved course/material/calendar/announcement/notification/profile experience; remove excluded menu/dashboard links/counters without deleting shared helpers. Add active-only 15-second polling with hidden-tab pause, backoff and terminal stop; provider calls remain in the worker.
+- [ ] Rerun view tests; check UI01/UI02 at narrow/wide widths, keyboard use and failed refresh. Smoke-test the retained teaching-to-feedback flow, including assignment-only gradebook content.
 - [ ] Commit UI/status feature with screenshots and exact scenario results; update development guide.
 
-**Acceptance:** student workflow and ST01 status scope pass. No frontend framework or new navigation system.
+**Acceptance:** UI01/UI02 pass for both student and teacher; P5 verifies actual endpoint authorization. No frontend framework or new navigation system.
 
 ## P5: Add teacher rescans, history and protected downloads
 
-**Files:** create `app/scan/ScanAttemptService.php`, `app/controllers/SubmissionFileController.php`, `app/views/scan/_history.php`, `tests/ScanAccessTest.php`; add `rescan` to merged `ScanController.php`; modify scoped teacher views and replace legacy public attachment links in all scoped consumers.
+**Files:** create `app/scan/ScanAttemptService.php`, `app/controllers/ScanController.php`, `app/controllers/SubmissionFileController.php`, `tests/ScanAccessTest.php`, `tests/ScanStatusTest.php`; extend `Auth.php` only as needed and the task's P0b route/action map. Request template/link changes from P4 instead of editing its files concurrently. Use P1 repository methods rather than adding independent SQL.
 
-**Interfaces:** `ScanAttemptService::requestRescan(int $submissionId, int $actorId, string $requestToken): int`; `ScanController::rescan(int $submissionId): void`; `SubmissionFileController::download(int $fileId): void`. Service performs server authorization and idempotent enqueue, not HTTP scans. P3 processes teacher origin through its second consumer.
+**Interfaces:** `ScanAttemptService::requestRescan(int $submissionId, int $actorId, string $requestToken): array` returns `attemptId`, `created`, actual `processingState`; `ScanController::status(int $submissionId): void`; `ScanController::rescan(int $submissionId): void`; `SubmissionFileController::download(int $fileId): void`. Service authorizes and invokes P1's idempotent enqueue; it does not scan. Status JSON matches IP09; rescan returns 202 for created work, 200 for token replay. P3 handles the teacher-origin result consumer.
 
-- [ ] Write failing checks for owner/cross-course/admin scope, missing file, GET rescan rejection, invalid CSRF, duplicate token, authorized history and direct-path download bypass.
+- [ ] Write failing checks for status JSON fields/unknown-status fallback, no-file not_applicable, owner/cross-course/admin scope, missing file, GET rescan rejection, invalid CSRF, duplicate token, authorized history and direct-path download bypass.
 - [ ] Run `php tests/run.php --group=access`; confirm unauthorized cases fail before implementation.
-- [ ] Implement authorized new-attempt requests, current-attempt pointer, limited history and teacher details. Stream only authorized private files as attachments; no caller-selected paths or public fallback. Reuse shared status partial.
-- [ ] Rerun ST01/ST02/ST03 and teacher UI paths. Prove a rescan obtains a new analysis ID under the worker; retrieving the old ID is not a fresh scan.
+- [ ] Implement authorized status/rescan/history access using the shared repository; publish real request/response examples to P4. Stream authorized private files as attachments; no caller-selected paths or public fallback. P4 renders the shared status/history templates.
+- [ ] Run `php tests/run.php --group=status` and `php tests/run.php --group=access`; rerun ST01-ST04 and connected teacher UI paths. Prove a rescan obtains a new analysis ID under the worker; retrieving the old ID is not a fresh scan.
 - [ ] Commit feature plus access-control evidence and documentation updates.
 
-**Acceptance:** both real call sites work; downloads and rescan actions enforce object ownership on the server.
+**Acceptance:** endpoints enforce object ownership, exact response semantics and approved action scope; both real processing call sites connect. Route map and endpoints have one stream owner; templates have another.
 
 ## P6: Run integration, performance, reliability and security experiments
 
@@ -127,12 +155,13 @@ P3 can build its orchestration tests with the published provider fake after P1; 
 **Interfaces:** consume the built system as documented; do not modify another task's contract silently to make a test pass.
 
 - [ ] Run `php tests/run.php` and scoped role/browser acceptance; record actual failures and fix root causes in the owning task/PR.
+- [ ] Run UI02/ST04: retained supporting LMS features work, all assessment links are assignment-only, and excluded direct URLs/actions are denied. Do not claim scope reduction from menu screenshots alone.
 - [ ] Execute the load ramp defined in `validation.md` against fake provider responses; report environment, variable, raw metrics, degradation point/tested bound and failure mode.
 - [ ] Execute timeout, error, malformed-body and worker-crash trials; measure recovery including operator intervention where required.
 - [ ] Perform LIVE01 once with permitted synthetic content, verifying real handle and item/hash relationship. No provider load test or real malware. Record fixture-versus-live distinction.
 - [ ] Restore a disposable matched DB/private-file backup and have another member follow setup. Commit sanitized evidence and updated conclusions only.
 
-**Acceptance:** R01-R09 have linked real evidence or an explicit unresolved failure. No fabricated performance or success claims.
+**Acceptance:** R01-R09 and R15 have linked real evidence or an explicit unresolved failure. No fabricated performance or success claims.
 
 ## P7: Reconcile final artifacts and rehearse
 
@@ -145,3 +174,5 @@ P3 can build its orchestration tests with the published provider fake after P1; 
 - [ ] Have each member demonstrate their feature and explain one failure path; rehearse panel setup from a clean local target. Verify source revision and release contents before submission.
 
 **Acceptance:** all Parts A-F trace to the system as built. Remaining failures/risks are explicitly reported; final completion is not inferred from this planning document.
+
+Use DM01-DM12 in the demo manual as end-goal checks throughout implementation, not a last-day script. Any change outside those scenarios, R01-R15 or a concrete correctness/security need must be proposed before implementation. Read the optional prompting guidance in the team guide; members plan their own internal solutions with their agents rather than following a scripted conversation.

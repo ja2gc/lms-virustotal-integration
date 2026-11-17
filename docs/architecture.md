@@ -6,6 +6,8 @@ Extend Doodle with a durable, advisory scanning workflow while preserving submis
 
 This document describes the target, not current implementation. See [baseline audit](baseline-audit.md) for inspected behavior and [scope](project-scope.md) for requirements.
 
+The [approved feature list](feature-scope.md) is authoritative for pages/routes: retain supporting LMS courses/materials, calendar, announcements, notifications and dashboards, but assessments are assignments only. No quiz workflow is part of this project. Keep assignment grading and student feedback.
+
 ## Approaches considered
 
 | Approach | Trade-off | Decision |
@@ -88,5 +90,7 @@ Before a scan-start POST, persist an in-flight marker. If the worker crashes wit
 | D08 | No guaranteed 100 submissions/day or five-minute scan target | Request cost varies with polls, identity checks, failures and provider quota. Measure rather than reuse earlier estimates. |
 | D09 | Conservative Technical 3 no-detection policy retained initially | Unsupported/failed engines yield Unresolved, potentially often. Measure the effect and record any future policy revision before changing semantics. |
 | D10 | Cloud and containers are evaluated, not implementation requirements | Coordinator selected localhost. GitHub stores source; GitHub Pages cannot execute PHP. |
+| D11 | Retain a coherent teaching/submission/review workflow while excluding quizzes and unrelated modules | Coordinator approved assignment-only scope after reviewing Doodle extras. Source exclusions are planned tasks; no module has yet been deleted. |
+| D12 | Allocate work by module/file ownership and ordered handoffs | No contribution-size target. Baseline/shared contracts merge first; provider/worker, data, UI and HTTP/access use agreed boundaries. |
 
 Builders may choose internal SQL/query organization and test harness details consistent with these contracts. Changes to public methods, state meanings, file access, external disclosure, provider budget or revision ownership require updating the shared design before dependent work is merged.
