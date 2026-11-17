@@ -60,7 +60,7 @@ class HomeController extends Controller
         ];
         $recentUsers = Database::fetchAll("SELECT * FROM users ORDER BY created_at DESC LIMIT 6");
         $recentCourses = Database::fetchAll("SELECT c.*, u.full_name AS teacher_name FROM courses c JOIN users u ON c.teacher_id = u.id ORDER BY c.created_at DESC LIMIT 6");
-        $this->view('admin/dashboard', [
+        $this->render('admin/dashboard', [
             'pageTitle' => 'Admin Dashboard',
             'stats'     => $stats,
             'recentUsers' => $recentUsers,
@@ -100,7 +100,7 @@ class HomeController extends Controller
              LIMIT 8",
             ['tid' => $tid, 'st' => 'submitted']
         );
-        $this->view('teacher/dashboard', [
+        $this->render('teacher/dashboard', [
             'pageTitle' => 'Teacher Studio',
             'stats'     => $stats,
             'courses'   => $courses,
@@ -138,7 +138,7 @@ class HomeController extends Controller
              LIMIT 5",
             ['sid' => $sid, 'now' => date('Y-m-d H:i:s')]
         );
-        $this->view('student/dashboard', [
+        $this->render('student/dashboard', [
             'pageTitle'   => 'My Learning',
             'stats'       => $stats,
             'enrollments' => $enrollments,

@@ -39,7 +39,7 @@ class FlashcardController extends Controller
             '(d.user_id = :uid OR d.is_public = 1 OR d.course_id IN (SELECT course_id FROM enrollments WHERE student_id = :uid2 AND status = "active")) AND fr.user_id = :uid3 AND fr.next_review <= :today',
             ['uid' => $uid, 'uid2' => $uid, 'uid3' => $uid, 'today' => date('Y-m-d')]);
 
-        $this->view('flashcards/index', [
+        $this->render('flashcards/index', [
             'pageTitle' => 'Flashcards',
             'decks'     => $decks,
             'dueCount'  => $dueCount,
@@ -51,7 +51,7 @@ class FlashcardController extends Controller
         $deck = Database::fetch('SELECT * FROM flashcard_decks WHERE id = :id', ['id' => $deckId]);
         if (!$deck) { $this->redirect('flashcards'); }
         $cards = Database::fetchAll('SELECT * FROM flashcards WHERE deck_id = :did ORDER BY sort_order, id', ['did' => $deckId]);
-        $this->view('flashcards/view', [
+        $this->render('flashcards/view', [
             'pageTitle' => $deck['title'],
             'deck'      => $deck,
             'cards'     => $cards,
@@ -92,7 +92,7 @@ class FlashcardController extends Controller
         $courses = Auth::isStudent()
             ? Database::fetchAll("SELECT c.id, c.title FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE e.student_id = :uid AND e.status = 'active'", ['uid' => Auth::id()])
             : Database::fetchAll("SELECT id, title FROM courses WHERE teacher_id = :tid ORDER BY title", ['tid' => Auth::id()]);
-        $this->view('flashcards/create', [
+        $this->render('flashcards/create', [
             'pageTitle' => 'Create Deck',
             'courses'   => $courses,
         ]);
@@ -130,7 +130,7 @@ class FlashcardController extends Controller
             $this->flash('success', 'No cards due for review right now. Come back later!');
             $this->redirect('flashcards/view/' . $deckId);
         }
-        $this->view('flashcards/study', [
+        $this->render('flashcards/study', [
             'pageTitle' => 'Studying · ' . $deck['title'],
             'deck'      => $deck,
             'cards'     => $due,

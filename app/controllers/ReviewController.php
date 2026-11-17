@@ -95,7 +95,7 @@ class ReviewController extends Controller
              ORDER BY n.updated_at DESC",
             ['uid' => Auth::id()]
         );
-        $this->view('review/my_notes', [
+        $this->render('review/my_notes', [
             'pageTitle' => 'My Notes',
             'notes'     => $notes,
         ]);
@@ -128,7 +128,7 @@ class ReviewController extends Controller
              ORDER BY b.created_at DESC",
             ['uid' => Auth::id()]
         );
-        $this->view('review/my_bookmarks', [
+        $this->render('review/my_bookmarks', [
             'pageTitle' => 'My Bookmarks',
             'bookmarks' => $marks,
         ]);
@@ -182,7 +182,7 @@ class ReviewController extends Controller
             }
             foreach ($results as $r) $total += count($r);
         }
-        $this->view('review/search', [
+        $this->render('review/search', [
             'pageTitle' => 'Search',
             'q'         => $q,
             'results'   => $results,

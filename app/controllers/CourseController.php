@@ -24,7 +24,7 @@ class CourseController extends Controller
         );
         if (!$course) {
             http_response_code(404);
-            $this->view('errors/404', ['pageTitle' => 'Course not found', 'message' => 'Course not found.']);
+            $this->render('errors/404', ['pageTitle' => 'Course not found', 'message' => 'Course not found.']);
             return;
         }
 
@@ -70,7 +70,7 @@ class CourseController extends Controller
             $completedLessons = (int) Database::count('lesson_completions lc JOIN lessons l ON lc.lesson_id = l.id JOIN modules m ON l.module_id = m.id', 'm.course_id = :cid AND lc.student_id = :sid', ['cid' => $id, 'sid' => Auth::id()]);
         }
 
-        $this->view('course/view', [
+        $this->render('course/view', [
             'pageTitle'   => $course['title'],
             'course'      => $course,
             'modules'     => $modules,
@@ -157,7 +157,7 @@ class CourseController extends Controller
         );
         if (!$course) {
             http_response_code(404);
-            $this->view('errors/404', ['message' => 'Course not found.']);
+            $this->render('errors/404', ['message' => 'Course not found.']);
             return;
         }
         $isOwner = Auth::isAdmin() || (Auth::isTeacher() && $course['teacher_id'] == Auth::id());
@@ -227,7 +227,7 @@ class CourseController extends Controller
         $progress = $enroll ? (float) $enroll['progress'] : 0;
         $completedCount = count(array_filter($allLessons, fn($l) => $l['is_completed']));
 
-        $this->view('course/learn', [
+        $this->render('course/learn', [
             'pageTitle'  => $course['title'],
             'course'     => $course,
             'modules'    => $modulesWithLessons,
@@ -294,7 +294,7 @@ class CourseController extends Controller
              ORDER BY e.enrolled_at DESC",
             ['cid' => $courseId]
         );
-        $this->view('course/students', [
+        $this->render('course/students', [
             'pageTitle' => 'Enrolled students · ' . $course['title'],
             'course'    => $course,
             'students'  => $students,

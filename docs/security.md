@@ -2,6 +2,8 @@
 
 Target controls. No row below is a claim of an implemented or validated control. Reassess every row against final code and attach evidence before submission.
 
+**Baseline serving control implemented:** `router.local.php` denies source/configuration/database/documentation/evidence/test/dot paths and arbitrary PHP entry points; its automated HTTP checks pass with the documented loopback command. See [baseline results](../evidence/baseline/localhost-smoke.json). Existing uploads remain public and the explicit controller/action allowlist is still planned. This does not satisfy private-download authorization or the full security assessment below.
+
 Apply [approved assignment-only scope](feature-scope.md) through explicit allowed actions as well as menus. Deny quiz actions on the retained Teacher controller. Preserve authorized calendar, announcements, notifications and course-material actions; scope reduction must not become an access-control bypass or unapproved removal. P0b/P5 own route/access controls; P4 owns navigation/templates; both verify ST04.
 
 ## Boundary assessment

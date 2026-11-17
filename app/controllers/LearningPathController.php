@@ -29,7 +29,7 @@ class LearningPathController extends Controller
              ORDER BY lp.created_at DESC",
             ['uid' => Auth::id()]
         );
-        $this->view('learning_paths/index', [
+        $this->render('learning_paths/index', [
             'pageTitle' => 'Learning Paths',
             'paths'     => $paths,
         ]);
@@ -59,7 +59,7 @@ class LearningPathController extends Controller
             ? Database::fetch('SELECT * FROM learning_path_enrollments WHERE path_id = :pid AND user_id = :uid', ['pid' => $pathId, 'uid' => Auth::id()])
             : null;
         $enrollCount = Database::count('learning_path_enrollments', 'path_id = :pid', ['pid' => $pathId]);
-        $this->view('learning_paths/view', [
+        $this->render('learning_paths/view', [
             'pageTitle' => $path['title'],
             'path'      => $path,
             'courses'   => $courses,
@@ -110,7 +110,7 @@ class LearningPathController extends Controller
         } else {
             $courses = Database::fetchAll("SELECT id, title FROM courses WHERE teacher_id = :tid AND status = 'published' ORDER BY title", ['tid' => Auth::id()]);
         }
-        $this->view('learning_paths/create', [
+        $this->render('learning_paths/create', [
             'pageTitle' => 'Create Learning Path',
             'courses'   => $courses,
         ]);

@@ -47,7 +47,7 @@ class TeacherController extends Controller
              LIMIT 8",
             ['tid' => $tid, 'st' => 'submitted']
         );
-        $this->view('teacher/dashboard', [
+        $this->render('teacher/dashboard', [
             'pageTitle' => 'Teacher Studio',
             'stats' => $stats,
             'courses' => $courses,
@@ -69,7 +69,7 @@ class TeacherController extends Controller
             ['tid' => $tid]
         );
         $categories = Database::fetchAll("SELECT * FROM categories ORDER BY name");
-        $this->view('teacher/courses', [
+        $this->render('teacher/courses', [
             'pageTitle' => 'My Courses',
             'courses' => $courses,
             'categories' => $categories,
@@ -127,7 +127,7 @@ class TeacherController extends Controller
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
             $this->flash('success', 'Course created. Now add modules and lessons.');
-            $this->redirect('teacher/courses/edit/' . $id);
+            $this->redirect('teacher/editCourse/' . $id);
         }
         $this->redirect('teacher/courses');
     }
@@ -175,7 +175,7 @@ class TeacherController extends Controller
                 Database::update('courses', $updates, 'id = :id', ['id' => $id]);
                 $this->flash('success', 'Course updated.');
             }
-            $this->redirect('teacher/courses/edit/' . $id);
+            $this->redirect('teacher/editCourse/' . $id);
         }
 
         $modules = Database::fetchAll(
@@ -184,7 +184,7 @@ class TeacherController extends Controller
             ['cid' => $id]
         );
         $categories = Database::fetchAll("SELECT * FROM categories ORDER BY name");
-        $this->view('teacher/course_edit', [
+        $this->render('teacher/course_edit', [
             'pageTitle' => 'Edit · ' . $course['title'],
             'course' => $course,
             'modules' => $modules,
@@ -210,7 +210,7 @@ class TeacherController extends Controller
                 $this->flash('success', 'Module added.');
             }
         }
-        $this->redirect('teacher/courses/edit/' . $courseId);
+        $this->redirect('teacher/editCourse/' . $courseId);
     }
 
     public function deleteModule(int $moduleId): void
@@ -220,7 +220,7 @@ class TeacherController extends Controller
         if (!Auth::ownsCourse($m['course_id'])) { Auth::requireRole('admin'); }
         Database::delete('modules', 'id = :id', ['id' => $moduleId]);
         $this->flash('success', 'Module deleted.');
-        $this->redirect('teacher/courses/edit/' . $m['course_id']);
+        $this->redirect('teacher/editCourse/' . $m['course_id']);
     }
 
     public function addLesson(int $moduleId): void
@@ -247,7 +247,7 @@ class TeacherController extends Controller
                     $fileSize = $_FILES['file']['size'];
                 } else {
                     $this->flash('error', 'Invalid file type or size exceeds limit.');
-                    $this->redirect('teacher/courses/edit/' . $m['course_id']);
+                    $this->redirect('teacher/editCourse/' . $m['course_id']);
                 }
             }
             Database::insert('lessons', [
@@ -264,7 +264,7 @@ class TeacherController extends Controller
             ]);
             $this->flash('success', 'Lesson added.');
         }
-        $this->redirect('teacher/courses/edit/' . $m['course_id']);
+        $this->redirect('teacher/editCourse/' . $m['course_id']);
     }
 
     public function deleteLesson(int $lessonId): void
@@ -277,7 +277,7 @@ class TeacherController extends Controller
         }
         Database::delete('lessons', 'id = :id', ['id' => $lessonId]);
         $this->flash('success', 'Lesson deleted.');
-        $this->redirect('teacher/courses/edit/' . $l['course_id']);
+        $this->redirect('teacher/editCourse/' . $l['course_id']);
     }
 
     // ----- ASSIGNMENTS -----
@@ -294,7 +294,7 @@ class TeacherController extends Controller
              ORDER BY s.submitted_at DESC",
             ['aid' => $id]
         );
-        $this->view('teacher/assignment', [
+        $this->render('teacher/assignment', [
             'pageTitle' => 'Assignment · ' . $a['title'],
             'assignment' => $a,
             'submissions' => $submissions,
@@ -379,7 +379,7 @@ class TeacherController extends Controller
             $this->flash('success', 'Submission graded and student notified.');
             $this->redirect('teacher/assignment/' . $s['assignment_id']);
         }
-        $this->view('teacher/grade', ['pageTitle' => 'Grade submission', 'sub' => $s]);
+        $this->render('teacher/grade', ['pageTitle' => 'Grade submission', 'sub' => $s]);
     }
 
     // ----- QUIZZES -----
@@ -397,7 +397,7 @@ class TeacherController extends Controller
             ['tid' => $tid]
         );
         $courses = Database::fetchAll("SELECT id, title FROM courses WHERE teacher_id = :tid ORDER BY title", ['tid' => $tid]);
-        $this->view('teacher/quizzes', [
+        $this->render('teacher/quizzes', [
             'pageTitle' => 'Quiz Bank',
             'quizzes'   => $quizzes,
             'courses'   => $courses,
@@ -442,7 +442,7 @@ class TeacherController extends Controller
         if (!$q) { $this->redirect('teacher/quizzes'); }
         if (!Auth::ownsCourse($q['course_id'])) { Auth::requireRole('admin'); }
         $questions = Database::fetchAll("SELECT * FROM questions WHERE quiz_id = :qid ORDER BY sort_order, id", ['qid' => $id]);
-        $this->view('teacher/quiz_edit', [
+        $this->render('teacher/quiz_edit', [
             'pageTitle' => 'Quiz · ' . $q['title'],
             'quiz' => $q,
             'questions' => $questions,
@@ -504,7 +504,7 @@ class TeacherController extends Controller
     {
         $tid = Auth::id();
         $courses = Database::fetchAll("SELECT id, title FROM courses WHERE teacher_id = :tid ORDER BY title", ['tid' => $tid]);
-        $this->view('teacher/gradebook', [
+        $this->render('teacher/gradebook', [
             'pageTitle' => 'Gradebook',
             'courses'   => $courses,
         ]);
@@ -527,7 +527,7 @@ class TeacherController extends Controller
         foreach ($rows as $r) {
             $grades[$r['student_id']][$r['item_id']] = $r;
         }
-        $this->view('teacher/gradebook_course', [
+        $this->render('teacher/gradebook_course', [
             'pageTitle' => 'Gradebook · ' . $course['title'],
             'course' => $course,
             'students' => $students,

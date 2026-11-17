@@ -23,7 +23,7 @@ extract($data, EXTR_SKIP);
       $assignments = Database::count('assignments', 'course_id = :cid', ['cid' => $c['id']]);
       $pending = Database::count('submissions s JOIN assignments a ON s.assignment_id = a.id', 'a.course_id = :cid AND s.status = :st', ['cid' => $c['id'], 'st' => 'submitted']);
       ?>
-      <a href="<?= url('teacher/gradebook/course/' . $c['id']) ?>" class="card card-pad" style="text-decoration:none;color:inherit;">
+      <a href="<?= url('teacher/gradebookCourse/' . $c['id']) ?>" class="card card-pad" style="text-decoration:none;color:inherit;">
         <div class="flex-between mb-1">
           <h3 style="font-size:1.1rem;"><?= e($c['title']) ?></h3>
           <span class="material-icons" style="color:var(--text-muted);">chevron_right</span>

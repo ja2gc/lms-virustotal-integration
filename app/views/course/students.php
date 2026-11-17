@@ -5,7 +5,7 @@ $c = $course;
 <div class="breadcrumb">
   <a href="<?= url('teacher/courses') ?>">My courses</a>
   <span class="material-icons">chevron_right</span>
-  <a href="<?= url('teacher/courses/edit/' . $c['id']) ?>"><?= e($c['title']) ?></a>
+  <a href="<?= url('teacher/editCourse/' . $c['id']) ?>"><?= e($c['title']) ?></a>
   <span class="material-icons">chevron_right</span>
   <span>Students</span>
 </div>
@@ -16,7 +16,7 @@ $c = $course;
     <p><?= count($students) ?> student(s) enrolled in <?= e($c['title']) ?>.</p>
   </div>
   <div class="actions">
-    <a href="<?= url('teacher/gradebook/course/' . $c['id']) ?>" class="btn btn-secondary"><span class="material-icons">grading</span> View gradebook</a>
+    <a href="<?= url('teacher/gradebookCourse/' . $c['id']) ?>" class="btn btn-secondary"><span class="material-icons">grading</span> View gradebook</a>
   </div>
 </div>
 

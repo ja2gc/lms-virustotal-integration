@@ -1,6 +1,8 @@
 # LMS VirusTotal Integration Implementation Plan
 
-> **For agentic workers:** Use `superpowers:executing-plans` for the single assigned task when available. Use subagent-driven development only when the user explicitly chooses it; a member's task is not authorization to execute the whole plan. Steps use checkboxes. This document plans later product work; no product feature is implemented by this foundation session.
+> **For agentic workers:** Use `superpowers:executing-plans` for the single assigned task when available. Use subagent-driven development only when the user explicitly chooses it; a member's task is not authorization to execute the whole plan. Steps use checkboxes. This document plans integration work; the status below records subsequent localhost repairs.
+
+**2026-11-18 handoff:** startup/rendering and course/grade links are repaired; the shared baseline/routing test runner and `router.local.php` exist. Browser checks passed for install, three role logins, course publication/enrollment, written submission, grading and student feedback. The sidebar selection was also corrected. [Evidence and limits](baseline-audit.md) apply: P0's attachment checks remain open; P0b's action map/exclusions/private-path changes and P1-P7 integration work remain pending. Reuse and extend these files rather than recreating them. Rebase dependent controller/template branches on this merged baseline before editing.
 
 **Goal:** Deliver a locally reproducible Doodle submission workflow with durable VirusTotal advisories, two working reusable-component consumers and measured assessment evidence.
 
@@ -53,7 +55,7 @@ These are task/file boundaries, not assignments to named members or contribution
 
 P0a's mechanical rendering sweep touches existing controllers and some grade links once, **before** feature branches edit them. After that merge, hand those files to their listed stream. P0b changes routing in its own PR while P1 publishes bootstrap/schema/test seams in a separate PR. Do not work concurrently on the same file merely because changes seem small.
 
-The shared test runner from P0a discovers `tests/*Test.php`. Each test file returns `['group' => '<group>', 'tests' => ['test name' => callable]]`; supported groups are baseline, routing, persistence, adapter, worker, ui, status and access. The runner supports `--group=<group>` and exits nonzero on failure. Other streams add their own test files without editing this runner. This is a planned convention, not an existing harness.
+The implemented shared test runner from P0a discovers `tests/*Test.php`. Each test file returns `['group' => '<group>', 'tests' => ['test name' => callable]]`; planned groups are baseline, routing, persistence, adapter, worker, ui, status and access. The runner supports `--group=<group>` and exits nonzero on failure or when no tests match. Baseline and routing exist now. Other streams add their own test files without editing this runner.
 
 **Handoff package for every PR:** source revision/branch; changed files; exact provided/consumed signatures or JSON example; migration/config effects; focused test command and real result; sanitized fixture/evidence locations; known limitations; affected downstream task. Review and merge that package before a consumer depends on it.
 
@@ -63,14 +65,14 @@ All streams supply tests, documentation and evidence for their own work. P6/P7 a
 
 ## P0: Make the scoped Doodle baseline reproducible
 
-**P0a files (foundation first):** modify `app/core/Controller.php`, its rendering calls throughout `app/controllers/`, scoped teacher view links, `install.php`, `.gitignore`, `README.md`; create `tests/run.php`, `tests/BaselineTest.php`, `dependencies.md` and `config/scan.example.php`.
+**P0a files (foundation first):** modify `app/core/Controller.php`, its rendering calls throughout `app/controllers/`, scoped teacher view links, `install.php`, `.gitignore`, `README.md`; create `tests/run.php`, `tests/BaselineTest.php`, `runtime-requirements.json` and `config/scan.example.php`. The runtime manifest/test files now exist; scan example configuration is still pending.
 
 **P0b files (HTTP/access after P0a merge):** modify `app/core/Router.php`; create `router.local.php`, `config/routes.php` and `tests/RoutingTest.php`. The explicit action map retains the approved features and denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
 
 **Interfaces:** preserve public `*/view/{id}` actions; rename the protected rendering helper to `render(string $view, array $data = []): void` and update every internal `$this->view(...)` render call. Preserve `viewRaw`. Align teacher URLs/forms with existing `gradeSubmission(int $id)`. Define CLI-safe loading in P1 rather than requiring `index.php` from jobs.
 
-- [ ] Write controller-load checks for all 26 files, plus baseline installation and grade-route checks. The runner follows the discovery contract above and must throw/report nonzero without relying on PHP `assert()` settings.
-- [ ] Run `php tests/run.php --group=baseline`; observe the reproduced class conflict. Execute the installer in a disposable target to reproduce B07 before fixing bootstrap loading.
+- [x] Write controller-load checks for all 26 files, plus baseline installation and grade-route checks. The runner follows the discovery contract above and must throw/report nonzero without relying on PHP `assert()` settings.
+- [x] Run `php tests/run.php --group=baseline`; observe the reproduced class conflict. Execute the installer in a disposable target to reproduce B07 before fixing bootstrap loading.
 - [ ] In P0a rename the common renderer/callers and repair grade links/forms and proven installer defects; ignore local sessions/install/migration flags and secrets/data. Verify and merge this baseline sweep before other streams edit controllers/templates.
 - [ ] In P0b write failing routing tests, then implement the safe loopback router and action map: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
 - [ ] Rerun baseline checks; verify login, enrollment, assignment view, save, teacher review/grading and student feedback through a browser. Test direct protected paths under the actual router command.

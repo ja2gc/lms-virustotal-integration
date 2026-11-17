@@ -92,5 +92,6 @@ Before a scan-start POST, persist an in-flight marker. If the worker crashes wit
 | D10 | Cloud and containers are evaluated, not implementation requirements | Coordinator selected localhost. GitHub stores source; GitHub Pages cannot execute PHP. |
 | D11 | Retain a coherent teaching/submission/review workflow while excluding quizzes and unrelated modules | Coordinator approved assignment-only scope after reviewing Doodle extras. Source exclusions are planned tasks; no module has yet been deleted. |
 | D12 | Allocate work by module/file ownership and ordered handoffs | No contribution-size target. Baseline/shared contracts merge first; provider/worker, data, UI and HTTP/access use agreed boundaries. |
+| D13 | Repair upstream startup, renderer and course/grade URLs; add a loopback router and writable local session directory | Implemented for localhost access and the written-submission-to-feedback baseline. No framework/runtime upgrade. Public uploads, explicit action exclusions and scanning remain pending; see baseline evidence. |
 
 Builders may choose internal SQL/query organization and test harness details consistent with these contracts. Changes to public methods, state meanings, file access, external disclosure, provider budget or revision ownership require updating the shared design before dependent work is merged.

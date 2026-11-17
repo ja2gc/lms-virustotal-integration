@@ -45,7 +45,7 @@ class AdminController extends Controller
              LEFT JOIN users u ON al.user_id = u.id
              ORDER BY al.created_at DESC LIMIT 10"
         );
-        $this->view('admin/dashboard', [
+        $this->render('admin/dashboard', [
             'pageTitle'  => 'Admin Dashboard',
             'stats'      => $stats,
             'recentUsers'=> $recentUsers,
@@ -84,7 +84,7 @@ class AdminController extends Controller
             array_merge($params, ['limit' => PER_PAGE, 'offset' => $offset])
         );
         $baseUrl = 'admin/users?' . http_build_query(array_filter(['r'=>'admin/users','q'=>$q,'role'=>$role]));
-        $this->view('admin/users', [
+        $this->render('admin/users', [
             'pageTitle' => 'Manage Users',
             'users'    => $users,
             'q'         => $q,
@@ -160,7 +160,7 @@ class AdminController extends Controller
             $this->flash('success', 'User updated.');
             $this->redirect('admin/users');
         }
-        $this->view('admin/user_edit', ['pageTitle' => 'Edit user · ' . $user['full_name'], 'user' => $user]);
+        $this->render('admin/user_edit', ['pageTitle' => 'Edit user · ' . $user['full_name'], 'user' => $user]);
     }
 
     public function deleteUser(int $id): void
@@ -192,7 +192,7 @@ class AdminController extends Controller
             array_merge($params, ['limit' => PER_PAGE, 'offset' => $offset])
         );
         $baseUrl = 'admin/courses?' . http_build_query(array_filter(['r'=>'admin/courses','q'=>$q]));
-        $this->view('admin/courses', [
+        $this->render('admin/courses', [
             'pageTitle' => 'All Courses',
             'courses'   => $courses,
             'q'         => $q,
@@ -224,7 +224,7 @@ class AdminController extends Controller
             $this->redirect('admin/categories');
         }
         $categories = Database::fetchAll("SELECT cat.*, (SELECT COUNT(*) FROM courses c WHERE c.category_id = cat.id) AS course_count FROM categories cat ORDER BY cat.sort_order, cat.name");
-        $this->view('admin/categories', [
+        $this->render('admin/categories', [
             'pageTitle' => 'Categories',
             'categories' => $categories,
         ]);
@@ -276,7 +276,7 @@ class AdminController extends Controller
              ORDER BY a.created_at DESC"
         );
         $courses = Database::fetchAll("SELECT id, title FROM courses ORDER BY title");
-        $this->view('admin/announcements', [
+        $this->render('admin/announcements', [
             'pageTitle' => 'Announcements',
             'announcements' => $announcements,
             'courses' => $courses,
@@ -317,7 +317,7 @@ class AdminController extends Controller
         foreach (Database::fetchAll('SELECT * FROM settings') as $row) {
             $settings[$row['setting_key']] = $row['setting_value'];
         }
-        $this->view('admin/settings', [
+        $this->render('admin/settings', [
             'pageTitle' => 'System Settings',
             'settings'  => $settings,
         ]);

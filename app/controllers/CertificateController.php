@@ -31,7 +31,7 @@ class CertificateController extends Controller
              ORDER BY cert.issued_at DESC",
             ['uid' => $uid]
         );
-        $this->view('certificates/index', [
+        $this->render('certificates/index', [
             'pageTitle'    => 'My Certificates',
             'certificates' => $certs,
         ]);
@@ -76,7 +76,7 @@ class CertificateController extends Controller
         // Permission: owner, admin, or teacher of the course
         $canView = Auth::isAdmin() || $cert['user_id'] == $uid || (Auth::isTeacher() && $cert['teacher_id'] == $uid);
         if (!$canView) { $this->flash('error', 'Access denied.'); $this->redirect(''); }
-        $this->view('certificates/view', [
+        $this->render('certificates/view', [
             'pageTitle' => 'Certificate · ' . $cert['course_title'],
             'cert'      => $cert,
         ]);
@@ -88,7 +88,7 @@ class CertificateController extends Controller
         if (!Auth::ownsCourse($courseId)) { Auth::requireRole('admin'); }
         $course = Database::fetch('SELECT * FROM courses WHERE id = :id', ['id' => $courseId]);
         $templates = Database::fetchAll('SELECT * FROM certificate_templates WHERE course_id = :cid ORDER BY id', ['cid' => $courseId]);
-        $this->view('certificates/templates', [
+        $this->render('certificates/templates', [
             'pageTitle' => 'Certificate Templates · ' . $course['title'],
             'course'    => $course,
             'templates' => $templates,

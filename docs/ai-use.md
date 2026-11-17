@@ -16,6 +16,8 @@ This final project permits AI assistance and requires disclosure. Human contribu
 
 ## Corrections to AI assumptions
 
+Local baseline follow-up (2026-11-18): the coordinator requested actual localhost access/setup instructions, then the sidebar highlight correction and a push to main. Codex reproduced the installer/controller/route faults, wrote failing regressions, repaired the minimum startup/rendering/URL paths, added a local router/runtime manifest and updated setup/status documentation. A fictional in-app browser journey verified installation, three role logins, course publication/enrollment, written submission, teacher grading and student feedback. Sidebar regression checks cover teacher/student/admin dashboard overlap. [Executed evidence](../evidence/baseline/localhost-smoke.json) distinguishes this from pending scan/upload/security/UAT work. The coordinator remains the human reviewer; final project acceptance is not claimed. No API key or real student data was used.
+
 - Do not infer Moodle from a historical prompt; the selected baseline is Doodle.
 - Do not label a CLI worker as a separately deployed microservice.
 - Do not infer working upload protection merely from the presence of a MIME-check helper.

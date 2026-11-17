@@ -20,7 +20,7 @@ class AssignmentController extends Controller
              WHERE a.id = :id",
             ['id' => $id]
         );
-        if (!$a) { http_response_code(404); $this->view('errors/404', ['message' => 'Assignment not found.']); return; }
+        if (!$a) { http_response_code(404); $this->render('errors/404', ['message' => 'Assignment not found.']); return; }
 
         $isOwner = Auth::isAdmin() || (Auth::isTeacher() && $a['teacher_id'] == Auth::id());
         if (!$isOwner && !Auth::isEnrolled($a['course_id'])) {
@@ -33,7 +33,7 @@ class AssignmentController extends Controller
             ['aid' => $id, 'sid' => Auth::id()]
         ) : null;
 
-        $this->view('assignment/view', [
+        $this->render('assignment/view', [
             'pageTitle' => $a['title'],
             'assignment' => $a,
             'submission' => $submission,

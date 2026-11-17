@@ -42,7 +42,7 @@ $s = $sub;
 
   <div class="card card-pad">
     <h3 style="margin-bottom: 14px;">Grading</h3>
-    <form method="post" action="<?= url('teacher/grade/' . $s['id']) ?>">
+    <form method="post" action="<?= url('teacher/gradeSubmission/' . $s['id']) ?>">
       <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= CSRF::token() ?>">
       <div class="form-group">
         <label>Score (out of <?= $s['max_score'] ?>)</label>

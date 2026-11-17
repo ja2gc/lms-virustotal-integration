@@ -22,7 +22,7 @@ class GamificationController extends Controller
         $leaderboard = Gamification::leaderboard(10);
         $rank = 0;
         foreach ($leaderboard as $i => $u) if ($u['id'] == $uid) { $rank = $i + 1; break; }
-        $this->view('gamification/index', [
+        $this->render('gamification/index', [
             'pageTitle'  => 'My Achievements',
             'stats'      => $stats,
             'badges'     => $allBadges,
@@ -39,7 +39,7 @@ class GamificationController extends Controller
         if ($courseId > 0) {
             $course = Database::fetch('SELECT * FROM courses WHERE id = :id', ['id' => $courseId]);
         }
-        $this->view('gamification/leaderboard', [
+        $this->render('gamification/leaderboard', [
             'pageTitle' => 'Leaderboard',
             'board'     => $board,
             'course'    => $course,
@@ -56,7 +56,7 @@ class GamificationController extends Controller
             $b['earned'] = isset($earnedMap[$b['id']]);
             $b['awarded_at'] = $earnedMap[$b['id']] ?? null;
         }
-        $this->view('gamification/badges', [
+        $this->render('gamification/badges', [
             'pageTitle' => 'All Badges',
             'badges'    => $allBadges,
         ]);

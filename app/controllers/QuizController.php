@@ -19,7 +19,7 @@ class QuizController extends Controller
              WHERE q.id = :id",
             ['id' => $id]
         );
-        if (!$q) { http_response_code(404); $this->view('errors/404', ['message' => 'Quiz not found.']); return; }
+        if (!$q) { http_response_code(404); $this->render('errors/404', ['message' => 'Quiz not found.']); return; }
 
         // Permission: admin, owner, or enrolled student
         $canAccess = Auth::isAdmin()
@@ -42,7 +42,7 @@ class QuizController extends Controller
         $questions = Database::fetchAll("SELECT * FROM questions WHERE quiz_id = :qid ORDER BY sort_order, id", ['qid' => $id]);
         if ($q['shuffle']) shuffle($questions);
 
-        $this->view('quiz/take', [
+        $this->render('quiz/take', [
             'pageTitle' => 'Quiz · ' . $q['title'],
             'quiz' => $q,
             'questions' => $questions,
@@ -138,7 +138,7 @@ class QuizController extends Controller
             ]);
         }
 
-        $this->view('quiz/result', [
+        $this->render('quiz/result', [
             'pageTitle' => 'Quiz Result · ' . $q['title'],
             'quiz' => $q,
             'score' => $score,

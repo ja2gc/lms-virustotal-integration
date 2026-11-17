@@ -30,7 +30,7 @@ class WhiteboardController extends Controller
              WHERE w.course_id = :cid ORDER BY w.created_at DESC",
             ['cid' => $courseId]
         );
-        $this->view('whiteboard/course', [
+        $this->render('whiteboard/course', [
             'pageTitle' => 'Whiteboards · ' . $course['title'],
             'course'    => $course,
             'boards'    => $boards,
@@ -60,7 +60,7 @@ class WhiteboardController extends Controller
              WHERE s.whiteboard_id = :bid ORDER BY s.id",
             ['bid' => $boardId]
         );
-        $this->view('whiteboard/view', [
+        $this->render('whiteboard/view', [
             'pageTitle' => 'Whiteboard · ' . $board['name'],
             'board'     => $board,
             'strokes'   => $strokes,

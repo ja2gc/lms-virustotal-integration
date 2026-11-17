@@ -103,7 +103,7 @@ class AuthController extends Controller
             $pendingSecret = Security::generateTotpSecret();
             $qrUri = Security::totpUri($pendingSecret, Auth::user()['email']);
         }
-        $this->view('auth/setup2fa', [
+        $this->render('auth/setup2fa', [
             'pageTitle' => 'Two-Factor Authentication',
             'enabled' => !empty($existing) && !empty($existing['enabled_at']),
             'pendingSecret' => $pendingSecret,
@@ -214,7 +214,7 @@ class AuthController extends Controller
                 $this->redirect('auth/profile');
             }
         }
-        $this->view('auth/profile', ['pageTitle' => 'My Profile', 'user' => $user]);
+        $this->render('auth/profile', ['pageTitle' => 'My Profile', 'user' => $user]);
     }
 
     /** AJAX endpoint: persist theme preference. */

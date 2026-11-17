@@ -17,6 +17,8 @@ P6 validation and P7 final reconciliation/rehearsal involve **all four**. Each m
 
 ## What can start immediately?
 
+The coordinator's localhost task added renderer/bootstrap and course/grade route repairs, the baseline test runner and local router. [README setup](../README.md#run-the-current-lms-on-localhost) is executable. After pulling this baseline, foundation/data continues the remaining attachment checks and P1; HTTP/access extends the existing router/tests for P0b's explicit action map and P5; UI can work from the repaired templates/header. Provider/worker work still consumes P1's pending interfaces. Do not repeat the completed renderer sweep or replace the shared test runner. Full P0 acceptance and second-machine reproduction remain open; see [the audit](baseline-audit.md). The table describes task dependencies, including preparation already completed here.
+
 | Workstream | Can start now, without another member's implementation | Must wait for a handoff before connecting/merging |
 | --- | --- | --- |
 | Foundation/data | Reproduce baseline faults; implement P0a; plan migrations/repository and publish interface examples | Feature consumers wait for its common seam; P1 follows the core baseline sweep |

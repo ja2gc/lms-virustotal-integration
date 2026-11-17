@@ -4,6 +4,8 @@
 
 Doodle is PHP with server-rendered views, PDO helpers and vanilla CSS/JavaScript. It is not React: no React hooks, component library or frontend build pipeline is needed for this feature.
 
+The baseline renderer is now `Controller::render($view, $data)`. Use it for layout rendering; keep public `view(int)` actions for their existing URLs. `viewRaw()` and the global error-view helper retain their names. Teacher detail URLs use `teacher/editCourse/{id}`, `teacher/gradeSubmission/{id}` and `teacher/gradebookCourse/{id}`. Sidebar role dashboards match only their own index routes; course edit/assignment/grading belong under My Courses. See [baseline evidence](baseline-audit.md).
+
 | Responsibility | Existing location | Planned extension |
 | --- | --- | --- |
 | Request routing / CSRF | `app/core/Router.php`, `app/core/CSRF.php` | Correct baseline dispatch/method issues; keep same-origin session routes |

@@ -15,7 +15,7 @@ class NotificationsController extends Controller
             "SELECT * FROM notifications WHERE user_id = :uid ORDER BY created_at DESC LIMIT 100",
             ['uid' => Auth::id()]
         );
-        $this->view('notifications/index', [
+        $this->render('notifications/index', [
             'pageTitle' => 'Notifications',
             'notifs'    => $notifs,
         ]);

@@ -16,7 +16,7 @@ class WikiController extends Controller
         if (!$course) { $this->redirect(''); }
         $this->assertAccess($course);
         $pages = Database::fetchAll('SELECT * FROM wiki_pages WHERE course_id = :cid ORDER BY title', ['cid' => $courseId]);
-        $this->view('wiki/course', [
+        $this->render('wiki/course', [
             'pageTitle' => 'Wiki · ' . $course['title'],
             'course'    => $course,
             'pages'     => $pages,
@@ -41,7 +41,7 @@ class WikiController extends Controller
             "SELECT r.*, u.full_name AS editor_name FROM wiki_revisions r JOIN users u ON r.edited_by = u.id WHERE r.page_id = :pid ORDER BY r.edited_at DESC LIMIT 20",
             ['pid' => $pageId]
         );
-        $this->view('wiki/view', [
+        $this->render('wiki/view', [
             'pageTitle' => $page['title'],
             'page'      => $page,
             'revisions' => $revisions,
@@ -71,7 +71,7 @@ class WikiController extends Controller
             $this->flash('success', 'Wiki page updated.');
             $this->redirect('wiki/view/' . $pageId);
         }
-        $this->view('wiki/edit', ['pageTitle' => 'Edit · ' . $page['title'], 'page' => $page]);
+        $this->render('wiki/edit', ['pageTitle' => 'Edit · ' . $page['title'], 'page' => $page]);
     }
 
     public function create(int $courseId): void
@@ -97,7 +97,7 @@ class WikiController extends Controller
             $this->flash('success', 'Wiki page created.');
             $this->redirect('wiki/view/' . $pageId);
         }
-        $this->view('wiki/create', ['pageTitle' => 'New Wiki Page', 'course' => $course]);
+        $this->render('wiki/create', ['pageTitle' => 'New Wiki Page', 'course' => $course]);
     }
 
     public function delete(int $pageId): void
@@ -144,7 +144,7 @@ class GroupController extends Controller
             Database::fetchAll('SELECT group_id FROM group_members WHERE user_id = :uid', ['uid' => Auth::id()]),
             'group_id'
         );
-        $this->view('group/course', [
+        $this->render('group/course', [
             'pageTitle' => 'Groups · ' . $course['title'],
             'course'    => $course,
             'groups'    => $groups,
@@ -268,7 +268,7 @@ class BackupController extends Controller
     public function index(): void
     {
         $backups = Database::fetchAll('SELECT b.*, u.full_name AS creator_name FROM backups b LEFT JOIN users u ON b.created_by = u.id ORDER BY b.created_at DESC');
-        $this->view('admin/backups', [
+        $this->render('admin/backups', [
             'pageTitle' => 'Backups',
             'backups'   => $backups,
         ]);

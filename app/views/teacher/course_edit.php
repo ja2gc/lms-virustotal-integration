@@ -21,13 +21,13 @@ $c = $course;
     <a href="<?= url('course/view/' . $c['id']) ?>" class="btn btn-secondary"><span class="material-icons">visibility</span> Preview</a>
     <a href="<?= url('course/students/' . $c['id']) ?>" class="btn btn-secondary"><span class="material-icons">group</span> Students</a>
     <?php if ($c['status'] === 'draft'): ?>
-      <form method="post" action="<?= url('teacher/courses/edit/' . $c['id']) ?>" style="display:inline;">
+      <form method="post" action="<?= url('teacher/editCourse/' . $c['id']) ?>" style="display:inline;">
         <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= CSRF::token() ?>">
         <input type="hidden" name="action" value="publish">
         <button class="btn btn-success"><span class="material-icons">publish</span> Publish</button>
       </form>
     <?php else: ?>
-      <form method="post" action="<?= url('teacher/courses/edit/' . $c['id']) ?>" style="display:inline;">
+      <form method="post" action="<?= url('teacher/editCourse/' . $c['id']) ?>" style="display:inline;">
         <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= CSRF::token() ?>">
         <input type="hidden" name="action" value="unpublish">
         <button class="btn btn-ghost"><span class="material-icons">unpublished</span> Unpublish</button>
@@ -46,7 +46,7 @@ $c = $course;
 <div id="course-details" class="tab-pane">
   <div class="card card-pad">
     <h3 style="margin-bottom: 14px;">Course information</h3>
-    <form method="post" action="<?= url('teacher/courses/edit/' . $c['id']) ?>" enctype="multipart/form-data">
+    <form method="post" action="<?= url('teacher/editCourse/' . $c['id']) ?>" enctype="multipart/form-data">
       <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= CSRF::token() ?>">
       <input type="hidden" name="action" value="save">
       <div class="form-group">
@@ -117,7 +117,7 @@ $c = $course;
       </div>
       <div class="flex gap-sm">
         <button type="submit" class="btn btn-primary"><span class="material-icons">save</span> Save changes</button>
-        <form method="post" action="<?= url('teacher/courses/edit/' . $c['id']) ?>" onsubmit="return confirm('Permanently delete this course and all its content?')">
+        <form method="post" action="<?= url('teacher/editCourse/' . $c['id']) ?>" onsubmit="return confirm('Permanently delete this course and all its content?')">
           <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= CSRF::token() ?>">
           <input type="hidden" name="action" value="delete">
           <button type="submit" class="btn btn-danger"><span class="material-icons">delete</span> Delete course</button>

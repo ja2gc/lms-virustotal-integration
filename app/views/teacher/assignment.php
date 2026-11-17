@@ -3,7 +3,7 @@ extract($data, EXTR_SKIP);
 $a = $assignment;
 ?>
 <div class="breadcrumb">
-  <a href="<?= url('teacher/courses/edit/' . $a['course_id']) ?>">Course</a>
+  <a href="<?= url('teacher/editCourse/' . $a['course_id']) ?>">Course</a>
   <span class="material-icons">chevron_right</span>
   <span><?= e($a['title']) ?></span>
 </div>
@@ -68,7 +68,7 @@ $a = $assignment;
               <?php endif; ?>
             </td>
             <td class="text-right">
-              <a href="<?= url('teacher/grade/' . $s['id']) ?>" class="btn btn-primary btn-sm">
+              <a href="<?= url('teacher/gradeSubmission/' . $s['id']) ?>" class="btn btn-primary btn-sm">
                 <?= $s['status'] === 'graded' ? 'View' : 'Grade' ?>
               </a>
             </td>

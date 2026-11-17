@@ -78,7 +78,7 @@ if ('serviceWorker' in navigator) {
 
       <?php if (Auth::isStudent()): ?>
         <div class="sidebar-section">Learning</div>
-        <a href="<?= url('student') ?>" class="<?= strpos($currentUri, 'student') === 0 ? 'active' : '' ?>"><span class="material-icons">dashboard</span> My Learning</a>
+        <a href="<?= url('student') ?>" class="<?= in_array($currentUri, ['student', 'student/index'], true) ? 'active' : '' ?>"><span class="material-icons">dashboard</span> My Learning</a>
         <a href="<?= url('catalog') ?>" class="<?= strpos($currentUri, 'catalog') === 0 ? 'active' : '' ?>"><span class="material-icons">explore</span> Course Catalog</a>
         <a href="<?= url('learning_paths') ?>" class="<?= strpos($currentUri, 'learning_paths') === 0 ? 'active' : '' ?>"><span class="material-icons">route</span> Learning Paths</a>
         <a href="<?= url('review/search') ?>" class="<?= $currentUri === 'review/search' ? 'active' : '' ?>"><span class="material-icons">search</span> Search</a>
@@ -89,8 +89,8 @@ if ('serviceWorker' in navigator) {
 
       <?php if (Auth::isTeacher()): ?>
         <div class="sidebar-section">Teaching</div>
-        <a href="<?= url('teacher') ?>" class="<?= strpos($currentUri, 'teacher') === 0 && $currentUri !== 'teacher/quizzes' ? 'active' : '' ?>"><span class="material-icons">dashboard</span> Teacher Studio</a>
-        <a href="<?= url('teacher/courses') ?>" class="<?= strpos($currentUri, 'teacher/courses') === 0 ? 'active' : '' ?>"><span class="material-icons">school</span> My Courses</a>
+        <a href="<?= url('teacher') ?>" class="<?= in_array($currentUri, ['teacher', 'teacher/index'], true) ? 'active' : '' ?>"><span class="material-icons">dashboard</span> Teacher Studio</a>
+        <a href="<?= url('teacher/courses') ?>" class="<?= preg_match('~^teacher/(?:courses|editCourse|assignment|gradeSubmission)(?:/|$)~', $currentUri) ? 'active' : '' ?>"><span class="material-icons">school</span> My Courses</a>
         <a href="<?= url('teacher/quizzes') ?>" class="<?= strpos($currentUri, 'teacher/quizzes') === 0 ? 'active' : '' ?>"><span class="material-icons">quiz</span> Quiz Bank</a>
         <a href="<?= url('teacher/gradebook') ?>" class="<?= strpos($currentUri, 'teacher/gradebook') === 0 ? 'active' : '' ?>"><span class="material-icons">grading</span> Gradebook
           <?php if ($pendingCount > 0): ?><span class="badge"><?= $pendingCount ?></span><?php endif; ?>
@@ -100,7 +100,7 @@ if ('serviceWorker' in navigator) {
 
       <?php if (Auth::isAdmin()): ?>
         <div class="sidebar-section">Administration</div>
-        <a href="<?= url('admin') ?>" class="<?= strpos($currentUri, 'admin') === 0 ? 'active' : '' ?>"><span class="material-icons">admin_panel_settings</span> Admin Panel</a>
+        <a href="<?= url('admin') ?>" class="<?= in_array($currentUri, ['admin', 'admin/index'], true) ? 'active' : '' ?>"><span class="material-icons">admin_panel_settings</span> Admin Panel</a>
         <a href="<?= url('admin/users') ?>" class="<?= strpos($currentUri, 'admin/users') === 0 ? 'active' : '' ?>"><span class="material-icons">group</span> Users</a>
         <a href="<?= url('admin/courses') ?>" class="<?= strpos($currentUri, 'admin/courses') === 0 ? 'active' : '' ?>"><span class="material-icons">school</span> All Courses</a>
         <a href="<?= url('admin/categories') ?>" class="<?= strpos($currentUri, 'admin/categories') === 0 ? 'active' : '' ?>"><span class="material-icons">category</span> Categories</a>

@@ -3,7 +3,7 @@ extract($data, EXTR_SKIP);
 $c = $course;
 ?>
 <div class="breadcrumb">
-  <a href="<?= url('teacher/courses/edit/' . $c['id']) ?>"><?= e($c['title']) ?></a>
+  <a href="<?= url('teacher/editCourse/' . $c['id']) ?>"><?= e($c['title']) ?></a>
   <span class="material-icons">chevron_right</span>
   <span>Certificate templates</span>
 </div>

@@ -47,7 +47,7 @@ class StudentController extends Controller
              LIMIT 5",
             ['sid' => $sid, 'now' => date('Y-m-d H:i:s')]
         );
-        $this->view('student/dashboard', [
+        $this->render('student/dashboard', [
             'pageTitle'  => 'My Learning',
             'stats'      => $stats,
             'enrollments'=> $enrollments,
@@ -75,7 +75,7 @@ class StudentController extends Controller
                  ORDER BY att.submitted_at DESC",
                 ['cid' => $courseId, 'sid' => $sid]
             );
-            $this->view('student/grades_course', [
+            $this->render('student/grades_course', [
                 'pageTitle' => 'My Grades · ' . $course['title'],
                 'course' => $course,
                 'grades' => $grades,
@@ -96,7 +96,7 @@ class StudentController extends Controller
              ORDER BY e.enrolled_at DESC",
             ['sid' => $sid]
         );
-        $this->view('student/grades', [
+        $this->render('student/grades', [
             'pageTitle' => 'My Grades',
             'courses' => $courses,
         ]);
@@ -144,7 +144,7 @@ class StudentController extends Controller
             $this->redirect('course/view/' . $a['course_id']);
         }
         $course = Database::fetch('SELECT * FROM courses WHERE id = :id', ['id' => $a['course_id']]);
-        $this->view('student/submit_assignment', [
+        $this->render('student/submit_assignment', [
             'pageTitle' => 'Submit · ' . $a['title'],
             'assignment' => $a,
             'course' => $course,

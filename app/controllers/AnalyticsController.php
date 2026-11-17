@@ -23,7 +23,7 @@ class AnalyticsController extends Controller
         } else {
             $stats = $this->teacherStats(Auth::id());
         }
-        $this->view('analytics/index', [
+        $this->render('analytics/index', [
             'pageTitle' => 'Analytics',
             'stats'     => $stats,
         ]);
@@ -137,7 +137,7 @@ class AnalyticsController extends Controller
              ORDER BY att.submitted_at DESC LIMIT 20",
             ['sid' => $studentId, 'tid' => Auth::id(), 'is_admin' => Auth::isAdmin() ? 1 : 0]
         );
-        $this->view('analytics/student', [
+        $this->render('analytics/student', [
             'pageTitle'   => 'Analytics · ' . $student['full_name'],
             'student'     => $student,
             'enrollments' => $enrollments,

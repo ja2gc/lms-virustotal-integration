@@ -1,6 +1,6 @@
 # Documentation map: every member starts here
 
-This repository is the planning/source foundation for **LMS with VirusTotal Integration**. Doodle provides existing LMS code; the group builds and proves the assignment-security integration. Implementation has not been completed. Read the [root README](../README.md) for current status and repository locations.
+This repository is the source/documentation foundation for **LMS with VirusTotal Integration**. Doodle provides existing LMS code; the group builds and proves the assignment-security integration. The repaired local LMS baseline now runs; integration implementation remains pending. Read the [root README](../README.md) for tested setup, current status and repository locations.
 
 ## Shared must-reads, in order
 
@@ -50,7 +50,7 @@ Everyone participates in P6/P7 integrated evidence and rehearsal. You do not nee
 
 ## How to interpret status and evidence
 
-Guides specify the target unless they explicitly cite executed evidence. Existing app source does not prove the screen works; an API description does not prove a real request; a fixture pass does not prove provider availability. [Baseline JSON](../evidence/baseline/php-checks.json) records actual checks and failures. Future evidence is added when real tests run.
+Guides specify the target unless they explicitly cite executed evidence. Existing app source does not prove the screen works; an API description does not prove a real request; a fixture pass does not prove provider availability. [Original baseline JSON](../evidence/baseline/php-checks.json) records initial failures; [localhost smoke evidence](../evidence/baseline/localhost-smoke.json) records subsequent repairs and observed behavior. Future evidence is added when real tests run.
 
 Preserve one authoritative guide per topic. Ask its owner/coordinator before changing a shared contract or approved scope. Keep task-to-person names in team communication; numbered workstreams are defined in the team guide. Use a single reviewed handoff instead of copying conflicting implementations between branches.
 

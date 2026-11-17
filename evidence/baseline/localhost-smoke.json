@@ -1,0 +1,93 @@
+{
+  "checked_at_utc": "2026-11-17T19:00:55.439366+00:00",
+  "source_base": "30d21d44e8ecb26eda0fa9313060e42c8e0ea822",
+  "source_scope": "fix/local-baseline working tree; report is versioned with the repairs",
+  "environment": {
+    "os": "Windows",
+    "php": "8.3.30",
+    "database": "SQLite via PDO",
+    "browser": "Codex in-app utility preview",
+    "base_url": "http://127.0.0.1:8173"
+  },
+  "web_command": "php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php",
+  "automated": {
+    "command": "php tests/run.php",
+    "exit_code": 0,
+    "output": [
+      "PASS every controller can load with its base class",
+      "PASS installer GET renders a form without an installed database",
+      "PASS teacher grade links and form resolve to a public grading action",
+      "PASS SQLite schemas and initial data install without external services",
+      "PASS course-management and gradebook links reach their detail actions",
+      "PASS sidebar highlights the current section without its role dashboard",
+      "PASS local server serves assets and routes without exposing project files",
+      "7 passed; 0 failed"
+    ],
+    "syntax_checked": 126,
+    "syntax_failures": []
+  },
+  "browser_checks": [
+    {
+      "check": "Installer with new SQLite DB and fictional administrator",
+      "result": "Pass"
+    },
+    {
+      "check": "Admin login and creation of fictional teacher/student through Users",
+      "result": "Pass"
+    },
+    {
+      "check": "Teacher login, create/edit/publish course and create assignment",
+      "result": "Pass"
+    },
+    {
+      "check": "Student login, catalog, enrollment and assignment detail",
+      "result": "Pass"
+    },
+    {
+      "check": "Written-only assignment submission and teacher submission list",
+      "result": "Pass"
+    },
+    {
+      "check": "Teacher grade POST (90/100) and feedback persist",
+      "result": "Pass"
+    },
+    {
+      "check": "Student My Grades -> Details shows 90/100 and fictional feedback",
+      "result": "Pass"
+    },
+    {
+      "check": "My Courses sidebar selection after reload: only My Courses active",
+      "result": "Pass",
+      "screenshot": "local-courses.jpg"
+    },
+    {
+      "check": "Existing Calendar page after user navigation",
+      "result": "Pass (page rendered only; event actions not tested)"
+    }
+  ],
+  "not_verified": [
+    "Attachment acceptance/rejection/replacement",
+    "Complete UAT01-UAT34 and variants",
+    "Second-machine setup",
+    "All retained supporting feature actions",
+    "Load/fault/recovery/full-security assessment",
+    "Live VirusTotal"
+  ],
+  "not_implemented": [
+    "VirusTotal adapter/worker/scan persistence",
+    "Private attachment downloads",
+    "Approved module/menu/action exclusions"
+  ],
+  "known_limits": [
+    "Public uploads still use upstream static URLs; synthetic data only.",
+    "Some excluded upstream menu URLs remain broken; no modules have been removed.",
+    "Manual flashcards remain excluded pending a scope decision and route/access review.",
+    "Google Fonts/icons are upstream network resources; offline visuals not verified."
+  ],
+  "review": {
+    "kind": "fresh read-only whole-change review",
+    "result": "No actionable findings; ready to merge for localhost-baseline scope",
+    "independent_harness_result": "7 passed; 0 failed",
+    "human_final_acceptance": "Not claimed"
+  }
+}

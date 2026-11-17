@@ -31,7 +31,7 @@ class CodeController extends Controller
              ORDER BY e.difficulty, e.id",
             ['cid' => $courseId, 'uid' => Auth::id()]
         );
-        $this->view('code/course', [
+        $this->render('code/course', [
             'pageTitle' => 'Code Exercises · ' . $course['title'],
             'course'    => $course,
             'exercises' => $exercises,
@@ -53,7 +53,7 @@ class CodeController extends Controller
             "SELECT * FROM code_submissions WHERE exercise_id = :eid AND user_id = :uid ORDER BY submitted_at DESC LIMIT 10",
             ['eid' => $id, 'uid' => Auth::id()]
         );
-        $this->view('code/exercise', [
+        $this->render('code/exercise', [
             'pageTitle'  => $ex['title'],
             'exercise'   => $ex,
             'testCases'  => $testCases,
@@ -184,7 +184,7 @@ class CodeController extends Controller
         if (!Auth::ownsCourse($courseId)) { Auth::requireRole('admin'); }
         $course = Database::fetch('SELECT * FROM courses WHERE id = :id', ['id' => $courseId]);
         $exercises = Database::fetchAll('SELECT * FROM code_exercises WHERE course_id = :cid ORDER BY id', ['cid' => $courseId]);
-        $this->view('code/manage', [
+        $this->render('code/manage', [
             'pageTitle' => 'Code Exercises · ' . $course['title'],
             'course'    => $course,
             'exercises' => $exercises,

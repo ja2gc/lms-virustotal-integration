@@ -53,7 +53,7 @@ class MessageController extends Controller
                 ['tid' => $t['id']]
             );
         }
-        $this->view('messages/index', [
+        $this->render('messages/index', [
             'pageTitle' => 'Messages',
             'threads'   => $threads,
         ]);
@@ -95,7 +95,7 @@ class MessageController extends Controller
             "SELECT u.id, u.full_name, u.avatar, u.role FROM dm_participants p JOIN users u ON p.user_id = u.id WHERE p.thread_id = :tid",
             ['tid' => $threadId]
         );
-        $this->view('messages/view', [
+        $this->render('messages/view', [
             'pageTitle'    => 'Conversation',
             'thread'       => $thread,
             'messages'     => $messages,
@@ -165,7 +165,7 @@ class MessageController extends Controller
                 ['uid' => Auth::id()]
             );
         }
-        $this->view('messages/new', [
+        $this->render('messages/new', [
             'pageTitle' => 'New message',
             'users'     => $users,
         ]);

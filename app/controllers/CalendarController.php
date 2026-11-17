@@ -128,7 +128,7 @@ class CalendarController extends Controller
         $upcoming = array_filter($events, fn($e) => $e['date'] >= $today && $e['date'] <= $weekAhead);
         usort($upcoming, fn($a, $b) => $a['date'] <=> $b['date']);
 
-        $this->view('calendar/index', [
+        $this->render('calendar/index', [
             'pageTitle' => 'Calendar',
             'grid'      => $grid,
             'month'     => $month,

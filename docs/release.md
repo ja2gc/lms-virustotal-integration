@@ -2,7 +2,24 @@
 
 ## Target and current readiness
 
-The coordinator selected localhost. No Render, GitHub Pages runtime or cloud deployment is planned. This is the target release procedure; it is **not yet a panel-ready runbook**. The first implementation task must fix the [baseline blockers](baseline-audit.md), add the safe local router/bootstrap and validate installation. Replace the proposed commands below with proven commands and attach their output before final submission.
+The coordinator selected localhost. No Render, GitHub Pages runtime or cloud deployment is planned. The existing LMS can now be installed and used locally: follow the tested commands in the [root README](../README.md#run-the-current-lms-on-localhost). Baseline installation, role logins and the written-submission-to-feedback journey were browser-tested on Windows/PHP 8.3.30. This is **not yet the final integrated release**: scanning, private downloads, module exclusions and the full release evidence remain open.
+
+## Tested baseline setup and troubleshooting
+
+The [runtime manifest](../runtime-requirements.json) lists extensions and test requirements. Verify them with `php -v` and `php -m`; enable missing extensions in the active configuration shown by `php --ini`. SQLite is the default: do not set `DOODLE_DB_TYPE=mysql` for this setup. No database server, package install or build step is required. Root, `database/`, `public/uploads/` and `tmp/sessions/` must be writable by your local PHP process.
+
+Start from the repository root, create `tmp/sessions`, and use `php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php`. Open `http://127.0.0.1:8173`, complete the installer with your own administrator details, then use the Sign in link. Every clone has its own ignored local DB, install flags, sessions and uploads. None of the fictional verification accounts/passwords is distributed in Git.
+
+For manual baseline practice, admin **Users -> Add user** creates one fictional teacher and student with passwords you choose. Sign in as teacher, **My Courses -> New course -> Publish -> Assignments -> New assignment**. Student uses **Course Catalog -> course -> Enroll now**, then reopens the course overview, opens its assignment and submits a written response. Teacher opens **Teacher Studio -> Grade now**, enters score/feedback and saves. Student sees the result under **My Grades -> Details**. This was the observed baseline journey; it is not a replacement for the full UAT catalogue.
+
+- **PHP not recognized:** use a terminal whose PATH contains PHP, or replace `php` with `& 'C:\path\to\php.exe'` in PowerShell. Do not copy the original upstream quick-start over this command.
+- **Could not find driver:** enable `pdo_sqlite` in the PHP configuration actually used by the terminal, then restart PHP.
+- **Session permission error or repeated sign-in:** create `tmp/sessions`, start from the repository root with the documented `-d session.save_path` argument, and keep the host/port consistent. The machine's original default session folder was not writable during the check.
+- **Port already in use:** stop your earlier server with Ctrl+C or select an unused loopback port and open that exact URL. Do not terminate unrelated processes.
+- **Private paths or arbitrary PHP return 404:** expected. Always start with `router.local.php`; a plain `php -S` command ignores `.htaccess` and can expose source files.
+- **Stopped/restarted server:** reuse the same DB and `.installed` flag. Do not rerun installation/reset steps on an existing member's data. A disposable clean install belongs in a separate clone/folder.
+
+The baseline router allows only intended entry points and allowlisted public file types. Existing public uploads are still retrievable by URL; P1/P5 must replace this with authorized private downloads. Keep the server on loopback and use synthetic content. Google Fonts/icons are upstream network requests; offline visual fidelity remains a rehearsal check.
 
 ## Required release contents
 
@@ -12,16 +29,16 @@ The coordinator selected localhost. No Render, GitHub Pages runtime or cloud dep
 - A migration command, web command, worker command, fixture/test command and fictional demo-data setup command.
 - Sufficient instructions for a second member/panel to reproduce the system without the implementer's assistance.
 
-## Proposed local setup contract
+## Remaining integration setup contract (planned)
 
 1. Install PHP 8.3 with `pdo_sqlite`, `curl`, `mbstring`, `fileinfo`, `json`, `openssl`, session support and a trusted CA store. Use SQLite for the tested target; other PHP versions/DBs need their own evidence.
 2. Check out the release source. Keep credentials in local process configuration, never source. Example variables to implement: `VT_API_KEY`, `SCAN_MODE=fixture|live`, `SCAN_PRIVATE_DIR`, `SCAN_MAX_UPLOAD_BYTES`, `SCAN_REQUESTS_PER_MINUTE`, `SCAN_REQUESTS_PER_DAY`. Reuse upstream `DOODLE_DB_TYPE=sqlite` and `DOODLE_ENV` where compatible.
-3. Run the repaired installer against a new disposable local DB, then the project migration runner. Create fictional student/teacher/admin users, two courses with different teachers, one assignment per course, and synthetic attachments. Normal demo-data setup must run offline and be repeatable.
-4. Planned web command: `php -S 127.0.0.1:8080 router.local.php`. `router.local.php` must be implemented and access-tested; do not use upstream `.htaccess` as protection for the built-in server.
+3. The installer is repaired and creates upstream tables. The separate project migration runner and repeatable fictional demo-data command remain to build. Final acceptance needs two courses with different teachers and synthetic attachments.
+4. The implemented web command and router are described above. Extend its access tests when private storage and the explicit action map are added; baseline file blocking alone does not complete P0b/P5.
 5. Planned worker command in a second terminal: `php bin/scan-worker.php`. Support a `--once` option for diagnosis/tests. The worker loads CLI configuration, not the web front controller, and must not start sessions or web-trigger migrations.
-6. Planned checks: `php tests/run.php` offline, then a small optional explicitly live smoke check using only synthetic content. Record exact final commands once implemented.
+6. `php tests/run.php` currently runs baseline/routing regressions offline. Add the planned integration groups, then a limited explicitly live synthetic smoke check. Record exact final commands/results once implemented.
 
-Do not copy a generic README quick-start and label it verified: source inspection found an installer-bootstrap concern, controller-load errors and a grade route mismatch.
+Original startup failures and subsequent repaired-baseline results are kept separately in the [baseline audit](baseline-audit.md). A successful baseline does not prove upload hardening, provider availability or complete scope exclusion.
 
 ## Demo sequence
 

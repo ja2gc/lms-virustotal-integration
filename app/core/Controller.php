@@ -22,7 +22,7 @@ class Controller
         $this->data['currentUri']  = $_GET['r'] ?? '';
     }
 
-    protected function view(string $view, array $data = []): void
+    protected function render(string $view, array $data = []): void
     {
         $data = array_merge($this->data, $data);
         extract($data, EXTR_SKIP);

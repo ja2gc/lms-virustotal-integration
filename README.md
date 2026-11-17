@@ -15,11 +15,32 @@ Technical 3's original title is *Secure File Submission System with VirusTotal I
 
 Every member should understand this reading order. Every agent must also start with [AGENTS.md](AGENTS.md) and its linked workflow rules. The coordinator assigns actual people to the four workstreams; the repository does not assume a particular member needs a particular amount of code.
 
-## Current state: foundation, not a finished application
+## Run the current LMS on localhost
 
-Doodle source, project guides, diagrams, shared contracts, task/handoff plan and demo target are present. No application repair, module removal, VirusTotal feature, migration or worker has been implemented by the foundation session. [Recorded baseline checks](docs/baseline-audit.md) found controller-loading failures and other blockers. Passing individual PHP syntax checks did not establish a working website.
+Tested on Windows with **PHP 8.3.30 and SQLite**. You do not need hosting, MySQL, Composer or Node for this baseline. Install PHP with the extensions listed in [the runtime manifest](runtime-requirements.json). If `php` is not recognized, add your PHP folder to PATH; Laragon users can use its terminal or the full path to `php.exe`.
 
-Begin with P0a's baseline repair gate. Do not claim a running integration from documentation or fixture output. The [release guide](docs/release.md) contains the local setup contract to implement and verify; it is not yet a panel-ready runbook. The [validation guide](docs/validation.md) defines the evidence still needed.
+From PowerShell, clone once and start inside the project folder:
+
+```powershell
+git clone https://github.com/ja2gc/lms-virustotal-integration.git
+cd lms-virustotal-integration
+php -v
+php -m
+New-Item -ItemType Directory -Force tmp/sessions | Out-Null
+php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php
+```
+
+Keep that terminal running and open **[http://127.0.0.1:8173](http://127.0.0.1:8173)**. The first visit opens the installer: choose your own local administrator account/password, install, then sign in. SQLite tables and initial settings are created automatically. No VirusTotal key is needed to try the existing LMS.
+
+Already cloned? Open its folder, pull the latest `main` while your work is committed, then run the last two commands above. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
+
+In another terminal, run `php tests/run.php`. See [the release/setup guide](docs/release.md) for dependencies, fictional demo accounts, troubleshooting and remaining release gates.
+
+## Current state: working local baseline, integration pending
+
+Installer, all three role logins, course publishing/catalog/enrollment, a written assignment submission, teacher grading and student feedback were checked in the built-in browser preview. Startup/controller/rendering and course/grade route defects were repaired; the sidebar now selects My Courses without also selecting Teacher Studio. See [the baseline audit](docs/baseline-audit.md) for original failures and new evidence.
+
+**VirusTotal, its worker, private attachment downloads and the approved module exclusions are still to implement.** Existing extra menus remain visible. The local router blocks project source/configuration/database files, but upstream uploads remain publicly addressable; use fictional users and synthetic files only. This is a runnable development starting point, not the final integrated release or completed manual UAT. Follow [the implementation plan](docs/implementation-plan.md) and [validation guide](docs/validation.md).
 
 ## Shared technical direction
 
@@ -28,7 +49,7 @@ Begin with P0a's baseline repair gate. Do not claim a running integration from d
 - VirusTotal is the assessed external service. Browser requests go through the LMS; provider keys stay server-side.
 - Submission/grade state, processing state and security advisory have different meanings. Use the shared [integration contract](docs/integrations.md) and [data model/ERD](docs/data-model.md).
 - Use fictional accounts and synthetic attachments; never commit credentials, local databases, actual student files or backups.
-- PHP 8.3.30 is the runtime inspected so far. No runtime upgrade was performed; freeze the tested team environment during the baseline gate.
+- PHP 8.3.30 is the tested runtime. No runtime upgrade was performed; freeze the tested team environment during integration.
 
 ## Repository navigation
 
@@ -39,7 +60,8 @@ Begin with P0a's baseline repair gate. Do not claim a running integration from d
 | `docs/` | Authoritative project scope, architecture, contracts, tasks, security, evidence plan and demo guides |
 | `evidence/baseline/` | Actual normalized baseline check results; later evidence folders are created when real checks run |
 | `AGENTS.md`, `.agents/rules/workflow.md` | Agent reading order, boundaries and verification rules |
-| `app/scan/`, `bin/`, `tests/`, `database/migrations/` | Planned integration areas; the task plan specifies their creation, not existing implemented behavior |
+| `router.local.php`, `tests/`, `runtime-requirements.json` | Implemented local server entry point, baseline regression checks and tested runtime manifest |
+| `app/scan/`, `bin/`, `database/migrations/` | Planned integration areas; the worker and scan migrations do not exist yet |
 
 ## Collaboration and completion
 

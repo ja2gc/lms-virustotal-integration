@@ -2,9 +2,9 @@
 
 ## Current evidence
 
-Only [baseline PHP checks](../evidence/baseline/php-checks.json) have been executed for this foundation. They show 122 individual syntax checks passed and nine controller-load failures. No new integration test, load test, browser workflow, provider call, recovery result or security assessment has passed yet.
+The [original baseline PHP checks](../evidence/baseline/php-checks.json) showed 122 syntax passes and nine controller-load failures. The original failed installer check is preserved separately. Subsequent [localhost smoke evidence](../evidence/baseline/localhost-smoke.json) records the repaired startup, baseline/routing regressions and observed install/login/course/written-submission/grading/feedback browser journey. This is partial baseline coverage; attachment validation/replacement and complete UAT remain open. No VirusTotal test, load test, failure-injection/recovery result or full integration security assessment has passed yet.
 
-Create a minimal runnable PHP harness under `tests/` as part of implementation. It must fail with a nonzero exit code, work without provider credentials, and exercise real application logic through an injected transport. Do not depend on PHP assertions being enabled. The planned invocation is `php tests/run.php`; it does not exist yet.
+The minimal `tests/run.php` harness now discovers baseline and routing checks, runs offline and exits nonzero on failure or no matching tests. Extend it with the planned groups rather than adding another runner. Integration checks must exercise real application logic with an injected provider transport and must not depend on PHP assertions being enabled. Provider/worker checks are still to implement.
 
 ## Required test catalogue
 

@@ -214,7 +214,7 @@ class ApiController extends Controller
         }
         $tokens = Database::fetchAll('SELECT id, name, token, last_used, expires_at, created_at FROM api_tokens WHERE user_id = :uid ORDER BY created_at DESC', ['uid' => Auth::id()]);
         $newToken = $_GET['new'] ?? '';
-        $this->view('api/tokens', [
+        $this->render('api/tokens', [
             'pageTitle' => 'API Tokens',
             'tokens'    => $tokens,
             'newToken'  => $newToken,

@@ -1,0 +1,19 @@
+{
+  "application": "LMS with VirusTotal Integration",
+  "baseline_tested_on": "Windows / PHP 8.3.30 / SQLite via PDO",
+  "php_target": "8.3",
+  "baseline_extensions": ["PDO", "pdo_sqlite", "session", "json", "mbstring", "fileinfo", "openssl"],
+  "integration_extensions": ["curl"],
+  "baseline_external_packages": [],
+  "database": "SQLite; database/doodle.sqlite is created by install.php and must not be committed",
+  "test_requirements": ["proc_open enabled", "loopback TCP available", "writable tmp directory"],
+  "web_command": "php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php",
+  "test_command": "php tests/run.php",
+  "notes": [
+    "Run from the repository root after creating tmp/sessions.",
+    "No Composer, npm, Node, MySQL or cloud account is needed for the current baseline.",
+    "VirusTotal and its worker are not implemented yet; a future live adapter needs cURL, a trusted CA store and an allowed API key.",
+    "Upstream views request Google Fonts/icons; full offline visual fidelity has not been verified.",
+    "Other PHP versions, MySQL and other operating systems have not been runtime-tested."
+  ]
+}

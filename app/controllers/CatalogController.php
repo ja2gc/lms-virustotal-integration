@@ -50,7 +50,7 @@ class CatalogController extends Controller
         $baseUrl = 'catalog?' . http_build_query(array_filter(['r' => 'catalog', 'q' => $q, 'cat' => $categoryId, 'level' => $level]));
         $pagination = paginate($total, PER_PAGE, $page, $baseUrl);
 
-        $this->view('catalog/index', [
+        $this->render('catalog/index', [
             'pageTitle'  => 'Course Catalog',
             'courses'    => $courses,
             'categories' => $categories,

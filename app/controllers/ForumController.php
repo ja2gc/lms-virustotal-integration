@@ -35,7 +35,7 @@ class ForumController extends Controller
             ['cid' => $courseId]
         );
 
-        $this->view('forum/course', [
+        $this->render('forum/course', [
             'pageTitle' => 'Forum · ' . $course['title'],
             'course'    => $course,
             'topics'    => $topics,
@@ -92,7 +92,7 @@ class ForumController extends Controller
              WHERE t.id = :id",
             ['id' => $topicId]
         );
-        if (!$topic) { http_response_code(404); $this->view('errors/404', ['message' => 'Topic not found.']); return; }
+        if (!$topic) { http_response_code(404); $this->render('errors/404', ['message' => 'Topic not found.']); return; }
 
         $canAccess = Auth::isAdmin() || (Auth::isTeacher() && $topic['teacher_id'] == Auth::id()) || (Auth::isStudent() && Auth::isEnrolled($topic['course_id']));
         if (!$canAccess) { $this->flash('error', 'Access denied.'); $this->redirect(''); }
@@ -111,7 +111,7 @@ class ForumController extends Controller
         $canModerate = Auth::isAdmin() || (Auth::isTeacher() && $topic['teacher_id'] == Auth::id());
         $canReply = $canModerate || (!$topic['locked'] && Auth::check());
 
-        $this->view('forum/topic', [
+        $this->render('forum/topic', [
             'pageTitle' => $topic['title'],
             'topic'     => $topic,
             'posts'     => $posts,

@@ -44,7 +44,7 @@ extract($data, EXTR_SKIP);
           <div class="meta">
             <span class="teacher"><span class="material-icons" style="font-size:14px;">group</span> <?= (int) $c['student_count'] ?> students</span>
             <div class="flex gap-sm">
-              <a href="<?= url('teacher/courses/edit/' . $c['id']) ?>" class="btn btn-secondary btn-sm"><span class="material-icons">edit</span></a>
+              <a href="<?= url('teacher/editCourse/' . $c['id']) ?>" class="btn btn-secondary btn-sm"><span class="material-icons">edit</span></a>
               <a href="<?= url('course/students/' . $c['id']) ?>" class="btn btn-secondary btn-sm"><span class="material-icons">people</span></a>
             </div>
           </div>

@@ -30,7 +30,7 @@ class AIController extends Controller
         );
         // Recommendations
         $recs = AIEngine::studyRecommendations($uid);
-        $this->view('ai/index', [
+        $this->render('ai/index', [
             'pageTitle'     => 'AI Learning Assistant',
             'conversations' => $conversations,
             'recommendations' => $recs,
@@ -105,7 +105,7 @@ class AIController extends Controller
         // Reload messages after potential POST
         $messages = Database::fetchAll('SELECT * FROM ai_messages WHERE conversation_id = :cid ORDER BY created_at ASC, id ASC', ['cid' => $convId]);
 
-        $this->view('ai/chat', [
+        $this->render('ai/chat', [
             'pageTitle' => 'AI Assistant · ' . $conv['title'],
             'conv'      => $conv,
             'messages'  => $messages,
@@ -211,7 +211,7 @@ class AIController extends Controller
             $this->redirect('teacher/quiz/' . $quizId);
         } else {
             // Students see the questions inline
-            $this->view('ai/generated_quiz', [
+            $this->render('ai/generated_quiz', [
                 'pageTitle' => 'AI Practice Quiz · ' . $course['title'],
                 'course'    => $course,
                 'questions' => $questions,
@@ -239,7 +239,7 @@ class AIController extends Controller
         $summary = AIEngine::summarize($text, 3);
         $keywords = AIEngine::keywords($text, 10);
 
-        $this->view('ai/summary', [
+        $this->render('ai/summary', [
             'pageTitle' => 'AI Summary · ' . $lesson['title'],
             'lesson'    => $lesson,
             'summary'   => $summary,

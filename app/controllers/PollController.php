@@ -32,7 +32,7 @@ class PollController extends Controller
              ORDER BY p.created_at DESC",
             ['cid' => $courseId]
         );
-        $this->view('polls/course', [
+        $this->render('polls/course', [
             'pageTitle' => 'Polls · ' . $course['title'],
             'course'    => $course,
             'polls'     => $polls,
@@ -84,7 +84,7 @@ class PollController extends Controller
 
         $hasVoted = count($userVotes) > 0;
 
-        $this->view('polls/view', [
+        $this->render('polls/view', [
             'pageTitle'      => 'Poll · ' . $poll['question'],
             'poll'           => $poll,
             'options'        => $options,

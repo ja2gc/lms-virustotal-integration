@@ -45,12 +45,12 @@ extract($data, EXTR_SKIP);
             <tr><td colspan="5" class="text-center text-muted" style="padding:30px;">You haven't created any courses yet.</td></tr>
           <?php else: foreach ($courses as $c): ?>
             <tr>
-              <td><a href="<?= url('teacher/courses/edit/' . $c['id']) ?>"><strong><?= e($c['title']) ?></strong></a></td>
+              <td><a href="<?= url('teacher/editCourse/' . $c['id']) ?>"><strong><?= e($c['title']) ?></strong></a></td>
               <td><span class="badge badge-<?= $c['status'] === 'published' ? 'success' : 'warning' ?>"><?= ucfirst($c['status']) ?></span></td>
               <td><?= (int) $c['student_count'] ?></td>
               <td><?= (int) $c['lesson_count'] ?></td>
               <td class="text-right">
-                <a href="<?= url('teacher/courses/edit/' . $c['id']) ?>" class="btn btn-secondary btn-sm"><span class="material-icons">edit</span></a>
+                <a href="<?= url('teacher/editCourse/' . $c['id']) ?>" class="btn btn-secondary btn-sm"><span class="material-icons">edit</span></a>
                 <a href="<?= url('course/view/' . $c['id']) ?>" class="btn btn-secondary btn-sm"><span class="material-icons">visibility</span></a>
               </td>
             </tr>
@@ -77,7 +77,7 @@ extract($data, EXTR_SKIP);
             </div>
             <div class="text-muted" style="font-size:.8rem;"><?= e($p['assignment_title']) ?></div>
             <div class="text-muted" style="font-size:.72rem;"><?= e($p['course_title']) ?></div>
-            <a href="<?= url('teacher/grade/' . $p['id']) ?>" class="btn btn-primary btn-sm" style="margin-top:6px;">Grade now</a>
+            <a href="<?= url('teacher/gradeSubmission/' . $p['id']) ?>" class="btn btn-primary btn-sm" style="margin-top:6px;">Grade now</a>
           </div>
         <?php endforeach; ?>
       </div>

@@ -5,6 +5,7 @@
 # ---- Secrets & install state ----
 .installed
 .v2_migrated
+.v3_migrated
 .env
 .env.local
 .env.*.local

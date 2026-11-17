@@ -37,7 +37,7 @@ $c = $course;
       <a href="<?= url('course/unenroll/' . $c['id']) ?>" class="btn btn-ghost btn-block" style="color:#fff;margin-top:8px;" data-confirm="Are you sure you want to unenroll? Your progress will be lost.">Unenroll</a>
     <?php elseif ($isOwner): ?>
       <p style="color:#fff;font-size:.85rem;margin-bottom:14px;">This is your course.</p>
-      <a href="<?= url('teacher/courses/edit/' . $c['id']) ?>" class="btn btn-primary btn-block btn-lg"><span class="material-icons">edit</span> Manage course</a>
+      <a href="<?= url('teacher/editCourse/' . $c['id']) ?>" class="btn btn-primary btn-block btn-lg"><span class="material-icons">edit</span> Manage course</a>
       <a href="<?= url('course/learn/' . $c['id']) ?>" class="btn btn-ghost btn-block" style="color:#fff;margin-top:8px;">Preview as student</a>
     <?php elseif (Auth::isStudent()): ?>
       <?php if (!empty($c['enroll_key'])): ?>

@@ -14,7 +14,7 @@ $c = $course;
     <p><?= count($students) ?> students · <?= count($assignments) ?> graded items</p>
   </div>
   <div class="actions">
-    <a href="<?= url('teacher/courses/edit/' . $c['id']) ?>" class="btn btn-secondary"><span class="material-icons">edit</span> Manage course</a>
+    <a href="<?= url('teacher/editCourse/' . $c['id']) ?>" class="btn btn-secondary"><span class="material-icons">edit</span> Manage course</a>
   </div>
 </div>
 
