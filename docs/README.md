@@ -7,8 +7,9 @@ This repository is the planning/source foundation for **LMS with VirusTotal Inte
 | Read | Why every member needs it |
 | --- | --- |
 | [AGENTS.md](../AGENTS.md) and [workflow rules](../.agents/rules/workflow.md) | Required agent context, reuse/security/verification rules and scope authority |
+| [Software Requirements Specification](SRS.md) | Authoritative functional requirements by role, nonfunctional requirements, acceptance criteria and R01-R15 deliverable mapping |
 | [Approved features and user workflow](feature-scope.md) | What remains, what is excluded, and the assignment-only assessment decision |
-| [Demo manual](demo-manual.md) | The end-goal scenarios, expected proof, rehearsal and scope stop rule |
+| [Demo and manual UAT guide](demo-manual.md) | Full-feature manual checks, actual-result/defect recording, and a short panel script referencing those same cases |
 | [Team guide](team-guide.md) | Which stream owns each area, what can start now, what must wait, and how to prompt your own agent |
 | [Baseline audit](baseline-audit.md) | Real upstream blockers and limits of the checks already executed; prevents starting from a false working-system assumption |
 | [Implementation plan](implementation-plan.md) | Read the dependency/ownership sections and your own task details, rather than executing the entire plan |
@@ -28,8 +29,8 @@ Everyone participates in P6/P7 integrated evidence and rehearsal. You do not nee
 
 | Guide | Authoritative purpose | Read especially when |
 | --- | --- | --- |
-| [Project scope](project-scope.md) | R01-R15 acceptance criteria, final Parts A-F mapping and missing historical artifacts | Checking requirements or final completeness |
-| [Feature scope](feature-scope.md) | Approved website features, exclusions, role workflow and date/scope assumptions | Changing any page, navigation or feature |
+| [SRS](SRS.md) | Authoritative FR/NFR requirements, R01-R15 final Parts A-F mapping and missing historical artifacts | Every member/agent before planning; final completeness |
+| [Feature overview](feature-scope.md) | Readable approved-feature/workflow companion to the SRS, including exclusions and date assumptions | Understanding pages, navigation and user journeys |
 | [Architecture](architecture.md) | System boundaries, diagrams, failure flow, decisions and divergences | Changing responsibility or shared behavior |
 | [Data model](data-model.md) | ERD, field meanings, ownership, state transitions, concurrency and migration rules | Reading/writing submission/file/attempt data |
 | [Integrations](integrations.md) | Complete boundary register, reusable interface, repository methods, JSON, semantics and retry/quota policy | Connecting modules or changing APIs/fields/statuses |
@@ -39,12 +40,13 @@ Everyone participates in P6/P7 integrated evidence and rehearsal. You do not nee
 | [Team guide](team-guide.md) | Four workstreams, start/wait rules, safe handoffs and lightweight prompting help | Coordinating with classmates/agents |
 | [Validation](validation.md) | Test IDs, load/fault/recovery/security experiments and required raw evidence | Proving behavior and preparing final Part C |
 | [Release](release.md) | Local dependency/configuration/setup contract, migration/recovery/release gates | Making another machine/panel run the system |
-| [Demo manual](demo-manual.md) | DM01-DM12 presenter sequence and shared acceptance end goal | Building toward the end result or rehearsing |
+| [Demo and manual UAT guide](demo-manual.md) | Full manual cases and traceability, DM01-DM12 presenter sequence, pass/fail/defect recording | Manual acceptance, regression, scope control or rehearsal |
 | [Evaluation](evaluation.md) | Trends decisions and two sourced cases with traceable design effects | Preparing final Parts D/E |
 | [Risks](risks.md) | RMMM baseline, indicators, contingencies and closure format | Updating actual risks and final Part F |
 | [AI-use](ai-use.md) | Actual AI assistance, human decisions, corrections and disclosure | Recording AI-assisted work/final Part F |
 | [Baseline audit](baseline-audit.md) | Inspected source provenance, reproduced failures and unverified areas | Repairing upstream issues or interpreting old claims |
 | [Upstream Doodle reference](upstream-doodle.md) | Original product README retained for provenance; not our scope or verified instructions | Looking up original behavior/credits only |
+| [Old scope link](project-scope.md) | Redirect to the expanded SRS; no independent requirements | Following an earlier shared link only |
 
 ## How to interpret status and evidence
 

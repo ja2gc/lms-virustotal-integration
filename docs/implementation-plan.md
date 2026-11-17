@@ -8,9 +8,11 @@
 
 **Tech stack:** PHP 8.3, PDO SQLite, cURL, existing PHP views/CSS/vanilla JavaScript. No extra application framework, broker or cloud platform.
 
-**Spec:** [Architecture](architecture.md), [scope](project-scope.md), [data model](data-model.md), [integration contracts](integrations.md), [security](security.md). The coordinator approved the design baseline; numerical settings are proposed initial defaults to validate, not achieved metrics.
+**Spec:** [Software Requirements Specification](SRS.md) first; then [architecture](architecture.md), [data model](data-model.md), [integration contracts](integrations.md) and [security](security.md). FR/NFR IDs define required behavior; R01-R15 define the assessment mapping. Numerical targets explicitly marked proposed remain hypotheses to validate, not achieved metrics.
 
 ## Global constraints
+
+- `docs/SRS.md` is the required-behavior baseline. Map changes to its FR/NFR/R IDs and relevant manual/automated acceptance; the implementation plan does not override the SRS.
 
 - Localhost demonstration; bind the web server to `127.0.0.1`.
 - Reuse Doodle source and preserve its original history/license.
@@ -156,6 +158,7 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 
 - [ ] Run `php tests/run.php` and scoped role/browser acceptance; record actual failures and fix root causes in the owning task/PR.
 - [ ] Run UI02/ST04: retained supporting LMS features work, all assessment links are assignment-only, and excluded direct URLs/actions are denied. Do not claim scope reduction from menu screenshots alone.
+- [ ] Execute the full UAT01-UAT34 catalogue and variants from the demo manual, including supporting LMS features. Record actual results, Not run/Pass/Fail/Blocked, defects and retests in sanitized `evidence/uat/` records. The short DM01-DM12 panel script is not a substitute for this manual acceptance run.
 - [ ] Execute the load ramp defined in `validation.md` against fake provider responses; report environment, variable, raw metrics, degradation point/tested bound and failure mode.
 - [ ] Execute timeout, error, malformed-body and worker-crash trials; measure recovery including operator intervention where required.
 - [ ] Perform LIVE01 once with permitted synthetic content, verifying real handle and item/hash relationship. No provider load test or real malware. Record fixture-versus-live distinction.
@@ -172,7 +175,8 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 - [ ] Add actual code/test/evidence links to both case lessons and all trend decisions.
 - [ ] Complete each risk's final status, prediction-versus-outcome and reviewer/date; complete actual AI-use log.
 - [ ] Have each member demonstrate their feature and explain one failure path; rehearse panel setup from a clean local target. Verify source revision and release contents before submission.
+- [ ] Check FR01-FR26/NFR01-NFR12 traceability alongside R01-R15. Preserve unresolved manual defects and unexecuted checks honestly; do not convert a blocked feature into a claimed completed requirement to fit the demo slot.
 
 **Acceptance:** all Parts A-F trace to the system as built. Remaining failures/risks are explicitly reported; final completion is not inferred from this planning document.
 
-Use DM01-DM12 in the demo manual as end-goal checks throughout implementation, not a last-day script. Any change outside those scenarios, R01-R15 or a concrete correctness/security need must be proposed before implementation. Read the optional prompting guidance in the team guide; members plan their own internal solutions with their agents rather than following a scripted conversation.
+Use the SRS and full UAT catalogue as end-goal checks throughout implementation, not a last-day script. DM01-DM12 are the shorter presenter view of the same tested behavior. Any change outside SRS requirements, those cases or a concrete correctness/security need must be proposed before implementation. Read optional prompting guidance in the team guide; members plan their own internal solutions with their agents rather than following a scripted conversation.

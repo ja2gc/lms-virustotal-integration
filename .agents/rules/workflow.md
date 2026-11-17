@@ -4,6 +4,7 @@
 
 - Follow the current user request. A planning task produces plans; an assigned implementation task produces only its agreed changes.
 - Read root `AGENTS.md` first. Read this file explicitly; do not assume agents automatically discover `.agents/`.
+- Read `docs/SRS.md` for required behavior before planning. Map assigned work to its FR/NFR/R IDs and the manual UAT/demo cases. Source/evidence establish current behavior; a mismatch with the SRS is an implementation gap or an explicit change request, not an automatic scope revision.
 - Source, migrations, executed checks and observed behavior establish implementation truth. Label planned, implemented and verified behavior separately.
 - Reuse existing controllers, PHP views, CSS, authorization and database helpers where they fit. Inspect implementations and callers before adding a helper, service or component.
 - Follow `docs/feature-scope.md`: assignment-based assessment only, with its retained supporting LMS features. Do not rebuild quizzes or silently remove approved calendar/announcements/notifications/course behavior. Propose further scope changes before edits.

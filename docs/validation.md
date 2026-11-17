@@ -8,6 +8,8 @@ Create a minimal runnable PHP harness under `tests/` as part of implementation. 
 
 ## Required test catalogue
 
+Requirements authority: [SRS](SRS.md), including FR01-FR26, NFR01-NFR12 and R01-R15. The catalogue below defines implementation/measurement checks. The [demo/manual UAT guide](demo-manual.md) separately defines full manual feature acceptance, its actual-result/defect log, and the short panel sequence.
+
 | ID | Scenario and assertion |
 | --- | --- |
 | BT01 | Load every controller with the base class; no signature conflicts. Install isolated demo database; log in and navigate course/assignment pages. |
@@ -52,9 +54,15 @@ For malformed evidence the desired recovery can be a terminal Unresolved outcome
 
 ## Evidence format
 
-Store sanitized commands/configuration summaries and raw CSV/JSON/text under `evidence/contracts/`, `evidence/reliability/`, `evidence/performance/`, `evidence/security/`, `evidence/live/` and `evidence/release/` when those runs actually happen. Include a small manifest: test ID, time, source revision, environment, invocation, expected behavior, observed behavior, pass/fail and linked raw output. Screenshots supplement structured evidence; they do not replace measurements. Do not commit credentials, real identities, local DBs, backups or uploads.
+Store sanitized commands/configuration summaries and raw CSV/JSON/text under `evidence/contracts/`, `evidence/reliability/`, `evidence/performance/`, `evidence/security/`, `evidence/live/`, `evidence/uat/` and `evidence/release/` when those runs actually happen. Include a small manifest: FR/NFR/R and test/case IDs, time, source revision, environment, invocation/steps, expected behavior, actual observed behavior, status and linked raw output. For manual cases also record tester, fixture/live/operator-assisted mode, defect ID, owner and retest reference. Screenshots supplement structured evidence; they do not replace measurements. Do not commit credentials, real identities, local DBs, backups or uploads.
 
 Before release, trace every R-ID to implementation and evidence; explain any failed/untested requirement rather than relabeling it as complete.
+
+## Full manual acceptance and regression
+
+Run UAT01-UAT34 and each named variant on the integrated release, including the retained course/material/calendar/profile/announcement/notification and assignment/grading paths. A short presentation is not a complete manual test run. Keep statuses Not run, Pass, Fail or Blocked; record actual results rather than copying expected text. Do not prefill pass records during development.
+
+Retain failed results and defect reports, then add retest results on the fixed revision and rerun affected producer/consumer/role cases. Route/authorization or private-file failures are not cosmetic issues. Team-run manual acceptance is not independent stakeholder sign-off unless a real stakeholder participates and accepts it. Backend concurrency, reusable-call-site, quota and load claims still need the focused automated/measurement checks above.
 
 ## Team handoff verification
 

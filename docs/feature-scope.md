@@ -1,5 +1,7 @@
 # Approved website scope and workflow
 
+This is the readable feature/workflow companion to the [Software Requirements Specification](SRS.md). The SRS owns testable requirements and acceptance criteria; this overview does not create a competing specification.
+
 The coordinator approved an assignment-focused LMS with VirusTotal integration. Quizzes are excluded, including quiz creation, quiz-taking and quiz auto-grading. Assignment scores, teacher feedback and the student gradebook remain in scope. This is the target feature set; no upstream module has yet been deleted or disabled in code.
 
 Comparison is based on the supplied Technical 2 and revised Technical 3. Technical 1/4 were not supplied. Source presence is not proof of a working feature; existing paths must pass baseline smoke checks.

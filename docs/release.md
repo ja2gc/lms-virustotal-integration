@@ -25,7 +25,7 @@ Do not copy a generic README quick-start and label it verified: source inspectio
 
 ## Demo sequence
 
-Use [the demo manual](demo-manual.md) as the canonical presenter script and acceptance checklist. The steps below summarize its release connection; setup/run commands remain authoritative in this release guide.
+Use [the demo/manual UAT guide](demo-manual.md) for the full manual acceptance catalogue, defect/retest recording and the shorter presenter sequence. The steps below summarize its release connection; setup/run commands remain authoritative in this release guide. Complete and record UAT01-UAT34/variants before calling the release accepted; a rehearsed happy path alone is insufficient.
 
 1. Teacher opens a course/material and publishes an assignment/deadline. Briefly establish retained dashboards, calendar, announcements and notifications; avoid a tour of unrelated pages.
 2. Student submits text/file, sees successful local save and pending advisory while the worker is stopped.

@@ -2,6 +2,8 @@
 
 Use these four workstreams as the assignment slots. Choose actual members by familiarity and availability, not commit counts or line counts. Names and any later reassignment are team decisions. Everyone reads the root README, AGENTS.md and the shared must-reads in [the documentation map](README.md).
 
+Every member/agent must read [the SRS](SRS.md) before planning: it owns required final behavior. Use the complete UAT catalogue in [the demo/manual acceptance guide](demo-manual.md) to test supporting LMS features as well as scanning. The short panel script references those same cases but does not replace them. Record actual behavior, defects and retests; do not claim stakeholder acceptance from team rehearsal alone.
+
 ## Four assignments
 
 | Member / workstream | Main tasks | Owns | Completion proof |
@@ -55,7 +57,7 @@ The base rendering sweep temporarily touches many controllers; finish and merge 
 
 ## How to use your AI agent
 
-Give your agent a goal, your owned task IDs, required reading and boundaries. Let it inspect the repository, identify assumptions and propose its own plan. Discuss the plan with it before implementation. You do not need a scripted sequence of follow-up prompts.
+Give your agent a goal, your owned task IDs, relevant SRS requirement IDs, required reading and boundaries. Let it inspect the repository, identify assumptions and propose its own plan. Discuss the plan with it before implementation. You do not need a scripted sequence of follow-up prompts. Add the SRS and applicable UAT cases to any optional opener below; do not ask an agent to infer final requirements from a demo screenshot alone.
 
 Useful follow-ups are evidence-focused: ask what existing code it can reuse, which dependency is missing, how it will test the failure path, what a proposed extra feature contributes to a demo scenario, and which exact checks passed. Use [the demo manual](demo-manual.md) as an end goal, not permission to omit required security/performance evidence.
 

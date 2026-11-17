@@ -7,10 +7,11 @@ Technical 3's original title is *Secure File Submission System with VirusTotal I
 ## Read this before starting
 
 1. [Documentation map](docs/README.md): what every guide is for and what your role must read.
-2. [Approved scope and user workflow](docs/feature-scope.md): what we keep, exclude and add; do not expand or remove features independently.
-3. [Demo manual and acceptance target](docs/demo-manual.md): the end-to-end behavior we must successfully demonstrate.
-4. [Team guide](docs/team-guide.md): four workstreams, file ownership, what can start now, dependencies, handoffs and prompting advice.
-5. [Implementation plan](docs/implementation-plan.md): your assigned task IDs, interfaces, files and checks. Read relevant linked contracts before coding.
+2. [Software Requirements Specification](docs/SRS.md): the authoritative final behavior, role requirements, quality requirements and acceptance criteria. All members and agents must read it.
+3. [Feature/workflow overview](docs/feature-scope.md): a readable view of what we keep, exclude and add; it follows the SRS.
+4. [Demo and manual UAT guide](docs/demo-manual.md): full-feature manual acceptance checks and the shorter panel sequence using the same cases.
+5. [Team guide](docs/team-guide.md): four workstreams, ownership, start/wait dependencies, handoffs and prompting advice.
+6. [Implementation plan](docs/implementation-plan.md): assigned task IDs, interfaces, files and checks. Read linked contracts before coding.
 
 Every member should understand this reading order. Every agent must also start with [AGENTS.md](AGENTS.md) and its linked workflow rules. The coordinator assigns actual people to the four workstreams; the repository does not assume a particular member needs a particular amount of code.
 

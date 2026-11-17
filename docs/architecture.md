@@ -4,7 +4,7 @@
 
 Extend Doodle with a durable, advisory scanning workflow while preserving submission and grading behavior. Four students share one repository. The agreed demo runs locally. PHP views, vanilla CSS/JavaScript, PDO and the existing auth model remain the baseline. Use PHP 8.3 and SQLite for the assessed local target; MySQL support is not claimed until separately exercised.
 
-This document describes the target, not current implementation. See [baseline audit](baseline-audit.md) for inspected behavior and [scope](project-scope.md) for requirements.
+This document describes the target, not current implementation. See [baseline audit](baseline-audit.md) for inspected behavior and [scope](SRS.md) for requirements.
 
 The [approved feature list](feature-scope.md) is authoritative for pages/routes: retain supporting LMS courses/materials, calendar, announcements, notifications and dashboards, but assessments are assignments only. No quiz workflow is part of this project. Keep assignment grading and student feedback.
 
