@@ -22,5 +22,13 @@
     "No live browser upgrade from an installed historical service worker was exercised",
     "No full manual UAT, wide viewport, load/fault/live-provider or restore acceptance claimed",
     "P5 waits for P1; P1 ownership decision pending"
-  ]
+  ],
+  "publishedVerifiedRevision": "669569b3fad3806a677849741b28eede9feff44c",
+  "mainVerification": {
+    "command": "php tests/run.php",
+    "result": "22 passed; 0 failed",
+    "javascript": "Both Node checks passed again on main",
+    "localLinks": "73 checked; 0 broken",
+    "diffCheck": "git diff --check passed"
+  }
 }
