@@ -15,7 +15,7 @@ P6/P7 evidence and rehearsal are shared. Choosing a stream means owning its impl
 
 - [x] Documentation foundation, SRS, contracts/diagrams, team guide and full manual acceptance plan published.
 - [x] Local installer/renderer/course/grade routes and sidebar selection repaired; localhost runbook and evidence published in `645a43a`.
-- [ ] Current route/role/flashcard/demo-seeder follow-up reviewed, merged and verified on main. Owner: Jared. See the actual evidence in `evidence/baseline/routes-flashcards.json` when generated; do not infer a pass from this line.
+- [x] Route/role/flashcard/demo-seeder follow-up reviewed, merged via [PR #1](https://github.com/ja2gc/lms-virustotal-integration/pull/1) and verified on main at `8d15034`. Owner: Jared. Evidence: `evidence/baseline/routes-flashcards.json`.
 - [ ] **P0b feature cleanup/action restrictions/menu sweep — Jared, NOT STARTED. Explicitly deferred to next chat.**
 - [ ] P1 submission/private-revision/attempt persistence and interfaces.
 - [ ] P2/P3 provider and worker, including both reusable-component consumers.
@@ -29,4 +29,4 @@ For each task/PR add an entry below: task ID, owner, branch/PR, state (In progre
 
 ### Current follow-up — Jared
 
-State: Ready for review, before merge/main verification. Scope: all current sidebar routes and literal link/redirect resolution, three-role access checks, manual flashcard repair and localhost demo seeding. Evidence: `evidence/baseline/routes-flashcards.json`. Review found a lost Home flash message and discarded invalid-form input; both have focused regressions and corrections. No excluded module has been removed and no VirusTotal feature has been implemented. The final delivery reference will close this entry.
+State: **Done** for this foundation follow-up. Source PR #1 merged at `8d15034`; merged-main verification passed 16 PHP checks and the JavaScript check. 131 PHP syntax checks and 145 local documentation links passed. Scope: all current sidebar routes and literal link/redirect resolution, three-role access checks, manual flashcard repair and localhost demo seeding. Evidence: `evidence/baseline/routes-flashcards.json`. Review found a lost Home flash message and discarded invalid-form input; both have focused regressions and corrections. No excluded module has been removed and no VirusTotal feature has been implemented. The required completion record is closed; the separate cleanup and integration entries remain open.

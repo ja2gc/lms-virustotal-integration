@@ -49,7 +49,7 @@ php bin/seed-demo.php
 
 These are deliberately public **fictional localhost credentials**, not provider keys or production passwords. The offline seeder creates two courses, enrollments, one text lesson, assignments and a two-card manual deck. Run it twice safely: existing/manual records and reviews are preserved. If a demo identity's password/role was changed or its name collides, seeding stops instead of resetting it. The installer account you chose remains separate. Keep the server bound to loopback.
 
-Already cloned? Open its folder, pull the latest `main` while your work is committed, then run the last two commands above. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
+Already cloned? Open its folder, pull the latest `main` while your work is committed, then create `tmp/sessions` and run the documented web-server command near the top. Seeding is optional. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
 
 In another terminal, run `php tests/run.php`. See [the release/setup guide](docs/release.md) for dependencies, fictional demo accounts, troubleshooting and remaining release gates.
 
