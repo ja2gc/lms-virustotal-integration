@@ -1,16 +1,28 @@
-# Validation and evidence plan
+# Step C — Performance, Reliability and Security Validation
 
-## Current evidence
+## Original submission instruction — Part C
 
-The [original baseline PHP checks](../evidence/baseline/php-checks.json) showed 122 syntax passes and nine controller-load failures. The original failed installer check is preserved separately. Subsequent [localhost smoke evidence](../evidence/baseline/localhost-smoke.json) records the repaired startup, baseline/routing regressions and observed install/login/course/written-submission/grading/feedback browser journey. This is partial baseline coverage; attachment validation/replacement and complete UAT remain open. No VirusTotal test, load test, failure-injection/recovery result or full integration security assessment has passed yet.
+> Deliver evidence, not assertion. Performance: a load test stating the environment, the variable increased, the measurements, the degradation point, and the failure mode. Reliability: failure-injection results showing what the system does when an external dependency times out, returns an error, or returns malformed data, together with measured recovery behavior. Security: an assessment of every integration point covering authentication, authorization, transport protection, input validation, and logging, with the specific control implemented at each point and any accepted residual risk.
 
-The minimal `tests/run.php` harness now discovers baseline and routing checks, runs offline and exits nonzero on failure or no matching tests. Extend it with the planned groups rather than adding another runner. Integration checks must exercise real application logic with an injected provider transport and must not depend on PHP assertions being enabled. Provider/worker checks are still to implement.
+## Project response
+
+The catalogue/experiment settings below are checks/plans, not results. Manual acceptance and the panel script live only in [the demo/UAT manual](../demo-manual.md).
+
+## Baseline verification
+
+| Evidence snapshot | What was actually checked | Limit |
+| --- | --- | --- |
+| [Original source checks](../../evidence/baseline/php-checks.json), [initial installer check](../../evidence/baseline/localhost-check.json) | Upstream inspection and reproduced startup failures before repair | Historical input, not a current failure list |
+| [Local baseline smoke](../../evidence/baseline/localhost-smoke.json) | Installation, three role logins, course/enrollment, written submission, grading/feedback | Written-only baseline, not attachment or VirusTotal acceptance |
+| [Route/flashcard/seeder follow-up](../../evidence/baseline/routes-flashcards.json) | 16 PHP checks, JavaScript review checks, 131 syntax checks; role routes, private flashcards, repeatable fictional seeding | Snapshot only; final integrated UAT/load/fault/security/restore still pending |
+
+Private attachment storage, MIME/move-result enforcement, immutable revision/attempt linkage, scanning and final action exclusions remain to build. Baseline passes do not close them. The team plan owns completion; add raw evidence only when runs occur.
 
 ## Required test catalogue
 
-Current commands: `php tests/run.php` runs baseline, repeatable demo seeding, routing/three-role HTTP and flashcard checks without provider credentials. Optional developer JavaScript check: `node tests/flashcard-study.test.cjs` (standard Node only; Node is not an app runtime dependency). [Current evidence](../evidence/baseline/routes-flashcards.json) records actual results. These checks do not complete final scan/security/load/UAT acceptance.
+Current commands: `php tests/run.php` runs baseline, repeatable demo seeding, routing/three-role HTTP and flashcard checks without provider credentials. Optional developer JavaScript check: `node tests/flashcard-study.test.cjs` (standard Node only; Node is not an app runtime dependency). [Current evidence](../../evidence/baseline/routes-flashcards.json) records actual results. These checks do not complete final scan/security/load/UAT acceptance.
 
-Requirements authority: [SRS](SRS.md), including FR01-FR27, NFR01-NFR12 and R01-R15. The catalogue below defines implementation/measurement checks. The [demo/manual UAT guide](demo-manual.md) separately defines full manual feature acceptance, its actual-result/defect log, and the short panel sequence.
+Requirements authority: [SRS](../SRS.md) defines FR01-FR27 and NFR01-NFR12; the Step A-F files in this folder define assessment criteria R01-R15. The catalogue below defines implementation/measurement checks. The [demo/manual UAT guide](../demo-manual.md) separately defines full manual feature acceptance, its actual-result/defect log, and the short panel sequence.
 
 | ID | Scenario and assertion |
 | --- | --- |
@@ -69,3 +81,14 @@ Retain failed results and defect reports, then add retest results on the fixed r
 ## Team handoff verification
 
 Producer and consumer run the same fixture/JSON examples before merge. Check application camelCase versus SQL columns, nullability, exact status strings, seconds/bytes/UTC, identity types and normalized errors. Both reusable consumers exercise the same classifier. Test rescan token replay returns the original attempt and actual state, and result/lifecycle writes are atomic under the lease. Each stream adds focused test files to the common discovery runner. Final proof is an integrated role workflow and actual provider evidence, not four independently green modules.
+
+
+## Assessment traceability
+
+| ID | Observable acceptance criterion | Final part | Design and required proof |
+| --- | --- | --- | --- |
+| R03 | Submission survives provider timeout, error and malformed response; no favorable result is fabricated | C | `docs/final-project/step-c-performance-reliability-security-validation.md`; fault results and submission counts |
+| R05 | Cross-user/cross-course result reads, downloads and rescans are denied | C | `docs/engineering.md`; role and object-ownership tests |
+| R06 | Replacement files and late results cannot overwrite the latest revision's advisory | B/C | `data-model.md`; concurrency, duplicate-job and stale-response tests |
+| R08 | Load test identifies environment, increased variable, measurements, degradation point and failure mode | C | Raw measurements and analysis; app capacity separated from provider quota |
+| R09 | Fault injection measures recovery after timeout, error and malformed data | C | Timestamped state and recovery evidence |

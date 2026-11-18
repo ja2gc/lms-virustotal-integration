@@ -20,7 +20,7 @@ Every target boundary is listed, including internal ones. Browser authentication
 | IP10 teacher -> rescan | Local HTTP `POST index.php?r=scan/rescan/{submissionId}`; CSRF, session, course ownership; server-issued idempotency token | Synchronous enqueue then async work | No file -> validation error; duplicate token returns original attempt; no external call in controller | Project contract v1 |
 | IP11 browser -> attachment | Local HTTP `GET index.php?r=submissionFile/download/{fileId}`; session, owner/course authorization; streamed bytes | Synchronous authorized transfer | Deny unauthorized access before opening path; missing disk file -> 404; no static fallback | Existing legacy links migrated to this route |
 
-Local HTTP is accepted only on loopback for this demo. Provider transport is always verified HTTPS. No queue, scan-start request, result or download boundary may bypass [security controls](security.md).
+Local HTTP is accepted only on loopback for this demo. Provider transport is always verified HTTPS. No queue, scan-start request, result or download boundary may bypass [security controls](engineering.md#boundary-assessment).
 
 ## Published reusable component
 

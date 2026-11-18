@@ -1,30 +1,60 @@
-# LMS VirusTotal Integration Implementation Plan
+# Team plan and task record
 
-> **For agentic workers:** Use `superpowers:executing-plans` for the single assigned task when available. Use subagent-driven development only when the user explicitly chooses it; a member's task is not authorization to execute the whole plan. Steps use checkboxes. This document plans integration work; the status below records subsequent localhost repairs.
+Read your member row, dependencies and assigned P-task sections. The SRS owns product scope; architecture/data/integration guides own technical contracts. This file owns work division, task checks and completion. Claim Members 1-3 in the group chat; Member 4 is reserved. Use member numbers in repository docs.
 
-**2026-11-18 handoff:** startup/rendering and course/grade links are repaired; the shared baseline/routing test runner and `router.local.php` exist. Browser checks passed for install, three role logins, course publication/enrollment, written submission, grading and student feedback. The sidebar selection was also corrected. [Evidence and limits](baseline-audit.md) apply: P0's attachment checks remain open; P0b's action map/exclusions/private-path changes and P1-P7 integration work remain pending. Reuse and extend these files rather than recreating them. Rebase dependent controller/template branches on this merged baseline before editing.
+## Ownership
 
-**Goal:** Deliver a locally reproducible Doodle submission workflow with durable VirusTotal advisories, two working reusable-component consumers and measured assessment evidence.
+| Member | Tasks and file ownership | Current state / dependency |
+| --- | --- | --- |
+| 1 — foundation/data | P1; migrations, immutable submissions/file revisions/attempts, repository/submission service, Student-controller seam, CLI/web bootstrap contract | Unclaimed. Baseline renderer/runner exists. Publish the data contract before connected consumers. |
+| 2 — scanning engine | P2/P3; provider adapter/transport, quota pacing, CLI worker, both result consumers and provider fixtures | Unclaimed. Isolated adapter/fixtures can start; persistence-backed worker waits for P1. |
+| 3 — LMS interface | P4; all student/teacher templates, status/history, polling, CSS/JS and shared navigation after initial cleanup | Unclaimed. Isolated partials/fixtures can start. Existing header/dashboard edits wait for P0b; connected UI waits for P3/P5. |
+| 4 — HTTP/access/local delivery | P0b cleanup/action map and one-time menu/dashboard sweep; P5 status/rescan/history/private-download controllers, authorization and local delivery | Reserved. Replacement chat waits for explicit **continue**. Cleanup is NOT STARTED. Connected P5 waits for P1. |
 
-**Architecture:** One Doodle application and CLI worker share SQLite and private file storage. Durable scan-attempt rows drive asynchronous work; a provider adapter normalizes results, while host code owns authorization and persistence.
+P6/P7 are shared evidence/rehearsal gates. Each member supplies checks, docs and evidence for their code. Members use task branches and PRs; Member 4 reviews contracts/overlaps and integrates reviewed work. Ready for review is not Done. Full process rules are in AGENTS.md and its workflow file.
 
-**Tech stack:** PHP 8.3, PDO SQLite, cURL, existing PHP views/CSS/vanilla JavaScript. No extra application framework, broker or cloud platform.
+## Dependencies and parallel work
 
-**Spec:** [Software Requirements Specification](SRS.md) first; then [architecture](architecture.md), [data model](data-model.md), [integration contracts](integrations.md) and [security](security.md). FR/NFR IDs define required behavior; R01-R15 define the assessment mapping. Numerical targets explicitly marked proposed remain hypotheses to validate, not achieved metrics.
+P0a is complete for installation/rendering and the written-submission journey. P0b and P1 can proceed independently because they own different files. Member 4 performs shared navigation/dashboard cleanup once, then returns those files to Member 3. Do not edit another owner's shared file concurrently.
 
-## Global constraints
+Provider fixtures, isolated status partials, route/access planning and contract review can start before connected endpoints. Use fixtures honestly. P3 can exercise orchestration with P1 plus provider fixtures, then connect P2. P5 uses P1's exact repository/IDs/JSON; P4 connects to P3/P5. Missing dependencies mean Waiting for dependency, not competing SQL/interfaces.
 
-- `docs/SRS.md` is the required-behavior baseline. Map changes to its FR/NFR/R IDs and relevant manual/automated acceptance; the implementation plan does not override the SRS.
+```mermaid
+flowchart TD
+    A[P0a: baseline and common test harness] --> B[P0b: local router and allowed actions]
+    A --> C[P1: interface, migrations and repository]
+    C --> D[P2: tested provider adapter]
+    C --> E[P3: worker with fixtures]
+    D --> F[P3: connected scanning engine]
+    E --> F
+    B --> G[P5: authorized HTTP endpoints]
+    C --> G
+    H[P4: isolated UI and fixtures - start anytime] --> I[P4: connected LMS interface]
+    G --> I
+    F --> I
+    I --> J[P6: integrated checks and measured evidence]
+    F --> J
+    G --> J
+    J --> K[P7: documentation freeze and rehearsal]
+```
 
-- Localhost demonstration; bind the web server to `127.0.0.1`.
-- Reuse Doodle source and preserve its original history/license.
-- PHP 8.3 and SQLite are the tested target to establish; MySQL/cloud support is not assumed.
-- Keep submission/grade state separate from processing state and the four Technical 3 advisory strings.
-- Synthetic files and fictional users only; keys remain server-side.
-- Proposed initial upload policy: PDF/TXT/DOCX, at most 10,485,760 bytes; validate MIME mappings before implementation is merged.
-- Provider defaults: <=4 requests/minute and <=500/day across all operations; 30-second request timeout, 90-second lease, 60-second ordinary poll interval, persisted 30-minute polling deadline.
-- Never auto-replay an uncertain upload/rescan POST. Never publish a stale attempt as the current file's advisory.
-- Each behavioral task writes a focused failing check, demonstrates failure, implements the minimal change, reruns its checks and updates affected docs before a focused commit/PR.
+P0b and P1 can proceed in parallel after P0a because their owned files differ. Within scanning, implement/test the adapter before connecting the worker to it. Do not wait idle for a dependency: work on fixtures, isolated code/tests, review or your handoff documentation.
+
+## Handoff and prompting
+
+Send a PR/handoff containing: branch and revision; changed files; provided interface or JSON example; migration/config requirements; exact test commands and observed results; sanitized evidence; current limitations; which downstream task can now connect. Another member reviews it, then merge before consumers update from main. Do not copy chunks of another branch by hand or independently rename fields to make a local version work.
+
+The baseline rendering sweep is complete. Request contract changes from their owner before updating dependent code.
+
+Give your agent a goal, your owned task IDs, relevant SRS requirement IDs, required reading and boundaries. Let it inspect the repository, identify assumptions and propose its own plan. Discuss the plan with it before implementation. You do not need a scripted sequence of follow-up prompts. Add the SRS and applicable UAT cases to your starting prompt; do not ask an agent to infer final requirements from a demo screenshot alone.
+
+Useful follow-ups are evidence-focused: ask what existing code it can reuse, which dependency is missing, how it will test the failure path, what a proposed extra feature contributes to a demo scenario, and which exact checks passed. Use [the demo manual](demo-manual.md) as an end goal, not permission to omit required security/performance evidence.
+
+Keep prompts scoped. Do not tell an agent to build the entire project when it owns one stream. Tell it when a dependency is not ready and ask it to use agreed fixtures without claiming live integration. Use applicable installed skills as required by the workflow rules; repository contracts and the member's decisions remain authoritative.
+
+One optional starting prompt is enough; members discuss solutions with their own agents:
+
+> Read AGENTS.md and linked context. I own Member [number]'s tasks in docs/team-plan.md. Inspect current source/SRS, then plan only my assigned work with me. Respect file ownership and dependency gates; use agreed fixtures for independent preparation. Reuse existing code, write focused failure checks, report exactly what passed, and provide a PR with evidence and updated task records. Do not implement another member's stream or infer scope from screenshots.
 
 ## Review focus
 
@@ -34,40 +64,15 @@
 4. A direct static file URL must not bypass the authorized download action (P0/P5).
 5. Changed component output or optional provider categories must affect both real consumers consistently (P2/P3).
 
-## Dependency order
+## Implementation tasks
 
-`P0a -> {P0b, P1}; P1 -> {P2, P3 with fixtures}; {P0b, P1} -> P5; {P2, P1} -> connected P3; {P3, P5} -> connected P4; integrated P3/P4/P5 -> P6 -> P7`.
-
-P0b and P1 can proceed in parallel after P0a because they own different files. Isolated provider fixtures/UI partials/route planning can start immediately. See [the team guide](team-guide.md) for exactly when to wait and [the demo manual](demo-manual.md) for the shared acceptance scenarios.
-
-P3 can build its orchestration tests with the published provider fake after P1; merge its live adapter connection after P2. P4/P5 use the shared schema/status response contract while the real worker is under construction. Merge common seams before touching the same controller/helper concurrently. Claim unassigned streams in team chat and record ownership in docs/task-status.md; stream 4 is reserved for Jared.
-
-## Workstream boundaries and safe handoffs
-
-These are task/file boundaries, not assignments to named members or contribution-size targets. Map the four workstreams to classmates in team communication.
-
-| Stream | Primary ownership | Requests to other streams |
-| --- | --- | --- |
-| Foundation and data | P0a; P1; submission/revision/attempt migrations and repository; submission service; `StudentController.php`; initial CLI/web scan bootstrap seam | Provider/HTTP streams request new repository methods here rather than editing SQL/migrations concurrently |
-| Scanning engine | P2/P3; adapter, transport, provider budget, worker, both result consumers, CLI worker and provider fixtures | Uses frozen repository methods; does not edit student/teacher templates or HTTP controllers |
-| LMS interface | P4; all student/teacher scan templates including history; shared header/navigation, dashboards, CSS/JS and label formatter | Requests backend changes through the HTTP stream; does not duplicate authorization or provider classification |
-| HTTP, access and local delivery | P0b; P5; Router/action map, local server router, scan/status/rescan/download controllers, authorization, rescan service and local setup evidence | Uses data repository; does not write submission/scan SQL or edit templates owned by UI |
-
-P0a's mechanical rendering sweep touches existing controllers and some grade links once, **before** feature branches edit them. After that merge, hand those files to their listed stream. P0b changes routing in its own PR while P1 publishes bootstrap/schema/test seams in a separate PR. Do not work concurrently on the same file merely because changes seem small.
-
-The implemented shared test runner from P0a discovers `tests/*Test.php`. Each test file returns `['group' => '<group>', 'tests' => ['test name' => callable]]`; planned groups are baseline, routing, flashcards, persistence, adapter, worker, ui, status and access. The runner supports `--group=<group>` and exits nonzero on failure or when no tests match. Baseline, routing and flashcards exist now. The baseline group includes offline demo-seeder checks. Other streams add their own test files without editing this runner.
-
-**Handoff package for every PR:** source revision/branch; changed files; exact provided/consumed signatures or JSON example; migration/config effects; focused test command and real result; sanitized fixture/evidence locations; known limitations; affected downstream task. Review and merge that package before a consumer depends on it.
-
-**Contract gate:** P1 publishes the repository/interface below; P2 publishes provider fixtures; P5 publishes status/rescan examples; P4 consumes those exact examples. Contract changes need the producer and consumer to agree and update docs/tests together. Never independently rename a key, status or time unit. A complete vertical slice (saved file -> durable attempt -> adapter -> validated result -> authorized UI) must pass before final evidence/rehearsal.
-
-All streams supply tests, documentation and evidence for their own work. P6/P7 are shared integration/release gates; coordinating evidence does not transfer everyone's testing to one person.
+Only implement assigned tasks. Numerical policies remain in the contracts; do not independently rename IDs, fields or status meanings.
 
 ## P0: Make the scoped Doodle baseline reproducible
 
 **P0a files (foundation first):** modify `app/core/Controller.php`, its rendering calls throughout `app/controllers/`, scoped teacher view links, `install.php`, `.gitignore`, `README.md`; create `tests/run.php`, `tests/BaselineTest.php`, `runtime-requirements.json` and `config/scan.example.php`. The runtime manifest/test files now exist; scan example configuration is still pending.
 
-**P0b files (Jared; next chat after continue, following P0a merge):** extend existing `app/core/Router.php`, `router.local.php` and routing tests; create `config/routes.php` for the final action map as needed. Own the initial header/navigation/dashboard cleanup before handing those files back to P4. Retain manual flashcards but deny their generated-deck action. The explicit action map denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
+**P0b files (Member 4; next chat after continue, following P0a merge):** extend existing `app/core/Router.php`, `router.local.php` and routing tests; create `config/routes.php` for the final action map as needed. Own the initial header/navigation/dashboard cleanup before handing those files back to P4. Follow the exact SRS cleanup matrix. The explicit action map denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
 
 **Interfaces:** preserve public `*/view/{id}` actions; rename the protected rendering helper to `render(string $view, array $data = []): void` and update every internal `$this->view(...)` render call. Preserve `viewRaw`. Align teacher URLs/forms with existing `gradeSubmission(int $id)`. Define CLI-safe loading in P1 rather than requiring `index.php` from jobs.
 
@@ -75,7 +80,7 @@ All streams supply tests, documentation and evidence for their own work. P6/P7 a
 - [x] Run `php tests/run.php --group=baseline`; observe the reproduced class conflict. Execute the installer in a disposable target to reproduce B07 before fixing bootstrap loading.
 - [x] In P0a rename the common renderer/callers and repair grade links/forms and proven installer defects; ignore local sessions/install/migration flags and secrets/data. Verify and merge this baseline sweep before other streams edit controllers/templates.
 - [x] Route aliases/class discovery/query links/page blockers and three-role navigation/guest/role checks reviewed in PR #1, merged at 8d15034 and verified on main (16 PHP checks plus JavaScript check). This is not final exclusion.
-- [ ] Jared P0b next session, after continue: implement the final action map and initial navigation/dashboard cleanup from feature-scope. Extend routing tests to distinguish excluded routes from broken retained routes: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
+- [ ] Member 4 P0b next session, after continue: implement the final action map and initial navigation/dashboard cleanup from the [SRS cleanup matrix](SRS.md#cleanup-action-matrix). Extend routing tests to distinguish excluded routes from broken retained routes: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
 - [x] Rerun baseline checks; verify login, enrollment, assignment view, written save, teacher review/grading and student feedback through a browser. Test direct protected paths under the actual router command. Attachment/replacement acceptance remains a separate open gate.
 - [x] Add exact local dependency/setup commands to README/release guide, retaining unverified limitations. Commit only this repair task, with evidence; no scanning feature is implied by a green baseline.
 
@@ -127,9 +132,9 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 
 ## P4: Add the assignment-focused LMS interface and scan views
 
-**Files:** maintain the approved manual-flashcard templates after Jared's initial cleanup; create `app/views/scan/_status.php`, `app/views/scan/_history.php`, `public/js/scan-status.js`, `tests/ScanViewTest.php`, and UI fixtures under `tests/fixtures/status/`; modify retained student/assignment/teacher templates, shared header/navigation, dashboards, `app/helpers/functions.php` presentation helpers and styles as needed. No HTTP controller is owned by this task.
+**Files:** create `app/views/scan/_status.php`, `app/views/scan/_history.php`, `public/js/scan-status.js`, `tests/ScanViewTest.php`, and UI fixtures under `tests/fixtures/status/`; maintain retained templates and modify student/assignment/teacher templates, shared header/navigation, dashboards, `app/helpers/functions.php` presentation helpers and styles as needed. No HTTP controller is owned by this task.
 
-**Ownership:** Jared performs the initial menu/dashboard scope sweep in P0b; P4 receives those files after that merge. Keep manual flashcards and deny generated-deck promotions.
+**Ownership:** Member 4 performs the initial menu/dashboard scope sweep in P0b; P4 receives those files after that merge.
 
 **Interfaces:** consume IP09 status JSON and P5's rescan/download routes exactly as published; use fixture examples while endpoints are built. Own both student and teacher presentation to prevent competing edits to shared partials. Reuse one advisory formatter; never reclassify provider counts in JavaScript.
 
@@ -157,14 +162,14 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 
 ## P6: Run integration, performance, reliability and security experiments
 
-**Files:** extend focused tests; add `tests/load/` runner using existing available tooling, sanitized outputs under `evidence/`; update `validation.md`, `security.md` and `release.md`.
+**Files:** extend focused tests; add `tests/load/` runner using existing available tooling, sanitized outputs under `evidence/`; update `docs/final-project/step-c-performance-reliability-security-validation.md`, `docs/engineering.md` and `docs/final-project/step-a-working-integrated-system.md`.
 
 **Interfaces:** consume the built system as documented; do not modify another task's contract silently to make a test pass.
 
 - [ ] Run `php tests/run.php` and scoped role/browser acceptance; record actual failures and fix root causes in the owning task/PR.
 - [ ] Run UI02/ST04: retained supporting LMS features work, all assessment links are assignment-only, and excluded direct URLs/actions are denied. Do not claim scope reduction from menu screenshots alone.
 - [ ] Execute the full UAT01-UAT35 catalogue and variants from the demo manual, including supporting LMS features. Record actual results, Not run/Pass/Fail/Blocked, defects and retests in sanitized `evidence/uat/` records. The short DM01-DM13 panel script is not a substitute for this manual acceptance run.
-- [ ] Execute the load ramp defined in `validation.md` against fake provider responses; report environment, variable, raw metrics, degradation point/tested bound and failure mode.
+- [ ] Execute the load ramp defined in `docs/final-project/step-c-performance-reliability-security-validation.md` against fake provider responses; report environment, variable, raw metrics, degradation point/tested bound and failure mode.
 - [ ] Execute timeout, error, malformed-body and worker-crash trials; measure recovery including operator intervention where required.
 - [ ] Perform LIVE01 once with permitted synthetic content, verifying real handle and item/hash relationship. No provider load test or real malware. Record fixture-versus-live distinction.
 - [ ] Restore a disposable matched DB/private-file backup and have another member follow setup. Commit sanitized evidence and updated conclusions only.
@@ -184,4 +189,16 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 
 **Acceptance:** all Parts A-F trace to the system as built. Remaining failures/risks are explicitly reported; final completion is not inferred from this planning document.
 
-Use the SRS and full UAT catalogue as end-goal checks throughout implementation, not a last-day script. DM01-DM13 are the shorter presenter view of the same tested behavior. Any change outside SRS requirements, those cases or a concrete correctness/security need must be proposed before implementation. Read optional prompting guidance in the team guide; members plan their own internal solutions with their agents rather than following a scripted conversation.
+Use the SRS and full UAT catalogue as end-goal checks throughout implementation, not a last-day script. DM01-DM13 are the shorter presenter view of the same tested behavior. Any change outside SRS requirements, those cases or a concrete correctness/security need must be proposed before implementation. Use the prompting guidance above; members plan their own internal solutions with their agents rather than following a scripted conversation.
+
+## Completion record
+
+- [x] Documentation foundation, SRS, contracts/diagrams, team guide and full manual acceptance plan published.
+- [x] Local installer/renderer/course/grade routes and sidebar selection repaired; localhost runbook and evidence published in `645a43a`.
+- [x] Route/role/flashcard/demo-seeder follow-up reviewed, merged via [PR #1](https://github.com/ja2gc/lms-virustotal-integration/pull/1) and verified on main at `8d15034`. Owner: Member 4. Evidence: `evidence/baseline/routes-flashcards.json`.
+
+- [ ] Documentation consolidation — Ready for review/merge. Owner: Member 4; branch: `docs/consolidate-project-guides`. Reduced docs from 21 to 13, removed obsolete scope/index/handoff files, used member numbers and separated original Parts A-F. Read-only review corrections applied; 73 local links, all FR/NFR/R/P/RK/UAT IDs and unchanged technical contract blocks verified; `git diff --check` passed. Application files are unchanged. Merge reference and final verification remain pending; replace the parked chat only after publication.
+
+For every task/PR append: member number, task ID, branch/PR/merge, actual behavior/files, exact checks/results, sanitized evidence, contract/config/migration effects, downstream readiness and unresolved dependencies. Use Ready for review before integration; Done only after reviewed/merged verification. Update P-task checkboxes. Keep personal-name assignments in team communication.
+
+The baseline route/flashcard/seeder follow-up is Done via PR #1/source merge 8d15034. It passed 16 PHP checks, the JavaScript check, 131 syntax checks and 145 links at that snapshot. Raw evidence remains under evidence/baseline/. Cleanup, private uploads and VirusTotal remain pending as the P-task checks show.

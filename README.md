@@ -1,19 +1,33 @@
 # LMS with VirusTotal Integration
 
-An assignment-focused LMS extending [Doodle](https://github.com/deathlegionteamlk/doodle). Students submit work; teachers receive file-security advisories, can request a fresh scan, and grade/give feedback. Useful course, calendar, announcement and in-app notification features remain. **Quizzes are outside the approved scope.**
+An assignment-focused LMS extending [Doodle](https://github.com/deathlegionteamlk/doodle). Technical 3's original title is *Secure File Submission System with VirusTotal Integration*. Team repository: [ja2gc/lms-virustotal-integration](https://github.com/ja2gc/lms-virustotal-integration).
 
-Technical 3's original title is *Secure File Submission System with VirusTotal Integration*. Team repository: [ja2gc/lms-virustotal-integration](https://github.com/ja2gc/lms-virustotal-integration).
+## Start here
 
-## Read this before starting
+Every member reads the SRS, their member/task sections in the team plan and the demo/UAT targets. Agents start with AGENTS.md and its workflow rules. Use the map below for task-specific context.
 
-1. [Documentation map](docs/README.md): what every guide is for and what your role must read.
-2. [Software Requirements Specification](docs/SRS.md): the authoritative final behavior, role requirements, quality requirements and acceptance criteria. All members and agents must read it.
-3. [Feature/workflow overview](docs/feature-scope.md): a readable view of what we keep, exclude and add; it follows the SRS.
-4. [Demo and manual UAT guide](docs/demo-manual.md): full-feature manual acceptance checks and the shorter panel sequence using the same cases.
-5. [Team guide](docs/team-guide.md): four workstreams, ownership, start/wait dependencies, handoffs and prompting advice.
-6. [Implementation plan](docs/implementation-plan.md): assigned task IDs, interfaces, files and checks. Read linked contracts before coding.
+## Project documents
 
-Every member should understand this reading order. Every agent must also start with [AGENTS.md](AGENTS.md) and its linked workflow rules. The coordinator assigns actual people to the four workstreams; the repository does not assume a particular member needs a particular amount of code.
+| Working guide | Purpose / readers |
+| --- | --- |
+| [SRS](docs/SRS.md) | Final behavior, FR/NFR IDs, roles and exact keep/exclude matrix; everyone |
+| [Team plan](docs/team-plan.md) | Member ownership, dependencies, P0-P7 tasks, prompting guidance and completion; everyone reads their sections |
+| [Demo/manual UAT](docs/demo-manual.md) | Full manual acceptance and shorter panel sequence; everyone |
+| [Architecture](docs/architecture.md) | Component/context/sequence diagrams, failure design and decision/divergence log |
+| [Data model](docs/data-model.md) | ERD, identities, lifecycle, concurrency and migration constraints; data and consumers |
+| [Integration contracts](docs/integrations.md) | Point register, component/repository/status semantics, scheduling and versioning; producers/consumers |
+| [Engineering/security](docs/engineering.md) | Existing implementation patterns, UI conventions, test harness and boundary controls |
+
+Architecture, persistence and integration contracts stay separate because they have different owners. They link to shared rules rather than redefine them. Original Submission 1 Parts A-F are separated below from project plans/evidence. AI assistance is allowed with disclosure in Step F; the quoted requirements remain distinct from our responses.
+
+| Submission 1 | File |
+| --- | --- |
+| Step A — Working Integrated System | [Part A and delivery plan](docs/final-project/step-a-working-integrated-system.md) |
+| Step B — Integration Documentation | [Part B and artifact/source reconciliation](docs/final-project/step-b-integration-documentation.md) |
+| Step C — Performance, Reliability and Security Validation | [Part C, test catalogue/experiments and evidence](docs/final-project/step-c-performance-reliability-security-validation.md) |
+| Step D — Trends Evaluation | [Part D and engineering decisions](docs/final-project/step-d-trends-evaluation.md) |
+| Step E — Case-Based Lessons | [Part E and traceable design effects](docs/final-project/step-e-case-based-lessons.md) |
+| Step F — Risk Closure and AI-Use Log | [Part F, RMMM and disclosure](docs/final-project/step-f-risk-closure-and-ai-use-log.md) |
 
 ## Run the current LMS on localhost
 
@@ -51,44 +65,32 @@ These are deliberately public **fictional localhost credentials**, not provider 
 
 Already cloned? Open its folder, pull the latest `main` while your work is committed, then create `tmp/sessions` and run the documented web-server command near the top. Seeding is optional. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
 
-In another terminal, run `php tests/run.php`. See [the release/setup guide](docs/release.md) for dependencies, fictional demo accounts, troubleshooting and remaining release gates.
+In another terminal, run `php tests/run.php`. Optional developer UI logic check: `node tests/flashcard-study.test.cjs`. Step A lists remaining release gates.
 
-## Current state: working local baseline, integration pending
 
-Installer, all three role logins, course publishing/catalog/enrollment, a written assignment submission, teacher grading and student feedback were checked in the built-in browser preview. Startup/controller/rendering and course/grade route defects were repaired; the sidebar now selects My Courses without also selecting Teacher Studio. See [the baseline audit](docs/baseline-audit.md) for original failures and new evidence.
+## Setup troubleshooting
 
-**VirusTotal, its worker, private attachment downloads and the approved module exclusions are still to implement.** Existing extra menus remain visible. The local router blocks project source/configuration/database files, but upstream uploads remain publicly addressable; use fictional users and synthetic files only. This is a runnable development starting point, not the final integrated release or completed manual UAT. Follow [the implementation plan](docs/implementation-plan.md) and [validation guide](docs/validation.md).
+- **PHP not recognized:** use a terminal whose PATH contains PHP, or replace `php` with `& 'C:\path\to\php.exe'` in PowerShell. Do not copy the original upstream quick-start over this command.
+- **Could not find driver:** enable `pdo_sqlite` in the PHP configuration actually used by the terminal, then restart PHP.
+- **Session permission error or repeated sign-in:** create `tmp/sessions`, start from the repository root with the documented `-d session.save_path` argument, and keep the host/port consistent. The machine's original default session folder was not writable during the check.
+- **Port already in use:** stop your earlier server with Ctrl+C or select an unused loopback port and open that exact URL. Do not terminate unrelated processes.
+- **Private paths or arbitrary PHP return 404:** expected. Always start with `router.local.php`; a plain `php -S` command ignores `.htaccess` and can expose source files.
+- **Stopped/restarted server:** reuse the same DB and `.installed` flag. Do not rerun installation/reset steps on an existing member's data. A disposable clean install belongs in a separate clone/folder.
 
-Current sidebar/link repairs are checked for student, teacher and admin; manual flashcards now create/study/save progress with private-deck checks. [Task status](docs/task-status.md) records ownership/completion. **Jared owns stream 4**; cleanup starts in his next chat only after he says continue. Other members claim streams 1–3 in the group chat, use task branches and submit PRs for Jared's review. Follow [the cleanup matrix](docs/feature-scope.md#exact-cleanup-guide-for-agents); repaired upstream routes are not all retained final features.
+## Current readiness
 
-## Shared technical direction
+Installer, three role logins/navigation, course/enrollment, written submissions, grading/feedback, manual flashcards and repeatable fictional seeding have executed checks. [Step C](docs/final-project/step-c-performance-reliability-security-validation.md#baseline-verification) links actual evidence and limits.
 
-- One PHP application and a CLI background worker from the same codebase, with SQLite and private local files.
-- Localhost demonstration; no cloud deployment, new frontend framework or broker is required.
-- VirusTotal is the assessed external service. Browser requests go through the LMS; provider keys stay server-side.
-- Submission/grade state, processing state and security advisory have different meanings. Use the shared [integration contract](docs/integrations.md) and [data model/ERD](docs/data-model.md).
-- Use fictional accounts and synthetic attachments; never commit credentials, local databases, actual student files or backups.
-- PHP 8.3.30 is the tested runtime. No runtime upgrade was performed; freeze the tested team environment during integration.
+**Pending:** final feature/menu/action cleanup, VirusTotal/worker/scan persistence, private downloads and final integrated UAT/load/fault/security/restore proof. Public upstream upload URLs still exist: synthetic files and loopback only. A running baseline is not the final integrated release. The [team plan](docs/team-plan.md#completion-record) owns completion; the SRS owns scope. Member 4's replacement cleanup chat waits for explicit continue.
 
-## Repository navigation
+## Collaboration and schedule
 
-| Location | Purpose / status |
-| --- | --- |
-| `app/core/`, `app/controllers/`, `app/views/`, `app/helpers/` | Existing Doodle authentication/routing/controllers/screens/helpers; inspect before extending |
-| `config/`, `database/`, `public/` | Existing configuration/schema/assets; existing public submission storage must be strengthened |
-| `docs/` | Authoritative project scope, architecture, contracts, tasks, security, evidence plan and demo guides |
-| `evidence/baseline/` | Actual normalized baseline check results; later evidence folders are created when real checks run |
-| `AGENTS.md`, `.agents/rules/workflow.md` | Agent reading order, boundaries and verification rules |
-| `router.local.php`, `tests/`, `runtime-requirements.json` | Implemented local server entry point, baseline regression checks and tested runtime manifest |
-| `bin/seed-demo.php` | Implemented offline fictional demo-data setup |
-| `app/scan/`, `bin/scan-worker.php`, `database/migrations/` | Planned integration areas; the worker and scan migrations do not exist yet |
+Claim a numbered stream in the group chat, use task branches and submit PRs. Member 4 reviews producer/consumer contracts and overlaps before integration. Update task checks and completion in the team plan; Ready for review becomes Done only after reviewed/merged verification. Preserve others' changes, Doodle history/license and required AI disclosure.
 
-## Collaboration and completion
+Finish target: November 20, 2026. Working presentation/submission assumption: November 21, 2026; confirm against the class notice because the original correction still contained October 21 for the final date. Reserve rehearsal/evidence time before the panel.
 
-One primary owner per file/stream. Merge the baseline sweep before feature branches change shared controllers; merge contracts before consumers connect. Use task branches and reviewed handoffs with exact tests and known limitations. Every member supplies their own verification/evidence. Complete the demo scenarios **and** the final assessment's measured tests/documentation; neither alone is sufficient.
+## Source locations and provenance
 
-Finish target is November 20, 2026. See the approved scope for the presentation-date assumption and rehearsal sequence. Further scope changes need a proposal before editing. AI assistance is permitted, with the required [AI-use disclosure](docs/ai-use.md); human commits use the actual contributor's identity without AI co-author trailers.
+`app/` holds PHP MVC code; `config/`, `database/` and `public/` hold configuration/schema/assets. `router.local.php` is the loopback router; `tests/` and `evidence/` hold checks/output. `bin/seed-demo.php` exists; scan worker/migrations remain planned. The runtime manifest is runtime-requirements.json.
 
-## Upstream provenance
-
-Doodle is by Death Legion Team under the original [license](LICENSE). Its source history and notices are retained. The [upstream README reference](docs/upstream-doodle.md) describes additional upstream features and unverified setup/security claims; it is not this project's feature list or runbook.
+Doodle is by Death Legion Team under the original [license](LICENSE); history and source notices remain. Inspected upstream revision: `6e5365ed49199bfceec61f9b3ba41d83a94ccb3d`. [Original upstream source/README](https://github.com/deathlegionteamlk/doodle/tree/6e5365ed49199bfceec61f9b3ba41d83a94ccb3d) is provenance, not this project's feature list/runbook.
