@@ -1,0 +1,98 @@
+{
+  "checked_at_utc": "2026-11-18T00:48:06.112380+00:00",
+  "source_base": "645a43a",
+  "source_scope": "fix/routes-and-flashcards working tree; evidence versioned with changes",
+  "environment": "Windows / PHP 8.3.30 / SQLite / loopback server",
+  "checks": {
+    "php": {
+      "command": "php tests/run.php",
+      "exit_code": 0,
+      "output": [
+        "PASS every controller can load with its base class",
+        "PASS installer GET renders a form without an installed database",
+        "PASS teacher grade links and form resolve to a public grading action",
+        "PASS SQLite schemas and initial data install without external services",
+        "PASS course-management and gradebook links reach their detail actions",
+        "PASS sidebar highlights the current section without its role dashboard",
+        "PASS demo seeding is repeatable, preserves existing users and supplies connected role logins",
+        "PASS manual deck creation, study and review persist through real HTTP",
+        "PASS private deck view and study reject a different student and teacher",
+        "PASS deck creation validates content and course scope; deletion requires CSRF POST",
+        "PASS local server serves assets and routes without exposing project files",
+        "PASS home delegation preserves the one-time login message for every role",
+        "PASS every literal application link and redirect resolves to an action",
+        "PASS query links keep routing separate from filter parameters",
+        "PASS every sidebar destination renders for each of the three roles",
+        "PASS restricted role routes stay forbidden and guests are redirected to login",
+        "16 passed; 0 failed"
+      ]
+    },
+    "javascript": {
+      "command": "node tests/flashcard-study.test.cjs",
+      "exit_code": 0,
+      "output": [
+        "PASS flashcard review failures preserve progress; repeat clicks are blocked; success completes session"
+      ]
+    }
+  },
+  "syntax": {
+    "checked": 131,
+    "failed": []
+  },
+  "role_coverage": [
+    "admin",
+    "teacher",
+    "student"
+  ],
+  "route_coverage": [
+    "All current sidebar destinations (except logout/theme anchors; login/logout tested separately)",
+    "Literal application link/redirect resolution",
+    "Controller aliases and combined-source controllers",
+    "Role/guest denial and malformed action/argument rejection",
+    "Query/filter parameters separate from route"
+  ],
+  "flashcard_browser_trial": {
+    "browser": "Codex native in-app preview",
+    "steps": [
+      "Create a two-card manual course deck",
+      "Open study",
+      "Flip first card and save Good rating",
+      "Flip second by keyboard and save Easy rating",
+      "Observe 2/2 reviewed and Session complete",
+      "Reload and observe no cards immediately due"
+    ],
+    "automated_elapsed_seconds": 28,
+    "human_demo_budget_seconds": "45-60 (planning estimate; rehearse)",
+    "screenshot": "flashcard-trial.jpg"
+  },
+  "seeder": {
+    "command": "php bin/seed-demo.php",
+    "disposable_runs": 2,
+    "actual_local_runs": 2,
+    "actual_local_seeded_role_logins": "panel_admin, panel_teacher, panel_student passed",
+    "checks": [
+      "Stable row counts on repeat run",
+      "Connected users/courses/enrollments/material/assignment/deck",
+      "Enrollment counter matches actual rows",
+      "Unrelated original users preserved",
+      "Changed demo account aborts without reset or partial commit"
+    ],
+    "fabricated_results": false
+  },
+  "not_done": [
+    "Feature removal/action exclusions/menu cleanup: explicitly deferred to Jared next chat after continue",
+    "VirusTotal adapter, worker, scan schema and private downloads",
+    "Final integrated UAT/load/fault/recovery/security/restore and second-machine release proof"
+  ],
+  "shared_history": "Earlier baseline JSON files preserve historical failures/results; this file is the current route/flashcard/seeder follow-up.",
+  "review": {
+    "kind": "fresh read-only whole-change review and focused follow-up",
+    "corrections": [
+      "Home retains consumed one-time messages",
+      "Invalid flashcard form retains escaped title/cards",
+      "Completion marked Ready for review until merged and verified"
+    ],
+    "independent_checks": "16 PHP passed; JavaScript check passed",
+    "result": "No remaining review blockers"
+  }
+}

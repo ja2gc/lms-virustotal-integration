@@ -17,6 +17,7 @@ Comparison is based on the supplied Technical 2 and revised Technical 3. Technic
 | Communication | Announcements and in-app notifications | Reuse existing behavior; do not add external email or messaging |
 | Organization | Role dashboards and existing assignment calendar | Retain useful existing views; no new calendar integration or expanded analytics |
 | Convenience | Basic profiles and existing theme switch | Preserve if working; no redesign or new customization work |
+| Manual flashcards | Create manual decks/cards, view permitted decks, flip/study, rate recall and persist the next review | Approved after the localhost trial; no quizzes, generated decks or new external API. Keep deck/course ownership and CSRF controls. |
 
 If a retained supporting feature fails its smoke check, report the blocker and agree the smallest repair or deferment. Do not independently remove an approved feature or expand its implementation.
 
@@ -40,7 +41,7 @@ The reusable result component has two real consumers: automatic submission proce
 | --- | --- | --- |
 | Quizzes | `QuizController.php`, teacher quiz actions/views | Exclude creation, taking, auto-grading and quiz-specific gradebook/dashboard content |
 | AI study tools | `AIController.php`, `AIEngine.php`, AI views | Exclude chatbot, summaries and generated study/practice content |
-| Gamification and flashcards | Gamification/Flashcard controllers, core helper, views | Exclude points/badges/streaks/leaderboard and flashcard UI |
+| Gamification | Gamification controller, core helper, views | Exclude points/badges/streaks/leaderboard UI; preserve shared helpers until their callers are safely handled. Manual flashcards remain. |
 | Social features | Message/Forum controllers and views | Exclude direct messages and discussion forums |
 | Course extras | Certificate/Poll/LearningPath controllers and views | Exclude certificates, polls/surveys and multi-course learning paths |
 | Collaboration/programming | Whiteboard/Code controllers; Wiki/Group classes in combined file | Exclude whiteboards, wiki/group workflows and code exercises |
@@ -55,6 +56,20 @@ No new PWA/offline feature or two-factor implementation is planned. Preserve exi
 
 Remove excluded menu/dashboard links and unnecessary header queries, and deny excluded direct routes/actions through a small explicit action allowlist. Hiding is not endpoint disabling. The route owner and UI owner use the same approved feature list. Verify that retained courses, assignments, calendar, announcements, notifications, profiles and grading remain reachable.
 
+**Cleanup status: pending, reserved for Jared's next chat.** Route repairs are not scope approval for every upstream module. The coordinator explicitly postponed removals. P0b's one-time cleanup owns both route restrictions and the initial navigation/dashboard sweep before P4 edits shared UI; P4 then maintains that scope during scan UI work. Read [task status](task-status.md) and [Jared's handoff](handoffs/jared-member-4.md).
+
+### Exact cleanup guide for agents
+
+| Treatment | Controllers/actions and visible entry points |
+| --- | --- |
+| Keep | Home, Auth login/logout/profile/theme; Admin users/roles/courses/categories/announcements/basic settings; Teacher courses/modules/materials/assignments/assignment grading; Student learning/submission/assignment grades; Course, Catalog, Assignment, Calendar, Notifications; manual Flashcard index/create/view/study/review/delete |
+| Deny and remove links/panels | Quiz; Teacher quizzes/createQuiz/quiz/addQuestion/deleteQuestion; AI; Gamification; Message; Forum; Certificate; Poll; LearningPath; Whiteboard; Wiki; Group; Code; Analytics; Review; generic Api; OAuth/Push configuration |
+| Deny within retained controller | Flashcard::generateFromCourse; keep its manual actions. Remove generated-deck promotions and AI links from retained screens. |
+| Cover aliases too | flashcard/flashcards, message/messages, certificate/certificates, learningpath/learning_paths and all canonical controller names. An alternative spelling must not bypass the final action map. |
+| Preserve shared internals | Existing schema history, enrollment/grade/notification helpers, and any still-called Gamification helper. The combined WikiGroupPushBackup file also contains Backup; do not delete the file wholesale. Existing setup/recovery utilities not listed for exclusion need an explicit decision before removal. |
+
+Use this table and the SRS as the cleanup authority. Do not infer removal merely because a feature is not mentioned in a chat prompt. Update tests to distinguish intentionally denied routes from broken retained routes. Prove both menu absence/direct denial and the retained end-to-end workflows. Archive/delete an unused source file only after tracing all callers and showing that no retained path loads it; removing dead UI/routes does not require destructive DB cleanup.
+
 Do not bulk-delete upstream files or schema history. Trace callers first: assignment submission currently calls `Gamification::award(...)`. Source files/shared helpers may remain internally while their excluded UI/routes are disabled. Avoid a generalized plugin/feature-flag framework. Any further deletion or scope change needs a concrete proposal before editing.
 
 ## User workflows
@@ -62,6 +77,8 @@ Do not bulk-delete upstream files or schema history. Trace callers first: assign
 **Teacher:** log in -> create course/materials -> publish assignment and deadline -> review submissions/advisories -> inspect counts/history or request rescan -> download an authorized attachment -> grade and give feedback.
 
 **Student:** log in/enroll -> view materials and deadlines -> submit text/file -> receive saved confirmation and pending scan -> view advisory -> resubmit where allowed -> read grade/feedback and in-app notifications.
+
+**Study aid (student/teacher):** open Flashcards -> create/select a permitted manual deck -> study/flip -> rate recall -> see saved review progress. This is optional study practice, not a graded quiz.
 
 **Admin:** manage the fictional local users, roles, courses, announcements and basic settings needed to support that workflow. Provider credentials remain server-side, not a new admin settings form.
 

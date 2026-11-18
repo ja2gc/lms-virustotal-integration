@@ -11,53 +11,17 @@
 
 class Router
 {
-    private string $controller = 'Home';
-    private string $method     = 'index';
-    private array  $params     = [];
-
     public function dispatch(): void
     {
-        // Determine route from URL
-        $url = $this->parseUrl();
-
-        // Controller
-        if (!empty($url[0])) {
-            $ctrl = ucfirst($url[0]);
-            if (preg_match('/^[A-Za-z]+$/', $ctrl)) {
-                $this->controller = $ctrl;
-            }
-            array_shift($url);
-        }
-
-        // Method
-        if (!empty($url[0])) {
-            $m = $url[0];
-            if (preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $m) && $m !== 'index' || (preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $m) && $m !== '__construct')) {
-                $this->method = $m;
-            }
-            array_shift($url);
-        }
-
-        // Remaining params
-        $this->params = $url;
-
-        // Load controller
-        $ctrlClass = $this->controller . 'Controller';
-        $file = APP_DIR . '/controllers/' . $ctrlClass . '.php';
-        if (!file_exists($file)) {
-            $this->notFound('Controller not found: ' . $ctrlClass);
+        $parts = $this->parseUrl();
+        $target = $parts === null ? null : self::resolve(implode('/', $parts));
+        if ($target === null) {
+            $this->notFound();
             return;
         }
-        require_once $file;
-        if (!class_exists($ctrlClass)) {
-            $this->notFound('Class not found: ' . $ctrlClass);
-            return;
-        }
+        [$ctrlClass, $method, $params] = $target;
+        $_GET['r'] = implode('/', $parts);
         $controllerObj = new $ctrlClass();
-        if (!method_exists($controllerObj, $this->method) || !is_callable([$controllerObj, $this->method])) {
-            $this->notFound('Method not found: ' . $ctrlClass . '::' . $this->method);
-            return;
-        }
 
         // Verify CSRF on POST/PUT/DELETE
         if (in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['POST', 'PUT', 'DELETE'])) {
@@ -67,13 +31,42 @@ class Router
             }
         }
 
-        call_user_func_array([$controllerObj, $this->method], $this->params);
+        call_user_func_array([$controllerObj, $method], $params);
     }
 
-    private function parseUrl(): array
+    /** Resolve without running constructors/actions; also used by the route audit. */
+    public static function resolve(string $route): ?array
+    {
+        $parts = explode('/', trim($route, '/'));
+        if ($parts === ['admin', 'backups']) $parts = ['backup'];
+        $name = array_shift($parts) ?: 'home';
+        $aliases = ['flashcards'=>'Flashcard', 'messages'=>'Message', 'certificates'=>'Certificate',
+            'learning_paths'=>'LearningPath', 'learningpath'=>'LearningPath', 'ai'=>'AI', 'oauth'=>'OAuth'];
+        if (!preg_match('/^[A-Za-z]+$/', $name) && !isset($aliases[$name])) return null;
+        $controller = $aliases[strtolower($name)] ?? ucfirst(strtolower($name));
+        $class = $controller . 'Controller';
+        $file = in_array($controller, ['Wiki', 'Group', 'Push', 'Backup'], true)
+            ? 'WikiGroupPushBackupController.php' : $class . '.php';
+        $file = APP_DIR . '/controllers/' . $file;
+        if (!is_file($file)) return null;
+        require_once $file;
+        $method = array_shift($parts) ?? 'index';
+        if (!preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $method) || !method_exists($class, $method)) return null;
+        $action = new ReflectionMethod($class, $method);
+        if (!$action->isPublic() || $action->isStatic() || $action->getDeclaringClass()->getName() === Controller::class
+            || count($parts) < $action->getNumberOfRequiredParameters() || count($parts) > $action->getNumberOfParameters()) return null;
+        foreach ($action->getParameters() as $i => $parameter) {
+            if (isset($parts[$i]) && $parameter->getType()?->getName() === 'int'
+                && (filter_var($parts[$i], FILTER_VALIDATE_INT) === false || (int) $parts[$i] < 0)) return null;
+        }
+        return [$class, $action->getName(), $parts];
+    }
+
+    private function parseUrl(): ?array
     {
         $route = '';
         if (isset($_GET['r'])) {
+            if (!is_string($_GET['r'])) return null;
             $route = $_GET['r'];
         } elseif (isset($_SERVER['PATH_INFO'])) {
             $route = ltrim($_SERVER['PATH_INFO'], '/');

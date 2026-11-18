@@ -4,7 +4,7 @@ extract($data, EXTR_SKIP);
 <div class="page-head">
   <div class="title-block">
     <h1>Flashcards</h1>
-    <p>Spaced-repetition flashcards with SM-2 algorithm. Study smarter, not harder.</p>
+    <p>Create study decks and review cards when they are due.</p>
   </div>
   <div class="actions">
     <a href="<?= url('flashcards/create') ?>" class="btn btn-secondary"><span class="material-icons">add</span> New deck</a>
@@ -25,7 +25,7 @@ extract($data, EXTR_SKIP);
   <div class="card card-pad empty">
     <span class="material-icons">style</span>
     <h3>No flashcard decks yet</h3>
-    <p>Create your own deck, or auto-generate one from any course's lessons using the AI assistant.</p>
+    <p>Create your own deck with questions and answers, then study the cards.</p>
     <a href="<?= url('flashcards/create') ?>" class="btn btn-primary"><span class="material-icons">add</span> Create a deck</a>
   </div>
 <?php else: ?>
@@ -56,7 +56,10 @@ extract($data, EXTR_SKIP);
           <?php endif; ?>
           <a href="<?= url('flashcards/view/' . $d['id']) ?>" class="btn btn-secondary btn-sm">View</a>
           <?php if ($d['user_id'] == Auth::id() || Auth::isAdmin()): ?>
-            <a href="<?= url('flashcards/delete/' . $d['id']) ?>" class="btn btn-danger btn-sm" data-confirm="Delete this deck?"><span class="material-icons">delete</span></a>
+            <form method="post" action="<?= url('flashcards/delete/' . $d['id']) ?>" onsubmit="return confirm('Delete this deck?')">
+              <?= CSRF::field() ?>
+              <button type="submit" class="btn btn-danger btn-sm" aria-label="Delete deck"><span class="material-icons">delete</span></button>
+            </form>
           <?php endif; ?>
         </div>
       </div>

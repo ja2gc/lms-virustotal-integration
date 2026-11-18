@@ -15,10 +15,15 @@ class HomeController extends Controller
             return;
         }
         // Route by role
-        $role = Auth::role();
-        if ($role === 'admin')   { $this->adminHome(); return; }
-        if ($role === 'teacher') { $this->teacherHome(); return; }
-        $this->studentHome();
+        $class = match (Auth::role()) {
+            'admin' => AdminController::class,
+            'teacher' => TeacherController::class,
+            default => StudentController::class,
+        };
+        $dashboard = new $class();
+        // Home's base constructor already consumed these one-time messages.
+        $dashboard->data['flash'] = $this->data['flash'];
+        $dashboard->index();
     }
 
     /** Public landing page (when logged out). */

@@ -4,6 +4,8 @@
 
 Doodle is PHP with server-rendered views, PDO helpers and vanilla CSS/JavaScript. It is not React: no React hooks, component library or frontend build pipeline is needed for this feature.
 
+Manual flashcards are approved supporting study aids (FR27). Their own/public/course permissions, persisted reviews, POST deletion and failed-review behavior have focused checks. Keep them during cleanup; exclude generated decks/AI promotion. The one-time shared menu/dashboard cleanup belongs to Jared's P0b handoff, then returns to the UI stream. Read the exact feature matrix and task status before removing anything.
+
 The baseline renderer is now `Controller::render($view, $data)`. Use it for layout rendering; keep public `view(int)` actions for their existing URLs. `viewRaw()` and the global error-view helper retain their names. Teacher detail URLs use `teacher/editCourse/{id}`, `teacher/gradeSubmission/{id}` and `teacher/gradebookCourse/{id}`. Sidebar role dashboards match only their own index routes; course edit/assignment/grading belong under My Courses. See [baseline evidence](baseline-audit.md).
 
 | Responsibility | Existing location | Planned extension |

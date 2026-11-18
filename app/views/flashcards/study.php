@@ -20,7 +20,7 @@ extract($data, EXTR_SKIP);
 </div>
 
 <div class="flashcard-study text-center">
-  <div class="flashcard" id="flashcard" onclick="flipCard()">
+  <div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flip study card" onclick="flipCard()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();flipCard();}">
     <div class="flashcard-inner">
       <div class="flashcard-front">
         <span class="flashcard-label">Question</span>
@@ -35,6 +35,7 @@ extract($data, EXTR_SKIP);
     </div>
   </div>
 
+  <p id="reviewError" role="alert" class="text-danger"></p>
   <div id="ratingButtons" class="rating-buttons" style="display:none;">
     <p class="text-muted" style="margin-bottom:14px;">How well did you know this?</p>
     <div class="flex gap-sm" style="justify-content:center;">
@@ -87,9 +88,10 @@ extract($data, EXTR_SKIP);
 </style>
 
 <script>
-const cards = <?= json_encode($cards) ?>;
+const cards = <?= json_encode($cards, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
 let currentIdx = 0;
 let reviewed = 0;
+let saving = false;
 
 function showCard() {
   if (currentIdx >= cards.length) {
@@ -105,23 +107,37 @@ function showCard() {
   document.getElementById('ratingButtons').style.display = 'none';
 }
 function flipCard() {
+  if (saving) return;
   document.getElementById('flashcard').classList.toggle('flipped');
   if (document.getElementById('flashcard').classList.contains('flipped')) {
     document.getElementById('ratingButtons').style.display = 'block';
   }
 }
-function rateCard(rating) {
+async function rateCard(rating) {
+  if (saving || currentIdx >= cards.length) return;
+  saving = true;
+  const buttons = document.querySelectorAll('#ratingButtons button');
+  buttons.forEach(button => button.disabled = true);
+  const error = document.getElementById('reviewError');
+  error.textContent = '';
   const c = cards[currentIdx];
-  fetch('<?= url('flashcard/review') ?>', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: 'review_id=' + c.review_id + '&rating=' + rating + '&<?= CSRF_TOKEN_NAME ?>=<?= CSRF::token() ?>'
-  }).then(r => r.json()).then(() => {
+  try {
+    const response = await fetch('<?= url('flashcard/review') ?>', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'review_id=' + c.review_id + '&rating=' + rating + '&<?= CSRF_TOKEN_NAME ?>=<?= CSRF::token() ?>'
+    });
+    if (!response.ok || (await response.json()).ok !== true) throw new Error('Review rejected');
     reviewed++;
     document.getElementById('progress').textContent = reviewed;
     currentIdx++;
     showCard();
-  });
+  } catch (_) {
+    error.textContent = 'Review could not be saved. Your progress has not advanced. Try again or sign in again.';
+  } finally {
+    saving = false;
+    buttons.forEach(button => button.disabled = false);
+  }
 }
 showCard();
 </script>
