@@ -14,5 +14,7 @@
     "No live provider request",
     "Release rsync exclusions reviewed, not executed as a GitHub release",
     "Adapter/worker and integrated acceptance remain unfinished"
-  ]
+  ],
+  "publishedVerifiedRevision": "5cde3faf62ad4005bc555ee1aae5482d3fe30e13",
+  "mainVerification": "Configuration 6/6 and baseline 7/7; only .env.example tracked; local .env ignored; diff check clean."
 }
