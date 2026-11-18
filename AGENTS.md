@@ -13,4 +13,4 @@ The SRS owns final behavior and the [cleanup matrix](docs/SRS.md#cleanup-action-
 | Verification | docs/final-project/step-c-performance-reliability-security-validation.md, docs/demo-manual.md |
 | Final submission | Step A-F files in docs/final-project/, indexed in README |
 
-Follow branch/PR, applicable-skill, privacy, test and completion-record rules in the workflow file. Use member numbers in docs. Do not infer implemented scanning from design or execute every stream when assigned one.
+Before starting/resuming work and before submitting/updating a PR, follow [fork synchronization](.agents/rules/workflow.md#fork-synchronization): fetch the team main, preserve local work and bring applicable updates into your task branch. Push member changes to their own fork and open a PR to the team main. Follow the other branch/PR, applicable-skill, privacy, test and completion-record rules in that file. Use member numbers in docs. Do not infer implemented scanning from design or execute every stream when assigned one.

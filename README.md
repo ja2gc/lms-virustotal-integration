@@ -33,11 +33,12 @@ Architecture, persistence and integration contracts stay separate because they h
 
 Tested on Windows with **PHP 8.3.30 and SQLite**. You do not need hosting, MySQL, Composer or Node for this baseline. Install PHP with the extensions listed in [the runtime manifest](runtime-requirements.json). If `php` is not recognized, add your PHP folder to PATH; Laragon users can use its terminal or the full path to `php.exe`.
 
-From PowerShell, clone once and start inside the project folder:
+To contribute without collaborator access, first click **Fork** on the team repository. In PowerShell, replace `YOUR-GITHUB-USERNAME` below with your own username, clone your fork and set the team remote. For a panel/read-only demo, clone the team URL instead and omit the remote-add line.
 
 ```powershell
-git clone https://github.com/ja2gc/lms-virustotal-integration.git
+git clone https://github.com/YOUR-GITHUB-USERNAME/lms-virustotal-integration.git
 cd lms-virustotal-integration
+git remote add upstream https://github.com/ja2gc/lms-virustotal-integration.git
 php -v
 php -m
 New-Item -ItemType Directory -Force tmp/sessions | Out-Null
@@ -63,7 +64,7 @@ php bin/seed-demo.php
 
 These are deliberately public **fictional localhost credentials**, not provider keys or production passwords. The offline seeder creates two courses, enrollments, one text lesson, assignments and a two-card manual deck. Run it twice safely: existing/manual records and reviews are preserved. If a demo identity's password/role was changed or its name collides, seeding stops instead of resetting it. The installer account you chose remains separate. Keep the server bound to loopback.
 
-Already cloned? Open its folder, pull the latest `main` while your work is committed, then create `tmp/sessions` and run the documented web-server command near the top. Seeding is optional. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
+Already cloned? Reuse that folder and follow the [fork synchronization rules](.agents/rules/workflow.md#fork-synchronization) to get the team main without losing your work; do not clone over it or add duplicate remotes blindly. Then create `tmp/sessions` and run the documented web-server command near the top. Seeding is optional. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
 
 In another terminal, run `php tests/run.php`. Optional developer UI logic check: `node tests/flashcard-study.test.cjs`. Step A lists remaining release gates.
 
@@ -85,7 +86,7 @@ Installer, three role logins/navigation, course/enrollment, written submissions,
 
 ## Collaboration and schedule
 
-Claim a numbered stream in the group chat, use task branches and submit PRs. Member 4 reviews producer/consumer contracts and overlaps before integration. Update task checks and completion in the team plan; Ready for review becomes Done only after reviewed/merged verification. Preserve others' changes, Doodle history/license and required AI disclosure.
+Claim a numbered stream in the group chat. Members fork the team repository and clone their fork; collaborator access is not required. Push task branches to your fork and open PRs targeting this team's `main`. Follow the [fork synchronization rules](.agents/rules/workflow.md#fork-synchronization) before work and PR updates. Member 4 reviews producer/consumer contracts and overlaps before integration. Update task checks and completion in the team plan; Ready for review becomes Done only after reviewed/merged verification. Preserve others' changes, Doodle history/license and required AI disclosure.
 
 Finish target: November 20, 2026. Working presentation/submission assumption: November 21, 2026; confirm against the class notice because the original correction still contained October 21 for the final date. Reserve rehearsal/evidence time before the panel.
 
