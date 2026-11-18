@@ -17,7 +17,7 @@ extract($data, EXTR_SKIP);
   <div class="card card-pad empty">
     <span class="material-icons">school</span>
     <h3>You haven't created any courses yet</h3>
-    <p>Start by creating your first course. You'll be able to add modules, lessons, quizzes, and assignments.</p>
+    <p>Start by creating your first course. You'll be able to add modules, lessons, and assignments.</p>
     <button class="btn btn-primary" onclick="document.getElementById('newCourseModal').style.display='flex'">
       <span class="material-icons">add</span> Create your first course
     </button>

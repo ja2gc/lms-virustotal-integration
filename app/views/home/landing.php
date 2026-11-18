@@ -106,12 +106,12 @@ $stats = $stats ?? [];
       <div class="feature">
         <div class="feat-icon primary"><span class="material-icons">co_present</span></div>
         <h3>For Teachers</h3>
-        <p>Build modular courses, upload documents and videos, create quizzes with auto-grading, manage assignments, and engage students in course forums.</p>
+        <p>Build modular courses, upload documents and videos, manage assignments and share course announcements.</p>
       </div>
       <div class="feature">
         <div class="feat-icon success"><span class="material-icons">school</span></div>
         <h3>For Students</h3>
-        <p>Browse the catalog, enroll in seconds, track your progress lesson-by-lesson, take quizzes, submit assignments, and watch your grades update live.</p>
+        <p>Browse the catalog, enroll in seconds, track your progress lesson-by-lesson, submit assignments, and watch your grades update live.</p>
       </div>
       <div class="feature">
         <div class="feat-icon accent"><span class="material-icons">admin_panel_settings</span></div>
@@ -119,14 +119,14 @@ $stats = $stats ?? [];
         <p>Manage every user, course, and category. Broadcast announcements. Configure the platform. Audit activity. All from one console.</p>
       </div>
       <div class="feature">
-        <div class="feat-icon info"><span class="material-icons">quiz</span></div>
-        <h3>Quiz Engine</h3>
-        <p>Multiple-choice, true/false, and short-answer questions. Time limits, attempt limits, automatic grading, and per-question explanations.</p>
+        <div class="feat-icon info"><span class="material-icons">assignment</span></div>
+        <h3>Assignments</h3>
+        <p>Submit written work and view teacher scores and feedback alongside course deadlines.</p>
       </div>
       <div class="feature">
-        <div class="feat-icon warning"><span class="material-icons">forum</span></div>
-        <h3>Course Forums</h3>
-        <p>Each course has its own discussion space. Pin important threads, lock resolved ones, and let the community teach itself.</p>
+        <div class="feat-icon warning"><span class="material-icons">campaign</span></div>
+        <h3>Announcements</h3>
+        <p>Keep track of course announcements and assignment notifications.</p>
       </div>
       <div class="feature">
         <div class="feat-icon danger"><span class="material-icons">shield</span></div>

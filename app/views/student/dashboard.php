@@ -20,14 +20,6 @@ extract($data, EXTR_SKIP);
     <div><div class="stat-label">Completed</div><div class="stat-value"><?= $stats['completed'] ?></div><div class="stat-delta">courses finished</div></div>
     <div class="stat-icon"><span class="material-icons">emoji_events</span></div>
   </div>
-  <div class="stat info">
-    <div><div class="stat-label">Quizzes Taken</div><div class="stat-value"><?= $stats['quizzes'] ?></div><div class="stat-delta">attempts total</div></div>
-    <div class="stat-icon"><span class="material-icons">quiz</span></div>
-  </div>
-  <div class="stat accent">
-    <div><div class="stat-label">Average Score</div><div class="stat-value"><?= round($stats['avgScore'], 1) ?>%</div><div class="stat-delta">across all quizzes</div></div>
-    <div class="stat-icon"><span class="material-icons">trending_up</span></div>
-  </div>
 </div>
 
 <div class="grid" style="grid-template-columns: 2fr 1fr; gap: 24px; align-items: flex-start;">
@@ -91,12 +83,5 @@ extract($data, EXTR_SKIP);
       <?php endif; ?>
     </div>
 
-    <div class="card card-pad" style="background:linear-gradient(135deg,var(--primary-light),#fff);border-color:var(--primary);">
-      <h3 style="margin-bottom:8px;display:flex;align-items:center;gap:6px;">
-        <span class="material-icons" style="color:var(--primary);">smart_toy</span> AI Assistant
-      </h3>
-      <p class="text-muted" style="font-size:.82rem;margin-bottom:10px;">Ask questions, summarize lessons, generate quizzes & flashcards.</p>
-      <a href="<?= url('ai') ?>" class="btn btn-primary btn-block btn-sm">Open AI Assistant</a>
-    </div>
   </aside>
 </div>

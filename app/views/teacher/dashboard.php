@@ -8,7 +8,6 @@ extract($data, EXTR_SKIP);
   </div>
   <div class="actions">
     <a href="<?= url('teacher/courses') ?>" class="btn btn-secondary"><span class="material-icons">school</span> My courses</a>
-    <a href="<?= url('teacher/quizzes') ?>" class="btn btn-primary"><span class="material-icons">quiz</span> Quiz bank</a>
   </div>
 </div>
 
@@ -26,7 +25,7 @@ extract($data, EXTR_SKIP);
     <div class="stat-icon"><span class="material-icons">pending_actions</span></div>
   </div>
   <div class="stat info">
-    <div><div class="stat-label">Lessons Created</div><div class="stat-value"><?= $stats['lessons'] ?? '—' ?></div><div class="stat-delta"><?= $stats['quizzes'] ?? 0 ?> quizzes</div></div>
+    <div><div class="stat-label">Lessons Created</div><div class="stat-value"><?= $stats['lessons'] ?? '—' ?></div></div>
     <div class="stat-icon"><span class="material-icons">menu_book</span></div>
   </div>
 </div>

@@ -110,14 +110,6 @@ extract($data, EXTR_SKIP);
 </div>
 
 <div class="grid grid-3 mb-3">
-  <div class="stat accent">
-    <div>
-      <div class="stat-label">Forum Topics</div>
-      <div class="stat-value"><?= number_format($stats['forum']) ?></div>
-      <div class="stat-delta"><?= $stats['posts'] ?> posts total</div>
-    </div>
-    <div class="stat-icon"><span class="material-icons">forum</span></div>
-  </div>
   <div class="stat info">
     <div>
       <div class="stat-label">Total Submissions</div>

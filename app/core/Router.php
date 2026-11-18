@@ -38,19 +38,21 @@ class Router
     public static function resolve(string $route): ?array
     {
         $parts = explode('/', trim($route, '/'));
-        if ($parts === ['admin', 'backups']) $parts = ['backup'];
+        if (array_map('strtolower', $parts) === ['admin', 'backups']) $parts = ['backup'];
         $name = array_shift($parts) ?: 'home';
         $aliases = ['flashcards'=>'Flashcard', 'messages'=>'Message', 'certificates'=>'Certificate',
             'learning_paths'=>'LearningPath', 'learningpath'=>'LearningPath', 'ai'=>'AI', 'oauth'=>'OAuth'];
         if (!preg_match('/^[A-Za-z]+$/', $name) && !isset($aliases[$name])) return null;
         $controller = $aliases[strtolower($name)] ?? ucfirst(strtolower($name));
+        $method = array_shift($parts) ?? 'index';
+        $routes = require dirname(APP_DIR) . '/config/routes.php';
+        if (!in_array(strtolower($method), $routes[$controller] ?? [], true)) return null;
         $class = $controller . 'Controller';
         $file = in_array($controller, ['Wiki', 'Group', 'Push', 'Backup'], true)
             ? 'WikiGroupPushBackupController.php' : $class . '.php';
         $file = APP_DIR . '/controllers/' . $file;
         if (!is_file($file)) return null;
         require_once $file;
-        $method = array_shift($parts) ?? 'index';
         if (!preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $method) || !method_exists($class, $method)) return null;
         $action = new ReflectionMethod($class, $method);
         if (!$action->isPublic() || $action->isStatic() || $action->getDeclaringClass()->getName() === Controller::class

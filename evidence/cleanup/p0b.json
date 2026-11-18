@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-18",
+  "owner": "Member 4",
+  "task": "P0b",
+  "baseRevision": "bd684d7994cef84ed88013c1526a23f6e4809d4d",
+  "phpSuite": {
+    "command": "php tests/run.php",
+    "output": "PASS every controller can load with its base class\nPASS installer GET renders a form without an installed database\nPASS teacher grade links and form resolve to a public grading action\nPASS SQLite schemas and initial data install without external services\nPASS course-management and gradebook links reach their detail actions\nPASS sidebar highlights the current section without its role dashboard\nPASS demo seeding is repeatable, preserves existing users and supplies connected role logins\nPASS manual deck creation, study and review persist through real HTTP\nPASS private deck view and study reject a different student and teacher\nPASS deck creation validates content and course scope; deletion requires CSRF POST\nPASS local server serves assets and routes without exposing project files\nPASS empty retained workflows do not advertise quizzes\nPASS historical excluded notification links cannot promote denied actions\nPASS assignment submission grading feedback and gradebooks survive cleanup\nPASS logout and private responses prohibit cache reuse\nPASS excluded actions and aliases are denied before authentication or CSRF\nPASS retained pages contain no excluded links or quiz assessments\nPASS home delegation preserves the one-time login message for every role\nPASS every literal application link and redirect resolves to an action\nPASS query links keep routing separate from filter parameters\nPASS every sidebar destination renders for each of the three roles\nPASS restricted role routes stay forbidden and guests are redirected to login\n22 passed; 0 failed\n",
+    "result": "22 passed; 0 failed"
+  },
+  "routing": "12 checks within complete suite; excluded GET/POST routes, canonical names/aliases and uppercase variants tested for guest/admin/teacher/student over disposable localhost servers",
+  "javascript": [
+    "node tests/flashcard-study.test.cjs: PASS",
+    "node tests/service-worker.test.cjs: PASS; VM activation/retirement, not browser lifecycle proof"
+  ],
+  "syntax": "php -l: 133 tracked/unignored PHP files, 0 failures",
+  "visible": "Native in-app preview at 127.0.0.1:8173: landing, login/logout, student/teacher/admin dashboards; admin screenshot inspected at current narrow panel width. Public fictional demo accounts reused, no seeding/reset.",
+  "review": "Independent read-only review; persisted excluded notification-link regression corrected RED/GREEN. Empty-state quiz copy corrected RED/GREEN. Disabled quiz render data restored.",
+  "preservation": "No schema, migrations, database, local accounts, uploads, original license or shared Gamification helper removed. Backup/manual flashcards/account recovery actions retained.",
+  "limits": [
+    "No VirusTotal/worker/private-download integration exists",
+    "No live browser upgrade from an installed historical service worker was exercised",
+    "No full manual UAT, wide viewport, load/fault/live-provider or restore acceptance claimed",
+    "P5 waits for P1; P1 ownership decision pending"
+  ]
+}

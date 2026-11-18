@@ -34,8 +34,6 @@ class StudentController extends Controller
             'enrolled'   => count($enrollments),
             'completed'  => Database::count('enrollments', "student_id = :sid AND status = 'completed'", ['sid' => $sid]),
             'inProgress' => count(array_filter($enrollments, fn($e) => $e['progress'] > 0 && $e['progress'] < 100)),
-            'quizzes'    => Database::count('attempts', 'student_id = :sid', ['sid' => $sid]),
-            'avgScore'   => (float) (Database::fetch("SELECT AVG(percentage) AS a FROM attempts WHERE student_id = :sid", ['sid' => $sid])['a'] ?? 0),
         ];
         $upcoming = Database::fetchAll(
             "SELECT a.*, c.title AS course_title, c.id AS course_id
@@ -65,21 +63,14 @@ class StudentController extends Controller
             $grades = Database::fetchAll(
                 "SELECT g.*, u.full_name AS grader_name
                  FROM grades g LEFT JOIN users u ON g.graded_by = u.id
-                 WHERE g.course_id = :cid AND g.student_id = :sid
+                 WHERE g.course_id = :cid AND g.student_id = :sid AND g.item_type = 'assignment'
                  ORDER BY g.graded_at DESC",
-                ['cid' => $courseId, 'sid' => $sid]
-            );
-            $attempts = Database::fetchAll(
-                "SELECT att.*, q.title AS quiz_title FROM attempts att JOIN quizzes q ON att.quiz_id = q.id
-                 WHERE q.course_id = :cid AND att.student_id = :sid
-                 ORDER BY att.submitted_at DESC",
                 ['cid' => $courseId, 'sid' => $sid]
             );
             $this->render('student/grades_course', [
                 'pageTitle' => 'My Grades · ' . $course['title'],
                 'course' => $course,
                 'grades' => $grades,
-                'attempts' => $attempts,
             ]);
             return;
         }
@@ -87,9 +78,9 @@ class StudentController extends Controller
         // All enrolled courses
         $courses = Database::fetchAll(
             "SELECT c.*, e.progress,
-                    (SELECT COUNT(*) FROM grades g WHERE g.course_id = c.id AND g.student_id = :sid AND g.score IS NOT NULL) AS graded_items,
-                    (SELECT COALESCE(SUM(g.score), 0) FROM grades g WHERE g.course_id = c.id AND g.student_id = :sid) AS earned,
-                    (SELECT COALESCE(SUM(g.max_score), 0) FROM grades g WHERE g.course_id = c.id AND g.student_id = :sid) AS possible
+                    (SELECT COUNT(*) FROM grades g WHERE g.course_id = c.id AND g.student_id = :sid AND g.item_type = 'assignment' AND g.score IS NOT NULL) AS graded_items,
+                    (SELECT COALESCE(SUM(g.score), 0) FROM grades g WHERE g.course_id = c.id AND g.student_id = :sid AND g.item_type = 'assignment') AS earned,
+                    (SELECT COALESCE(SUM(g.max_score), 0) FROM grades g WHERE g.course_id = c.id AND g.student_id = :sid AND g.item_type = 'assignment') AS possible
              FROM enrollments e
              JOIN courses c ON e.course_id = c.id
              WHERE e.student_id = :sid AND e.status = 'active'

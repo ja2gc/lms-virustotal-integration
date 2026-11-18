@@ -12,7 +12,7 @@ extract($data, EXTR_SKIP);
   <div class="card card-pad empty">
     <span class="material-icons">grading</span>
     <h3>No grades yet</h3>
-    <p>Once you enroll in a course and submit assignments or take quizzes, your grades will appear here.</p>
+    <p>Once you enroll in a course and submit assignments, your grades will appear here.</p>
     <a href="<?= url('catalog') ?>" class="btn btn-primary">Browse courses</a>
   </div>
 <?php else: ?>

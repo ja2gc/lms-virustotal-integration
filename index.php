@@ -7,6 +7,9 @@
  * @author  Death Legion Team
  */
 
+// Private pages and redirects must not survive logout through HTTP caches.
+header('Cache-Control: no-store, private');
+
 // Load configuration
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';

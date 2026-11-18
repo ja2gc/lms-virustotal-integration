@@ -16,6 +16,9 @@ return ['group' => 'routing', 'tests' => [
         if (!defined('APP_DIR')) define('APP_DIR', dirname(__DIR__) . '/app');
         require_once APP_DIR . '/core/Controller.php';
         require_once APP_DIR . '/core/Router.php';
+        $excluded = static function (string $route): bool {
+            return (bool) preg_match('~^(?:(?:ai|analytics|api|certificate|certificates|code|forum|gamification|group|learningpath|learning_paths|message|messages|oauth|poll|push|quiz|review|whiteboard|wiki)(?:/|$)|teacher/(?:quizzes|createQuiz|quiz|addQuestion|deleteQuestion)(?:/|$)|flashcards?/generateFromCourse(?:/|$))~i', $route);
+        };
         $failures = [];
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(APP_DIR, FilesystemIterator::SKIP_DOTS));
         foreach ($files as $file) {
@@ -24,11 +27,14 @@ return ['group' => 'routing', 'tests' => [
             foreach ($matches[2] as $prefix) {
                 $route = explode('?', $prefix, 2)[0];
                 if (str_ends_with($route, '/')) $route .= '1';
-                if (Router::resolve($route) === null) $failures[] = $prefix;
+                $resolved = Router::resolve($route);
+                if ($excluded($route)) {
+                    if ($resolved !== null) $failures[] = 'Excluded route still resolves: ' . $prefix;
+                } elseif ($resolved === null) $failures[] = $prefix;
             }
         }
         if ($failures) throw new RuntimeException('Unresolved links: ' . implode(', ', array_unique($failures)));
-        foreach (['flashcards'=>'FlashcardController','messages'=>'MessageController','certificates'=>'CertificateController','learning_paths'=>'LearningPathController','admin/backups'=>'BackupController','ai'=>'AIController','oauth/google'=>'OAuthController'] as $route=>$class) {
+        foreach (['flashcards'=>'FlashcardController','flashcard'=>'FlashcardController','admin/backups'=>'BackupController','backup'=>'BackupController'] as $route=>$class) {
             if ((Router::resolve($route)[0] ?? null) !== $class) throw new RuntimeException('Wrong controller for ' . $route);
         }
     },
@@ -65,7 +71,7 @@ return ['group' => 'routing', 'tests' => [
             }
         }
         if ($web->request('student', 'teacher')['status'] !== 403) throw new RuntimeException('Student reached teacher area.');
-        foreach (['student', 'teacher', 'admin', 'flashcards', 'messages', 'wiki/course/1'] as $route) {
+        foreach (['student', 'teacher', 'admin', 'flashcards', 'notifications', 'calendar'] as $route) {
             $response = $web->request('guest', $route);
             if ($response['status'] !== 302 || !str_contains($response['location'] ?? '', 'auth/login')) throw new RuntimeException('Guest did not require login: ' . $route);
         }

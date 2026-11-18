@@ -4,7 +4,7 @@ extract($data, EXTR_SKIP);
 <div class="page-head">
   <div class="title-block">
     <h1>Notifications</h1>
-    <p>All your recent notifications from courses, submissions, and forum activity.</p>
+    <p>Your recent course and assignment notifications.</p>
   </div>
   <div class="actions">
     <a href="<?= url('notifications/markAllRead') ?>" class="btn btn-secondary"><span class="material-icons">done_all</span> Mark all read</a>

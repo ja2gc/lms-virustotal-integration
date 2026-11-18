@@ -50,7 +50,6 @@ class CourseController extends Controller
         foreach ($modules as $m) $totalLessons += $m['lesson_count'];
 
         $assignments = Database::fetchAll("SELECT * FROM assignments WHERE course_id = :cid ORDER BY due_date, id", ['cid' => $id]);
-        $quizzes     = Database::fetchAll("SELECT * FROM quizzes WHERE course_id = :cid ORDER BY id", ['cid' => $id]);
         $announcements = Database::fetchAll(
             "SELECT a.*, u.full_name AS author_name
              FROM announcements a
@@ -76,7 +75,6 @@ class CourseController extends Controller
             'modules'     => $modules,
             'totalLessons'=> $totalLessons,
             'assignments' => $assignments,
-            'quizzes'     => $quizzes,
             'announcements' => $announcements,
             'isEnrolled'  => $isEnrolled,
             'isOwner'     => $isOwner,

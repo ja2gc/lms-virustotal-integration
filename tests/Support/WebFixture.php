@@ -96,7 +96,7 @@ PHP;
             if (preg_match('/^Set-Cookie: ([^=]+)=([^;]*)/i', $header, $cookie)) $this->cookies[$user][$cookie[1]] = $cookie[1] . '=' . $cookie[2];
             if (stripos($header, 'Location: ') === 0) $location = substr($header, 10);
         }
-        return ['status' => (int) ($match[1] ?? 0), 'body' => $body === false ? '' : $body, 'location' => $location];
+        return ['status' => (int) ($match[1] ?? 0), 'body' => $body === false ? '' : $body, 'location' => $location, 'headers' => $http_response_header ?? []];
     }
 
     public function login(string $user, ?string $password = null): void

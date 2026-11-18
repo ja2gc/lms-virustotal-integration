@@ -523,7 +523,7 @@ class TeacherController extends Controller
         );
         $assignments = Database::fetchAll("SELECT * FROM assignments WHERE course_id = :cid ORDER BY id", ['cid' => $courseId]);
         $grades = [];
-        $rows = Database::fetchAll("SELECT * FROM grades WHERE course_id = :cid", ['cid' => $courseId]);
+        $rows = Database::fetchAll("SELECT * FROM grades WHERE course_id = :cid AND item_type = 'assignment'", ['cid' => $courseId]);
         foreach ($rows as $r) {
             $grades[$r['student_id']][$r['item_id']] = $r;
         }

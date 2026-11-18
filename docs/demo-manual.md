@@ -1,6 +1,6 @@
 # Demo manual and manual UAT
 
-This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. Local baseline/route/flashcard repairs are implemented; VirusTotal and feature cleanup remain pending. New test records start Not run; use actual evidence rather than copying expected outcomes.
+This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. Local baseline/route/flashcard repairs are implemented; P0b scope cleanup is implemented and checked; VirusTotal remains pending. Full manual acceptance remains unexecuted. New test records start Not run; use actual evidence rather than copying expected outcomes.
 
 The [SRS](SRS.md) is the requirements authority; the [feature overview](SRS.md#cleanup-action-matrix) explains the approved assignment-focused LMS. This manual is a shared end goal: build toward its scenarios and SRS requirements, not extra modules. Successful presentation does not replace load, reliability, security, risk and AI-use evidence. Team-run manual tests are rehearsal/acceptance evidence; do not claim independent stakeholder sign-off unless a real stakeholder reviews and accepts the results.
 

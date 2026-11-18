@@ -50,32 +50,4 @@ $c = $course;
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-head"><h3>Quiz attempts</h3></div>
-    <div class="table-wrap">
-      <table class="data">
-        <thead><tr><th>Quiz</th><th>Score</th><th>Result</th><th>Submitted</th></tr></thead>
-        <tbody>
-          <?php if (empty($attempts)): ?>
-            <tr><td colspan="4" class="text-center text-muted" style="padding:24px;">No quiz attempts yet.</td></tr>
-          <?php else: foreach ($attempts as $a): ?>
-            <tr>
-              <td><strong><?= e($a['quiz_title']) ?></strong></td>
-              <td><strong><?= $a['score'] ?></strong> / <?= $a['max_score'] ?> (<?= $a['percentage'] ?>%)</td>
-              <td>
-                <?php if ($a['passed'] === 1): ?>
-                  <span class="badge badge-success">Passed</span>
-                <?php elseif ($a['passed'] === 0): ?>
-                  <span class="badge badge-danger">Failed</span>
-                <?php else: ?>
-                  <span class="badge">In progress</span>
-                <?php endif; ?>
-              </td>
-              <td class="text-muted" style="font-size:.82rem;"><?= $a['submitted_at'] ? timeAgo($a['submitted_at']) : '—' ?></td>
-            </tr>
-          <?php endforeach; endif; ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
 </div>

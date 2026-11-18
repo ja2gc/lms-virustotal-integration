@@ -35,7 +35,7 @@ class NotificationsController extends Controller
         $n = Database::fetch('SELECT * FROM notifications WHERE id = :id AND user_id = :uid', ['id' => $id, 'uid' => Auth::id()]);
         if ($n) {
             Database::query('UPDATE notifications SET is_read = 1 WHERE id = :id', ['id' => $id]);
-            if (!empty($n['link'])) {
+            if (!empty($n['link']) && Router::resolve(explode('?', $n['link'], 2)[0]) !== null) {
                 $this->redirect($n['link']);
                 return;
             }

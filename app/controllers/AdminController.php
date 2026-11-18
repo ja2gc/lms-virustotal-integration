@@ -30,8 +30,6 @@ class AdminController extends Controller
             'enrollments'=> Database::count('enrollments'),
             'submissions'=> Database::count('submissions'),
             'pending'    => Database::count('submissions', "status = 'submitted'"),
-            'forum'      => Database::count('forum_topics'),
-            'posts'      => Database::count('forum_posts'),
         ];
         $recentUsers = Database::fetchAll("SELECT * FROM users ORDER BY created_at DESC LIMIT 8");
         $recentCourses = Database::fetchAll(
@@ -296,8 +294,6 @@ class AdminController extends Controller
             $keys = ['site_name','site_tagline','site_description','allow_registration','default_role','contact_email','footer_text','theme_primary',
                 'maintenance_mode','maintenance_message',
                 'smtp_host','smtp_port','smtp_user','smtp_pass','smtp_from_email','smtp_from_name','enable_email',
-                'enable_web_push','web_push_vapid_public','web_push_vapid_private',
-                'oauth_google_client_id','oauth_google_secret','oauth_github_client_id','oauth_github_secret',
                 'recaptcha_site_key','recaptcha_secret_key',
                 'default_language','login_max_attempts','login_lockout_minutes'];
             foreach ($keys as $k) {

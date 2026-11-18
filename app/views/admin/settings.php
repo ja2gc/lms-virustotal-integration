@@ -12,9 +12,7 @@ $s = $settings;
 <div class="tabs">
   <a href="#general" class="active" onclick="switchTab(event,'general')">General</a>
   <a href="#security" onclick="switchTab(event,'security')">Security</a>
-  <a href="#oauth" onclick="switchTab(event,'oauth')">OAuth</a>
   <a href="#email" onclick="switchTab(event,'email')">Email / SMTP</a>
-  <a href="#push" onclick="switchTab(event,'push')">Push</a>
   <a href="#maintenance" onclick="switchTab(event,'maintenance')">Maintenance</a>
 </div>
 
@@ -59,23 +57,6 @@ $s = $settings;
       </div>
     </div>
 
-    <!-- OAuth -->
-    <div id="oauth" class="tab-pane" style="display:none;">
-      <h3 style="margin-bottom:14px;">Google OAuth</h3>
-      <p class="text-muted" style="font-size:.85rem;margin-bottom:10px;">Create credentials at <a href="https://console.developers.google.com/apis/credentials" target="_blank">Google Cloud Console</a>. Redirect URI: <code><?= BASE_URL ?>/index.php?r=oauth/callback</code></p>
-      <div class="form-grid">
-        <div class="form-group"><label>Google client ID</label><input type="text" name="oauth_google_client_id" value="<?= e($s['oauth_google_client_id'] ?? '') ?>"></div>
-        <div class="form-group"><label>Google client secret</label><input type="password" name="oauth_google_secret" value="<?= e($s['oauth_google_secret'] ?? '') ?>"></div>
-      </div>
-      <hr style="border:0;border-top:1px solid var(--border);margin:24px 0;">
-      <h3 style="margin-bottom:14px;">GitHub OAuth</h3>
-      <p class="text-muted" style="font-size:.85rem;margin-bottom:10px;">Create an OAuth app at <a href="https://github.com/settings/developers" target="_blank">GitHub Developer Settings</a>. Callback URL: <code><?= BASE_URL ?>/index.php?r=oauth/callback</code></p>
-      <div class="form-grid">
-        <div class="form-group"><label>GitHub client ID</label><input type="text" name="oauth_github_client_id" value="<?= e($s['oauth_github_client_id'] ?? '') ?>"></div>
-        <div class="form-group"><label>GitHub client secret</label><input type="password" name="oauth_github_secret" value="<?= e($s['oauth_github_secret'] ?? '') ?>"></div>
-      </div>
-    </div>
-
     <!-- Email -->
     <div id="email" class="tab-pane" style="display:none;">
       <h3 style="margin-bottom:14px;">SMTP configuration</h3>
@@ -93,15 +74,6 @@ $s = $settings;
         <div class="form-group"><label>From email</label><input type="email" name="smtp_from_email" value="<?= e($s['smtp_from_email'] ?? '') ?>"></div>
         <div class="form-group"><label>From name</label><input type="text" name="smtp_from_name" value="<?= e($s['smtp_from_name'] ?? 'doodle') ?>"></div>
       </div>
-    </div>
-
-    <!-- Push -->
-    <div id="push" class="tab-pane" style="display:none;">
-      <h3 style="margin-bottom:14px;">Web Push notifications</h3>
-      <p class="text-muted" style="font-size:.85rem;margin-bottom:10px;">Generate VAPID keys at <a href="https://web-push-codelab.glitch.me/" target="_blank">web-push-codelab</a>. Requires HTTPS in production.</p>
-      <div class="form-group checkbox-group"><input type="checkbox" name="enable_web_push" id="enablePush" value="1" <?= ($s['enable_web_push'] ?? '0') === '1' ? 'checked' : '' ?>><label for="enablePush">Enable web push notifications</label></div>
-      <div class="form-group"><label>VAPID public key</label><textarea name="web_push_vapid_public" rows="3"><?= e($s['web_push_vapid_public'] ?? '') ?></textarea></div>
-      <div class="form-group"><label>VAPID private key</label><textarea name="web_push_vapid_private" rows="3"><?= e($s['web_push_vapid_private'] ?? '') ?></textarea></div>
     </div>
 
     <!-- Maintenance -->
