@@ -94,5 +94,11 @@
     ],
     "independent_checks": "16 PHP passed; JavaScript check passed",
     "result": "No remaining review blockers"
+  },
+  "delivery": {
+    "pull_request": "https://github.com/ja2gc/lms-virustotal-integration/pull/1",
+    "merged_source_revision": "8d15034",
+    "merged_main_verification": "16 PHP passed; JavaScript check passed",
+    "cleanup": "Not started; next chat waits for continue"
   }
 }
