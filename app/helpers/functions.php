@@ -11,7 +11,8 @@ function url(string $path = ''): string
 {
     $path = ltrim($path, '/');
     if ($path === '') return BASE_URL . '/';
-    return BASE_URL . '/index.php?r=' . $path;
+    [$route, $query] = array_pad(explode('?', $path, 2), 2, '');
+    return BASE_URL . '/index.php?r=' . $route . ($query === '' ? '' : '&' . $query);
 }
 
 // Build an asset URL

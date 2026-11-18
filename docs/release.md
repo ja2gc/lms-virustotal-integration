@@ -8,9 +8,11 @@ The coordinator selected localhost. No Render, GitHub Pages runtime or cloud dep
 
 The [runtime manifest](../runtime-requirements.json) lists extensions and test requirements. Verify them with `php -v` and `php -m`; enable missing extensions in the active configuration shown by `php --ini`. SQLite is the default: do not set `DOODLE_DB_TYPE=mysql` for this setup. No database server, package install or build step is required. Root, `database/`, `public/uploads/` and `tmp/sessions/` must be writable by your local PHP process.
 
-Start from the repository root, create `tmp/sessions`, and use `php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php`. Open `http://127.0.0.1:8173`, complete the installer with your own administrator details, then use the Sign in link. Every clone has its own ignored local DB, install flags, sessions and uploads. None of the fictional verification accounts/passwords is distributed in Git.
+Start from the repository root, create `tmp/sessions`, and use `php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php`. Open `http://127.0.0.1:8173`, complete the installer with your own administrator details, then use the Sign in link. Every clone has its own ignored local DB, install flags, sessions and uploads. The original ad-hoc test passwords are not distributed. Optional explicitly public panel_* demo logins are supplied by the seeder and documented in README.
 
 For manual baseline practice, admin **Users -> Add user** creates one fictional teacher and student with passwords you choose. Sign in as teacher, **My Courses -> New course -> Publish -> Assignments -> New assignment**. Student uses **Course Catalog -> course -> Enroll now**, then reopens the course overview, opens its assignment and submits a written response. Teacher opens **Teacher Studio -> Grade now**, enters score/feedback and saves. Student sees the result under **My Grades -> Details**. This was the observed baseline journey; it is not a replacement for the full UAT catalogue.
+
+For repeatable preparation, run `php bin/seed-demo.php` after installation. [README demo credentials](../README.md#fictional-localhost-demo-accounts) are explicitly fictional/public and valid only for this loopback demo. The seeder was run twice and all three seeded role logins were checked. It preserves unrelated records and deliberately does not reset changed passwords or study progress. Use the seeded course/material/assignment/manual deck as input; create submissions, grades, notifications and future scan evidence through real workflows.
 
 - **PHP not recognized:** use a terminal whose PATH contains PHP, or replace `php` with `& 'C:\path\to\php.exe'` in PowerShell. Do not copy the original upstream quick-start over this command.
 - **Could not find driver:** enable `pdo_sqlite` in the PHP configuration actually used by the terminal, then restart PHP.
@@ -33,7 +35,7 @@ The baseline router allows only intended entry points and allowlisted public fil
 
 1. Install PHP 8.3 with `pdo_sqlite`, `curl`, `mbstring`, `fileinfo`, `json`, `openssl`, session support and a trusted CA store. Use SQLite for the tested target; other PHP versions/DBs need their own evidence.
 2. Check out the release source. Keep credentials in local process configuration, never source. Example variables to implement: `VT_API_KEY`, `SCAN_MODE=fixture|live`, `SCAN_PRIVATE_DIR`, `SCAN_MAX_UPLOAD_BYTES`, `SCAN_REQUESTS_PER_MINUTE`, `SCAN_REQUESTS_PER_DAY`. Reuse upstream `DOODLE_DB_TYPE=sqlite` and `DOODLE_ENV` where compatible.
-3. The installer is repaired and creates upstream tables. The separate project migration runner and repeatable fictional demo-data command remain to build. Final acceptance needs two courses with different teachers and synthetic attachments.
+3. The installer and offline demo seeder exist. The project scan migration runner remains to build. The seeder supplies two courses with different teachers and fictional inputs; prepare synthetic attachments through the real upload workflow.
 4. The implemented web command and router are described above. Extend its access tests when private storage and the explicit action map are added; baseline file blocking alone does not complete P0b/P5.
 5. Planned worker command in a second terminal: `php bin/scan-worker.php`. Support a `--once` option for diagnosis/tests. The worker loads CLI configuration, not the web front controller, and must not start sessions or web-trigger migrations.
 6. `php tests/run.php` currently runs baseline/routing regressions offline. Add the planned integration groups, then a limited explicitly live synthetic smoke check. Record exact final commands/results once implemented.
@@ -42,7 +44,7 @@ Original startup failures and subsequent repaired-baseline results are kept sepa
 
 ## Demo sequence
 
-Use [the demo/manual UAT guide](demo-manual.md) for the full manual acceptance catalogue, defect/retest recording and the shorter presenter sequence. The steps below summarize its release connection; setup/run commands remain authoritative in this release guide. Complete and record UAT01-UAT34/variants before calling the release accepted; a rehearsed happy path alone is insufficient.
+Use [the demo/manual UAT guide](demo-manual.md) for the full manual acceptance catalogue, defect/retest recording and the shorter presenter sequence. The steps below summarize its release connection; setup/run commands remain authoritative in this release guide. Complete and record UAT01-UAT35/variants before calling the release accepted; a rehearsed happy path alone is insufficient.
 
 1. Teacher opens a course/material and publishes an assignment/deadline. Briefly establish retained dashboards, calendar, announcements and notifications; avoid a tour of unrelated pages.
 2. Student submits text/file, sees successful local save and pending advisory while the worker is stopped.

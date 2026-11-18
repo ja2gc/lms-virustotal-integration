@@ -33,12 +33,12 @@ class AnalyticsController extends Controller
     {
         // Activity over last 30 days
         $activity = Database::fetchAll(
-            "SELECT DATE(created_at) AS d, COUNT(*) AS c, 'enrollments' AS type
-             FROM enrollments WHERE created_at >= :start GROUP BY DATE(created_at)
+            "SELECT DATE(enrolled_at) AS d, COUNT(*) AS c, 'enrollments' AS type
+             FROM enrollments WHERE enrolled_at >= :start GROUP BY DATE(enrolled_at)
              UNION ALL
-             SELECT DATE(created_at), COUNT(*), 'submissions' FROM submissions WHERE created_at >= :start2 GROUP BY DATE(created_at)
+             SELECT DATE(submitted_at), COUNT(*), 'submissions' FROM submissions WHERE submitted_at >= :start2 GROUP BY DATE(submitted_at)
              UNION ALL
-             SELECT DATE(created_at), COUNT(*), 'lesson_completions' FROM lesson_completions WHERE created_at >= :start3 GROUP BY DATE(created_at)",
+             SELECT DATE(completed_at), COUNT(*), 'lesson_completions' FROM lesson_completions WHERE completed_at >= :start3 GROUP BY DATE(completed_at)",
             ['start' => date('Y-m-d', strtotime('-30 days')), 'start2' => date('Y-m-d', strtotime('-30 days')), 'start3' => date('Y-m-d', strtotime('-30 days'))]
         );
         $activityByDay = [];
@@ -80,12 +80,12 @@ class AnalyticsController extends Controller
     private function teacherStats(int $tid): array
     {
         $activity = Database::fetchAll(
-            "SELECT DATE(created_at) AS d, COUNT(*) AS c FROM lesson_completions lc
+            "SELECT DATE(lc.completed_at) AS d, COUNT(*) AS c FROM lesson_completions lc
              JOIN lessons l ON lc.lesson_id = l.id
              JOIN modules m ON l.module_id = m.id
              JOIN courses c ON m.course_id = c.id
-             WHERE c.teacher_id = :tid AND lc.created_at >= :start
-             GROUP BY DATE(lc.created_at) ORDER BY d",
+             WHERE c.teacher_id = :tid AND lc.completed_at >= :start
+             GROUP BY DATE(lc.completed_at) ORDER BY d",
             ['tid' => $tid, 'start' => date('Y-m-d', strtotime('-30 days'))]
         );
         $activityByDay = [];

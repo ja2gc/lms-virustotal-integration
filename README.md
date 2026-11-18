@@ -32,6 +32,23 @@ php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php
 
 Keep that terminal running and open **[http://127.0.0.1:8173](http://127.0.0.1:8173)**. The first visit opens the installer: choose your own local administrator account/password, install, then sign in. SQLite tables and initial settings are created automatically. No VirusTotal key is needed to try the existing LMS.
 
+### Fictional localhost demo accounts
+
+After installation, in another terminal at the project root run:
+
+```powershell
+php bin/seed-demo.php
+```
+
+| Role | Username | Local demo password |
+| --- | --- | --- |
+| Administrator | `panel_admin` | `DemoOnly!2026` |
+| Teacher A | `panel_teacher` | `DemoOnly!2026` |
+| Student A | `panel_student` | `DemoOnly!2026` |
+| Teacher B / Student B (permission checks) | `panel_teacher_b` / `panel_student_b` | `DemoOnly!2026` |
+
+These are deliberately public **fictional localhost credentials**, not provider keys or production passwords. The offline seeder creates two courses, enrollments, one text lesson, assignments and a two-card manual deck. Run it twice safely: existing/manual records and reviews are preserved. If a demo identity's password/role was changed or its name collides, seeding stops instead of resetting it. The installer account you chose remains separate. Keep the server bound to loopback.
+
 Already cloned? Open its folder, pull the latest `main` while your work is committed, then run the last two commands above. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
 
 In another terminal, run `php tests/run.php`. See [the release/setup guide](docs/release.md) for dependencies, fictional demo accounts, troubleshooting and remaining release gates.
@@ -41,6 +58,8 @@ In another terminal, run `php tests/run.php`. See [the release/setup guide](docs
 Installer, all three role logins, course publishing/catalog/enrollment, a written assignment submission, teacher grading and student feedback were checked in the built-in browser preview. Startup/controller/rendering and course/grade route defects were repaired; the sidebar now selects My Courses without also selecting Teacher Studio. See [the baseline audit](docs/baseline-audit.md) for original failures and new evidence.
 
 **VirusTotal, its worker, private attachment downloads and the approved module exclusions are still to implement.** Existing extra menus remain visible. The local router blocks project source/configuration/database files, but upstream uploads remain publicly addressable; use fictional users and synthetic files only. This is a runnable development starting point, not the final integrated release or completed manual UAT. Follow [the implementation plan](docs/implementation-plan.md) and [validation guide](docs/validation.md).
+
+Current sidebar/link repairs are checked for student, teacher and admin; manual flashcards now create/study/save progress with private-deck checks. [Task status](docs/task-status.md) records ownership/completion. **Jared owns stream 4**; cleanup starts in his next chat only after he says continue. Other members claim streams 1–3 in the group chat, use task branches and submit PRs for Jared's review. Follow [the cleanup matrix](docs/feature-scope.md#exact-cleanup-guide-for-agents); repaired upstream routes are not all retained final features.
 
 ## Shared technical direction
 
@@ -61,7 +80,8 @@ Installer, all three role logins, course publishing/catalog/enrollment, a writte
 | `evidence/baseline/` | Actual normalized baseline check results; later evidence folders are created when real checks run |
 | `AGENTS.md`, `.agents/rules/workflow.md` | Agent reading order, boundaries and verification rules |
 | `router.local.php`, `tests/`, `runtime-requirements.json` | Implemented local server entry point, baseline regression checks and tested runtime manifest |
-| `app/scan/`, `bin/`, `database/migrations/` | Planned integration areas; the worker and scan migrations do not exist yet |
+| `bin/seed-demo.php` | Implemented offline fictional demo-data setup |
+| `app/scan/`, `bin/scan-worker.php`, `database/migrations/` | Planned integration areas; the worker and scan migrations do not exist yet |
 
 ## Collaboration and completion
 

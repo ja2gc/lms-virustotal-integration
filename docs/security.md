@@ -30,6 +30,8 @@ Source: [VirusTotal upload documentation and data-sharing warning](https://docs.
 
 ## Secrets and local serving
 
+Manual flashcards now check deck owner/public/course scope before viewing/studying/reviewing. Course-deck creation checks accessible courses; review updates require the current user's review record and current deck access. Delete is a CSRF-protected POST for owner/admin. Failed study requests keep visible progress unchanged. This is scoped flashcard proof, not certification of the still-pending integration boundaries. Public synthetic localhost demo credentials are an explicitly authorized exception; real credentials/provider keys remain prohibited.
+
 The application loads the API key from the process environment, never a browser bundle, database settings page or committed file. Provide a safe example with placeholder values; never open or commit a real `.env`. A CLI bootstrap reads environment configuration without starting browser sessions or running web migrations. Never log HTTP request headers.
 
 PHP's built-in server does not enforce Apache `.htaccess`. Before demonstration, add a local router/serving configuration that blocks `.git`, configuration, private storage, database, documentation and evidence paths, and exposes only intended assets/controllers. Bind to `127.0.0.1`, not all network interfaces. Private files belong outside the served root or are denied by a tested router, with no alternate static path. Do not rely on an `index.php` returning 404 to protect sibling files.

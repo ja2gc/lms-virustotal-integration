@@ -198,6 +198,7 @@ class ApiController extends Controller
     public function tokens(): void
     {
         Auth::requireLogin();
+        parent::__construct();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($this->input('name', ''));
             if (!empty($name)) {

@@ -1,12 +1,12 @@
 # Demo manual and manual UAT
 
-This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. Baseline repairs and the VirusTotal integration are not implemented yet. All new test records start Not run; do not copy expected outcomes into actual-result fields.
+This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. Local baseline/route/flashcard repairs are implemented; VirusTotal and feature cleanup remain pending. New test records start Not run; use actual evidence rather than copying expected outcomes.
 
 The [SRS](SRS.md) is the requirements authority; the [feature overview](feature-scope.md) explains the approved assignment-focused LMS. This manual is a shared end goal: build toward its scenarios and SRS requirements, not extra modules. Successful presentation does not replace load, reliability, security, risk and AI-use evidence. Team-run manual tests are rehearsal/acceptance evidence; do not claim independent stakeholder sign-off unless a real stakeholder reviews and accepts the results.
 
 ## Setup and rehearsal checklist
 
-- [ ] Use the actual verified commands in [local release instructions](release.md), on the same tagged/reviewed revision on all machines. Proposed commands are not yet verified.
+- [ ] Use the actual verified commands in [local release instructions](release.md), on the same tagged/reviewed revision on all machines. The baseline app/seeder commands are verified; worker commands remain planned until implemented.
 - [ ] Prepare fictional Admin Demo, Teacher A, Teacher B, Student A and Student B accounts. Keep passwords local; do not put credentials in slides, source or this manual.
 - [ ] Prepare a course named Systems Integration Lab, a short lesson/material, an assignment named Integration Reflection, a visible future deadline, and maximum score 100. Teacher B owns another course for access-control testing. Student A and Student B remain distinct owners.
 - [ ] Prepare harmless synthetic `reflection-v1.txt` and `reflection-v2.txt` with different contents/hashes. No private coursework or real malware. Keep fixtures and any retained downloads in the agreed private/test locations.
@@ -59,6 +59,7 @@ Case numbers group coverage rather than mandate execution order: establish clean
 | UAT32 | Disposable matched DB/private-file backup | Restore only into a temporary target, open relevant record and compare harmless attachment bytes/hash/linkage. | Restored DB and files agree; backup presence alone is not treated as proof; original demo target is untouched. | NFR10 |
 | UAT33 | Retained and scan screens with long labels/filenames and empty/error records | Test keyboard navigation, narrow/wide layouts, labels, loading/empty/read-only/error states and status without color alone. | Main actions remain usable and understandable; no clipping, lost useful input or unsafe displayed text. | NFR08; FR08/FR17 |
 | UAT34 | Integrated release and actual evidence manifest | Review tests, both real reusable consumers, load/fault/security results, setup/restore proof, trends/case effects, risks and actual AI-use disclosure. | Source/evidence map to FR/NFR/R IDs; measured values and limitations are honest. Manual inspection does not replace automated contract/concurrency/load proof. | NFR07/NFR09/NFR11/NFR12; R01-R15 |
+| UAT35a-e | Teacher/student and a two-card manual deck; unrelated user for negative checks | (a) Create a manual deck with complete cards; reject empty/incomplete input. (b) Open/study an own/public/permitted course deck; deny another private deck and foreign course association. (c) Flip by mouse/keyboard and rate both cards. (d) Reload/reopen; saved reviews are not due again immediately. Test failed review/repeated clicks without false progress. (e) Reject GET/no-CSRF deletion; permit owner/admin POST. | Cards and review schedule persist, private/course boundaries hold, failed saves preserve progress. No quiz grade or generated-deck claim. | FR27; NFR01/NFR03/NFR08 |
 
 ## Recording actual results and defects
 
@@ -121,6 +122,8 @@ Prepare the following as short controlled scenarios. If time is limited, demonst
 
 ## Presenter handoffs
 
+**DM13: manual flashcards (short supporting feature).** Use the seeded Panel Demo Integration Cards. Open Flashcards, show two manual cards, start studying, flip/rate and show completion; reopen to establish saved progress. Link to UAT35a-e/FR27 and the flashcard test evidence. Budget **45–60 seconds**, a rehearsal target rather than a measured human presentation time. The initial automated create-and-two-card trial took 28 seconds. Pre-create a fresh small deck for rehearsal if the seeded cards are no longer due; normal seeding deliberately does not reset reviews. No AI-generated content or quizzes. Every main feature is covered in UAT; the short panel sequence need not run every negative variant live.
+
 Suggested roles, adjustable by the team: UI owner guides DM01-DM04 and DM07; scanning owner explains DM05/DM11; HTTP/access owner explains DM06/DM10 and local setup; data owner explains DM08/DM09 and connects the evidence story. Practice handoffs on one coherent dataset. Everyone must understand the main workflow and one failure path, not just their page.
 
 ## If a live dependency is unavailable
@@ -129,8 +132,8 @@ Say what failed. Keep the saved submission visible, show its honest waiting/Unre
 
 ## Definition of ready and stop rule
 
-- [ ] DM01-DM12 executed on the integrated release, with pass/fail notes and real evidence linked. Any exception is explicit, not silently skipped.
-- [ ] UAT01-UAT34 and named subcases executed or explicitly reported Blocked/Fail, with actual observations, evidence, defects and retests. No unresolved blocking/required-feature failure is silently called ready.
+- [ ] DM01-DM13 executed on the integrated release, with pass/fail notes and real evidence linked. Any exception is explicit, not silently skipped.
+- [ ] UAT01-UAT35 and named subcases executed or explicitly reported Blocked/Fail, with actual observations, evidence, defects and retests. No unresolved blocking/required-feature failure is silently called ready.
 - [ ] R01-R15 checked against code/evidence; all required Part A-F artifacts reflect the built system.
 - [ ] Every SRS FR/NFR has a trace to the relevant manual and/or automated evidence. Passing a panel narrative or a manual case does not by itself prove load limits, internal contract reuse or concurrency guarantees.
 - [ ] Supporting retained features pass smoke checks; quizzes and other approved exclusions are absent from assessed navigation and denied by direct routes.

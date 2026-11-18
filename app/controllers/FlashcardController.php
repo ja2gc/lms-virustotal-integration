@@ -30,14 +30,16 @@ class FlashcardController extends Controller
              WHERE d.user_id = :uid
                 OR d.is_public = 1
                 OR (d.course_id IN (SELECT course_id FROM enrollments WHERE student_id = :uid AND status = 'active'))
+                OR :is_admin = 1
+                OR (d.course_id IN (SELECT id FROM courses WHERE teacher_id = :uid))
              ORDER BY d.created_at DESC",
-            ['uid' => $uid, 'today' => date('Y-m-d')]
+            ['uid' => $uid, 'today' => date('Y-m-d'), 'is_admin' => Auth::isAdmin() ? 1 : 0]
         );
 
         // Count due cards across all decks
         $dueCount = Database::count('flashcard_reviews fr JOIN flashcards f ON fr.flashcard_id = f.id JOIN flashcard_decks d ON f.deck_id = d.id',
-            '(d.user_id = :uid OR d.is_public = 1 OR d.course_id IN (SELECT course_id FROM enrollments WHERE student_id = :uid2 AND status = "active")) AND fr.user_id = :uid3 AND fr.next_review <= :today',
-            ['uid' => $uid, 'uid2' => $uid, 'uid3' => $uid, 'today' => date('Y-m-d')]);
+            '(d.user_id = :uid OR d.is_public = 1 OR :is_admin = 1 OR d.course_id IN (SELECT id FROM courses WHERE teacher_id = :uid) OR d.course_id IN (SELECT course_id FROM enrollments WHERE student_id = :uid2 AND status = "active")) AND fr.user_id = :uid3 AND fr.next_review <= :today',
+            ['uid' => $uid, 'uid2' => $uid, 'uid3' => $uid, 'today' => date('Y-m-d'), 'is_admin' => Auth::isAdmin() ? 1 : 0]);
 
         $this->render('flashcards/index', [
             'pageTitle' => 'Flashcards',
@@ -48,8 +50,7 @@ class FlashcardController extends Controller
 
     public function view(int $deckId): void
     {
-        $deck = Database::fetch('SELECT * FROM flashcard_decks WHERE id = :id', ['id' => $deckId]);
-        if (!$deck) { $this->redirect('flashcards'); }
+        $deck = $this->requireDeck($deckId);
         $cards = Database::fetchAll('SELECT * FROM flashcards WHERE deck_id = :did ORDER BY sort_order, id', ['did' => $deckId]);
         $this->render('flashcards/view', [
             'pageTitle' => $deck['title'],
@@ -60,38 +61,68 @@ class FlashcardController extends Controller
 
     public function create(): void
     {
+        $courses = Auth::isAdmin()
+            ? Database::fetchAll('SELECT id, title FROM courses ORDER BY title')
+            : (Auth::isStudent()
+                ? Database::fetchAll("SELECT c.id, c.title FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE e.student_id = :uid AND e.status = 'active'", ['uid' => Auth::id()])
+                : Database::fetchAll("SELECT id, title FROM courses WHERE teacher_id = :tid ORDER BY title", ['tid' => Auth::id()]));
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $title = trim($this->input('title', ''));
-            $desc  = trim($this->input('description', ''));
+            $title = is_string($this->input('title')) ? trim($this->input('title')) : '';
+            $desc = is_string($this->input('description')) ? trim($this->input('description')) : '';
             $courseId = (int) $this->input('course_id', 0) ?: null;
             $isPublic = (int) ($this->input('is_public', '0') === '1');
-            $deckId = Database::insert('flashcard_decks', [
-                'course_id'  => $courseId,
-                'user_id'    => Auth::id(),
-                'title'      => $title,
-                'description'=> $desc,
-                'is_public'  => $isPublic,
-                'is_ai_generated' => 0,
-            ]);
-            // Add cards
-            $fronts = (array) ($this->input('front', []));
-            $backs  = (array) ($this->input('back', []));
-            for ($i = 0; $i < count($fronts); $i++) {
-                if (!empty($fronts[$i]) && !empty($backs[$i])) {
+            if ($courseId !== null && !in_array($courseId, array_map('intval', array_column($courses, 'id')), true)) {
+                $this->json(['ok'=>false, 'error'=>'You cannot add a deck to that course.'], 403);
+            }
+            $cards = [];
+            $fronts = (array) $this->input('front', []);
+            $backs = (array) $this->input('back', []);
+            $invalid = count($fronts) !== count($backs);
+            foreach ($fronts as $i => $front) {
+                $back = $backs[$i] ?? '';
+                if (!is_string($front) || !is_string($back)) { $invalid = true; continue; }
+                $front = trim($front); $back = trim($back);
+                if ($front === '' && $back === '') continue;
+                if ($front === '' || $back === '') { $invalid = true; continue; }
+                $cards[] = ['front'=>$front, 'back'=>$back];
+            }
+            if ($title === '' || mb_strlen($title) > 255 || !$cards || $invalid) {
+                http_response_code(422);
+                $this->render('flashcards/create', ['pageTitle'=>'Create Deck', 'courses'=>$courses,
+                    'old'=>['title'=>$title, 'description'=>$desc, 'course_id'=>$courseId, 'is_public'=>$isPublic,
+                        'front'=>array_map(static fn($value)=>is_string($value)?$value:'', $fronts),
+                        'back'=>array_map(static fn($value)=>is_string($value)?$value:'', $backs)],
+                    'error'=>'Enter a title (up to 255 characters) and at least one complete question/answer pair.']);
+                return;
+            }
+            $db = Database::getInstance();
+            $db->beginTransaction();
+            try {
+                $deckId = Database::insert('flashcard_decks', [
+                    'course_id'  => $courseId,
+                    'user_id'    => Auth::id(),
+                    'title'      => $title,
+                    'description'=> $desc,
+                    'is_public'  => $isPublic,
+                    'is_ai_generated' => 0,
+                ]);
+                // Add cards
+                foreach ($cards as $i => $card) {
                     Database::insert('flashcards', [
                         'deck_id'    => $deckId,
-                        'front'      => $fronts[$i],
-                        'back'       => $backs[$i],
+                        'front'      => $card['front'],
+                        'back'       => $card['back'],
                         'sort_order' => $i,
                     ]);
                 }
+                $db->commit();
+            } catch (Throwable $error) {
+                $db->rollBack();
+                throw $error;
             }
             $this->flash('success', 'Deck created.');
             $this->redirect('flashcards/view/' . $deckId);
         }
-        $courses = Auth::isStudent()
-            ? Database::fetchAll("SELECT c.id, c.title FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE e.student_id = :uid AND e.status = 'active'", ['uid' => Auth::id()])
-            : Database::fetchAll("SELECT id, title FROM courses WHERE teacher_id = :tid ORDER BY title", ['tid' => Auth::id()]);
         $this->render('flashcards/create', [
             'pageTitle' => 'Create Deck',
             'courses'   => $courses,
@@ -100,8 +131,7 @@ class FlashcardController extends Controller
 
     public function study(int $deckId): void
     {
-        $deck = Database::fetch('SELECT * FROM flashcard_decks WHERE id = :id', ['id' => $deckId]);
-        if (!$deck) { $this->redirect('flashcards'); }
+        $deck = $this->requireDeck($deckId);
         // Initialize review rows for all cards in deck that user hasn't seen yet
         $cards = Database::fetchAll('SELECT * FROM flashcards WHERE deck_id = :did ORDER BY sort_order, id', ['did' => $deckId]);
         foreach ($cards as $c) {
@@ -147,6 +177,8 @@ class FlashcardController extends Controller
         if ($rating > 4) $rating = 4;
         $review = Database::fetch('SELECT * FROM flashcard_reviews WHERE id = :id AND user_id = :uid', ['id' => $reviewId, 'uid' => Auth::id()]);
         if (!$review) $this->json(['ok' => false, 'error' => 'Review not found'], 404);
+        $card = Database::fetch('SELECT deck_id FROM flashcards WHERE id = :id', ['id'=>$review['flashcard_id']]);
+        $this->requireDeck((int) $card['deck_id']);
 
         $ef = (float) $review['ease_factor'];
         $reps = (int) $review['repetitions'];
@@ -225,8 +257,8 @@ class FlashcardController extends Controller
 
     public function delete(int $deckId): void
     {
-        $deck = Database::fetch('SELECT * FROM flashcard_decks WHERE id = :id', ['id' => $deckId]);
-        if (!$deck) { $this->redirect('flashcards'); }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') $this->json(['ok'=>false, 'error'=>'Use POST to delete a deck.'], 405);
+        $deck = $this->requireDeck($deckId);
         if ($deck['user_id'] != Auth::id() && !Auth::isAdmin()) {
             $this->flash('error', 'You can only delete your own decks.');
             $this->redirect('flashcards');
@@ -234,5 +266,15 @@ class FlashcardController extends Controller
         Database::delete('flashcard_decks', 'id = :id', ['id' => $deckId]);
         $this->flash('success', 'Deck deleted.');
         $this->redirect('flashcards');
+    }
+
+    private function requireDeck(int $deckId): array
+    {
+        $deck = Database::fetch('SELECT * FROM flashcard_decks WHERE id = :id', ['id'=>$deckId]);
+        if (!$deck) $this->json(['ok'=>false, 'error'=>'Deck not found.'], 404);
+        $canRead = Auth::isAdmin() || (int) $deck['user_id'] === Auth::id() || (int) $deck['is_public'] === 1
+            || ($deck['course_id'] !== null && (Auth::ownsCourse((int) $deck['course_id']) || Auth::isEnrolled((int) $deck['course_id'])));
+        if (!$canRead) $this->json(['ok'=>false, 'error'=>'You cannot access this deck.'], 403);
+        return $deck;
     }
 }

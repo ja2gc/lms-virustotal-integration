@@ -8,7 +8,9 @@ The minimal `tests/run.php` harness now discovers baseline and routing checks, r
 
 ## Required test catalogue
 
-Requirements authority: [SRS](SRS.md), including FR01-FR26, NFR01-NFR12 and R01-R15. The catalogue below defines implementation/measurement checks. The [demo/manual UAT guide](demo-manual.md) separately defines full manual feature acceptance, its actual-result/defect log, and the short panel sequence.
+Current commands: `php tests/run.php` runs baseline, repeatable demo seeding, routing/three-role HTTP and flashcard checks without provider credentials. Optional developer JavaScript check: `node tests/flashcard-study.test.cjs` (standard Node only; Node is not an app runtime dependency). [Current evidence](../evidence/baseline/routes-flashcards.json) records actual results. These checks do not complete final scan/security/load/UAT acceptance.
+
+Requirements authority: [SRS](SRS.md), including FR01-FR27, NFR01-NFR12 and R01-R15. The catalogue below defines implementation/measurement checks. The [demo/manual UAT guide](demo-manual.md) separately defines full manual feature acceptance, its actual-result/defect log, and the short panel sequence.
 
 | ID | Scenario and assertion |
 | --- | --- |
@@ -60,7 +62,7 @@ Before release, trace every R-ID to implementation and evidence; explain any fai
 
 ## Full manual acceptance and regression
 
-Run UAT01-UAT34 and each named variant on the integrated release, including the retained course/material/calendar/profile/announcement/notification and assignment/grading paths. A short presentation is not a complete manual test run. Keep statuses Not run, Pass, Fail or Blocked; record actual results rather than copying expected text. Do not prefill pass records during development.
+Run UAT01-UAT35 and each named variant on the integrated release, including the retained course/material/calendar/profile/announcement/notification and assignment/grading paths. A short presentation is not a complete manual test run. Keep statuses Not run, Pass, Fail or Blocked; record actual results rather than copying expected text. Do not prefill pass records during development.
 
 Retain failed results and defect reports, then add retest results on the fixed revision and rerun affected producer/consumer/role cases. Route/authorization or private-file failures are not cosmetic issues. Team-run manual acceptance is not independent stakeholder sign-off unless a real stakeholder participates and accepts it. Backend concurrency, reusable-call-site, quota and load claims still need the focused automated/measurement checks above.
 

@@ -1,5 +1,6 @@
 <?php /** @var array $data */
 extract($data, EXTR_SKIP);
+$old = $old ?? [];
 ?>
 <div class="breadcrumb">
   <a href="<?= url('flashcards') ?>">Flashcards</a>
@@ -10,63 +11,54 @@ extract($data, EXTR_SKIP);
 <div class="page-head">
   <div class="title-block">
     <h1>Create Flashcard Deck</h1>
-    <p>Build your own study deck, or use the AI assistant to auto-generate one.</p>
+    <p>Build a study deck with your own questions and answers.</p>
   </div>
 </div>
 
 <div class="card card-pad">
+  <?php if (!empty($error)): ?><div class="alert alert-error" role="alert"><?= e($error) ?></div><?php endif; ?>
   <form method="post" action="<?= url('flashcards/create') ?>">
     <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= CSRF::token() ?>">
     <div class="form-grid">
       <div class="form-group">
         <label>Deck title</label>
-        <input type="text" name="title" required placeholder="e.g., Spanish Vocabulary - Week 1">
+        <input type="text" name="title" required placeholder="e.g., Spanish Vocabulary - Week 1" value="<?= e($old['title'] ?? '') ?>">
       </div>
       <div class="form-group">
         <label>Course (optional)</label>
         <select name="course_id">
           <option value="0">— Standalone deck —</option>
           <?php foreach ($courses as $c): ?>
-            <option value="<?= $c['id'] ?>"><?= e($c['title']) ?></option>
+            <option value="<?= $c['id'] ?>" <?= (int) ($old['course_id'] ?? 0) === (int) $c['id'] ? 'selected' : '' ?>><?= e($c['title']) ?></option>
           <?php endforeach; ?>
         </select>
       </div>
     </div>
     <div class="form-group">
       <label>Description</label>
-      <textarea name="description" rows="2" placeholder="What is this deck about?"></textarea>
+      <textarea name="description" rows="2" placeholder="What is this deck about?"><?= e($old['description'] ?? '') ?></textarea>
     </div>
     <div class="form-group checkbox-group">
-      <input type="checkbox" name="is_public" id="isPublic" value="1">
+      <input type="checkbox" name="is_public" id="isPublic" value="1" <?= !empty($old['is_public']) ? 'checked' : '' ?>>
       <label for="isPublic">Make this deck public (visible to all users)</label>
     </div>
 
     <h3 style="margin: 24px 0 12px;">Cards</h3>
     <div id="cardsList">
+      <?php for ($i = 0, $rows = max(2, count($old['front'] ?? []), count($old['back'] ?? [])); $i < $rows; $i++): ?>
       <div class="card-row">
         <div class="form-grid">
           <div class="form-group">
             <label>Front (question)</label>
-            <input type="text" name="front[]" placeholder="What is...?">
+            <input type="text" name="front[]" placeholder="What is...?" value="<?= e($old['front'][$i] ?? '') ?>">
           </div>
           <div class="form-group">
             <label>Back (answer)</label>
-            <input type="text" name="back[]" placeholder="The answer is...">
+            <input type="text" name="back[]" placeholder="The answer is..." value="<?= e($old['back'][$i] ?? '') ?>">
           </div>
         </div>
       </div>
-      <div class="card-row">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Front</label>
-            <input type="text" name="front[]" placeholder="What is...?">
-          </div>
-          <div class="form-group">
-            <label>Back</label>
-            <input type="text" name="back[]" placeholder="The answer is...">
-          </div>
-        </div>
-      </div>
+      <?php endfor; ?>
     </div>
     <button type="button" class="btn btn-secondary btn-sm" onclick="addCardRow()"><span class="material-icons">add</span> Add card</button>
 

@@ -38,9 +38,11 @@ Everyone participates in P6/P7 integrated evidence and rehearsal. You do not nee
 | [Security](security.md) | Controls per integration point, private files, authorization, secrets and local serving | Any boundary, upload, download, result or rescan change |
 | [Implementation plan](implementation-plan.md) | Task files/interfaces/tests, ownership boundaries and build order | Planning or implementing the assigned work |
 | [Team guide](team-guide.md) | Four workstreams, start/wait rules, safe handoffs and lightweight prompting help | Coordinating with classmates/agents |
+| [Task status](task-status.md) | Claimed streams, actual completion, PR/evidence and dependency record | Selecting work, handing off, reviewing/merging |
+| [Jared stream 4 handoff](handoffs/jared-member-4.md) | Parked starting prompt, cleanup first, P5 dependencies and blast-radius checks | Jared's next chat after continue |
 | [Validation](validation.md) | Test IDs, load/fault/recovery/security experiments and required raw evidence | Proving behavior and preparing final Part C |
 | [Release](release.md) | Local dependency/configuration/setup contract, migration/recovery/release gates | Making another machine/panel run the system |
-| [Demo and manual UAT guide](demo-manual.md) | Full manual cases and traceability, DM01-DM12 presenter sequence, pass/fail/defect recording | Manual acceptance, regression, scope control or rehearsal |
+| [Demo and manual UAT guide](demo-manual.md) | Full manual cases and traceability, DM01-DM13 presenter sequence, pass/fail/defect recording | Manual acceptance, regression, scope control or rehearsal |
 | [Evaluation](evaluation.md) | Trends decisions and two sourced cases with traceable design effects | Preparing final Parts D/E |
 | [Risks](risks.md) | RMMM baseline, indicators, contingencies and closure format | Updating actual risks and final Part F |
 | [AI-use](ai-use.md) | Actual AI assistance, human decisions, corrections and disclosure | Recording AI-assisted work/final Part F |
@@ -52,6 +54,6 @@ Everyone participates in P6/P7 integrated evidence and rehearsal. You do not nee
 
 Guides specify the target unless they explicitly cite executed evidence. Existing app source does not prove the screen works; an API description does not prove a real request; a fixture pass does not prove provider availability. [Original baseline JSON](../evidence/baseline/php-checks.json) records initial failures; [localhost smoke evidence](../evidence/baseline/localhost-smoke.json) records subsequent repairs and observed behavior. Future evidence is added when real tests run.
 
-Preserve one authoritative guide per topic. Ask its owner/coordinator before changing a shared contract or approved scope. Keep task-to-person names in team communication; numbered workstreams are defined in the team guide. Use a single reviewed handoff instead of copying conflicting implementations between branches.
+Preserve one authoritative guide per topic. Ask its owner/coordinator before changing a shared contract or approved scope. Claim a numbered stream in team communication and record ownership in task-status.md; Jared is reserved for stream 4. Use a single reviewed handoff instead of copying conflicting implementations between branches.
 
 Technical 3's original project title was *Secure File Submission System with VirusTotal Integration*. The agreed target is Doodle, one application plus background worker, SQLite and localhost, with assignment-focused assessment and retained useful LMS support. Detailed numerical defaults remain implementation hypotheses to validate. T1/T4, the original populated RMMM and original reusable-component/transcript artifacts still need reconciliation before final submission.

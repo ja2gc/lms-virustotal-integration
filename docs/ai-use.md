@@ -31,6 +31,8 @@ Local baseline follow-up (2026-11-18): the coordinator requested actual localhos
 
 ## Continue this log during team implementation
 
+Current follow-up: the coordinator authorized all failed-route repairs, a manual-flashcard trial and then retention, keeping three roles, repeatable localhost demo credentials, portable Nutriscope rules, PR/task-record discipline and a parked Jared stream-4 handoff. Codex added real-HTTP role/route/flashcard/seeder regressions and a focused JavaScript failure check; repaired the source and synchronized the SRS/demo/cleanup guide. Nutriscope's universal workflow and seeder rules were read at their actual project location; Laravel/mobile/clinical/deployment specifics were not copied. The user explicitly postponed removals, so cleanup remains pending and the next chat must do no work before continue. Actual checks are recorded in the new baseline evidence; no VirusTotal implementation or final human acceptance is claimed.
+
 For each substantive AI-assisted task record the contributor, tool/model if known, task/prompt summary, files/artifact affected, accepted suggestions, rejected/changed suggestions with reasons, human reviewer and actual verification evidence. Do not invent model/version, effort hours or results. Preserve relevant transcripts/unaltered original AI artifacts when the assessment requires them, with credentials/private data removed; add their actual locations once available.
 
 The original Technical 3 AI artifact and corrected PHP prototype were not provided in this session. This log does not replace them. Complete the final record against the actual submission instructions and disclose unverified or inapplicable suggestions.

@@ -40,7 +40,7 @@
 
 P0b and P1 can proceed in parallel after P0a because they own different files. Isolated provider fixtures/UI partials/route planning can start immediately. See [the team guide](team-guide.md) for exactly when to wait and [the demo manual](demo-manual.md) for the shared acceptance scenarios.
 
-P3 can build its orchestration tests with the published provider fake after P1; merge its live adapter connection after P2. P4/P5 use the shared schema/status response contract while the real worker is under construction. Merge common seams before touching the same controller/helper concurrently. Assign people in team chat, not in this file.
+P3 can build its orchestration tests with the published provider fake after P1; merge its live adapter connection after P2. P4/P5 use the shared schema/status response contract while the real worker is under construction. Merge common seams before touching the same controller/helper concurrently. Claim unassigned streams in team chat and record ownership in docs/task-status.md; stream 4 is reserved for Jared.
 
 ## Workstream boundaries and safe handoffs
 
@@ -55,7 +55,7 @@ These are task/file boundaries, not assignments to named members or contribution
 
 P0a's mechanical rendering sweep touches existing controllers and some grade links once, **before** feature branches edit them. After that merge, hand those files to their listed stream. P0b changes routing in its own PR while P1 publishes bootstrap/schema/test seams in a separate PR. Do not work concurrently on the same file merely because changes seem small.
 
-The implemented shared test runner from P0a discovers `tests/*Test.php`. Each test file returns `['group' => '<group>', 'tests' => ['test name' => callable]]`; planned groups are baseline, routing, persistence, adapter, worker, ui, status and access. The runner supports `--group=<group>` and exits nonzero on failure or when no tests match. Baseline and routing exist now. Other streams add their own test files without editing this runner.
+The implemented shared test runner from P0a discovers `tests/*Test.php`. Each test file returns `['group' => '<group>', 'tests' => ['test name' => callable]]`; planned groups are baseline, routing, flashcards, persistence, adapter, worker, ui, status and access. The runner supports `--group=<group>` and exits nonzero on failure or when no tests match. Baseline, routing and flashcards exist now. The baseline group includes offline demo-seeder checks. Other streams add their own test files without editing this runner.
 
 **Handoff package for every PR:** source revision/branch; changed files; exact provided/consumed signatures or JSON example; migration/config effects; focused test command and real result; sanitized fixture/evidence locations; known limitations; affected downstream task. Review and merge that package before a consumer depends on it.
 
@@ -67,16 +67,17 @@ All streams supply tests, documentation and evidence for their own work. P6/P7 a
 
 **P0a files (foundation first):** modify `app/core/Controller.php`, its rendering calls throughout `app/controllers/`, scoped teacher view links, `install.php`, `.gitignore`, `README.md`; create `tests/run.php`, `tests/BaselineTest.php`, `runtime-requirements.json` and `config/scan.example.php`. The runtime manifest/test files now exist; scan example configuration is still pending.
 
-**P0b files (HTTP/access after P0a merge):** modify `app/core/Router.php`; create `router.local.php`, `config/routes.php` and `tests/RoutingTest.php`. The explicit action map retains the approved features and denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
+**P0b files (Jared; next chat after continue, following P0a merge):** extend existing `app/core/Router.php`, `router.local.php` and routing tests; create `config/routes.php` for the final action map as needed. Own the initial header/navigation/dashboard cleanup before handing those files back to P4. Retain manual flashcards but deny their generated-deck action. The explicit action map denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
 
 **Interfaces:** preserve public `*/view/{id}` actions; rename the protected rendering helper to `render(string $view, array $data = []): void` and update every internal `$this->view(...)` render call. Preserve `viewRaw`. Align teacher URLs/forms with existing `gradeSubmission(int $id)`. Define CLI-safe loading in P1 rather than requiring `index.php` from jobs.
 
 - [x] Write controller-load checks for all 26 files, plus baseline installation and grade-route checks. The runner follows the discovery contract above and must throw/report nonzero without relying on PHP `assert()` settings.
 - [x] Run `php tests/run.php --group=baseline`; observe the reproduced class conflict. Execute the installer in a disposable target to reproduce B07 before fixing bootstrap loading.
-- [ ] In P0a rename the common renderer/callers and repair grade links/forms and proven installer defects; ignore local sessions/install/migration flags and secrets/data. Verify and merge this baseline sweep before other streams edit controllers/templates.
-- [ ] In P0b write failing routing tests, then implement the safe loopback router and action map: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
-- [ ] Rerun baseline checks; verify login, enrollment, assignment view, save, teacher review/grading and student feedback through a browser. Test direct protected paths under the actual router command.
-- [ ] Add exact local dependency/setup commands to README/release guide, retaining unverified limitations. Commit only this repair task, with evidence; no scanning feature is implied by a green baseline.
+- [x] In P0a rename the common renderer/callers and repair grade links/forms and proven installer defects; ignore local sessions/install/migration flags and secrets/data. Verify and merge this baseline sweep before other streams edit controllers/templates.
+- [ ] Current follow-up, Ready for review: route aliases/class discovery/query links/page blockers and three-role navigation/guest/role checks are implemented and tested. Mark complete after review/merge/main verification; this is not final exclusion.
+- [ ] Jared P0b next session, after continue: implement the final action map and initial navigation/dashboard cleanup from feature-scope. Extend routing tests to distinguish excluded routes from broken retained routes: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
+- [x] Rerun baseline checks; verify login, enrollment, assignment view, written save, teacher review/grading and student feedback through a browser. Test direct protected paths under the actual router command. Attachment/replacement acceptance remains a separate open gate.
+- [x] Add exact local dependency/setup commands to README/release guide, retaining unverified limitations. Commit only this repair task, with evidence; no scanning feature is implied by a green baseline.
 
 **Acceptance:** BT01/BT02, UI02's retained-route smoke check and ST03/ST04 pass; a second member can reproduce installation. No quiz page/action is included in the target interface. Record additional scoped blockers rather than expanding into every upstream feature.
 
@@ -126,7 +127,9 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 
 ## P4: Add the assignment-focused LMS interface and scan views
 
-**Files:** create `app/views/scan/_status.php`, `app/views/scan/_history.php`, `public/js/scan-status.js`, `tests/ScanViewTest.php`, and UI fixtures under `tests/fixtures/status/`; modify retained student/assignment/teacher templates, shared header/navigation, dashboards, `app/helpers/functions.php` presentation helpers and styles as needed. No HTTP controller is owned by this task.
+**Files:** maintain the approved manual-flashcard templates after Jared's initial cleanup; create `app/views/scan/_status.php`, `app/views/scan/_history.php`, `public/js/scan-status.js`, `tests/ScanViewTest.php`, and UI fixtures under `tests/fixtures/status/`; modify retained student/assignment/teacher templates, shared header/navigation, dashboards, `app/helpers/functions.php` presentation helpers and styles as needed. No HTTP controller is owned by this task.
+
+**Ownership:** Jared performs the initial menu/dashboard scope sweep in P0b; P4 receives those files after that merge. Keep manual flashcards and deny generated-deck promotions.
 
 **Interfaces:** consume IP09 status JSON and P5's rescan/download routes exactly as published; use fixture examples while endpoints are built. Own both student and teacher presentation to prevent competing edits to shared partials. Reuse one advisory formatter; never reclassify provider counts in JavaScript.
 
@@ -160,7 +163,7 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 
 - [ ] Run `php tests/run.php` and scoped role/browser acceptance; record actual failures and fix root causes in the owning task/PR.
 - [ ] Run UI02/ST04: retained supporting LMS features work, all assessment links are assignment-only, and excluded direct URLs/actions are denied. Do not claim scope reduction from menu screenshots alone.
-- [ ] Execute the full UAT01-UAT34 catalogue and variants from the demo manual, including supporting LMS features. Record actual results, Not run/Pass/Fail/Blocked, defects and retests in sanitized `evidence/uat/` records. The short DM01-DM12 panel script is not a substitute for this manual acceptance run.
+- [ ] Execute the full UAT01-UAT35 catalogue and variants from the demo manual, including supporting LMS features. Record actual results, Not run/Pass/Fail/Blocked, defects and retests in sanitized `evidence/uat/` records. The short DM01-DM13 panel script is not a substitute for this manual acceptance run.
 - [ ] Execute the load ramp defined in `validation.md` against fake provider responses; report environment, variable, raw metrics, degradation point/tested bound and failure mode.
 - [ ] Execute timeout, error, malformed-body and worker-crash trials; measure recovery including operator intervention where required.
 - [ ] Perform LIVE01 once with permitted synthetic content, verifying real handle and item/hash relationship. No provider load test or real malware. Record fixture-versus-live distinction.
@@ -177,8 +180,8 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 - [ ] Add actual code/test/evidence links to both case lessons and all trend decisions.
 - [ ] Complete each risk's final status, prediction-versus-outcome and reviewer/date; complete actual AI-use log.
 - [ ] Have each member demonstrate their feature and explain one failure path; rehearse panel setup from a clean local target. Verify source revision and release contents before submission.
-- [ ] Check FR01-FR26/NFR01-NFR12 traceability alongside R01-R15. Preserve unresolved manual defects and unexecuted checks honestly; do not convert a blocked feature into a claimed completed requirement to fit the demo slot.
+- [ ] Check FR01-FR27/NFR01-NFR12 traceability alongside R01-R15. Preserve unresolved manual defects and unexecuted checks honestly; do not convert a blocked feature into a claimed completed requirement to fit the demo slot.
 
 **Acceptance:** all Parts A-F trace to the system as built. Remaining failures/risks are explicitly reported; final completion is not inferred from this planning document.
 
-Use the SRS and full UAT catalogue as end-goal checks throughout implementation, not a last-day script. DM01-DM12 are the shorter presenter view of the same tested behavior. Any change outside SRS requirements, those cases or a concrete correctness/security need must be proposed before implementation. Read optional prompting guidance in the team guide; members plan their own internal solutions with their agents rather than following a scripted conversation.
+Use the SRS and full UAT catalogue as end-goal checks throughout implementation, not a last-day script. DM01-DM13 are the shorter presenter view of the same tested behavior. Any change outside SRS requirements, those cases or a concrete correctness/security need must be proposed before implementation. Read optional prompting guidance in the team guide; members plan their own internal solutions with their agents rather than following a scripted conversation.

@@ -11,7 +11,7 @@
 - This SRS owns functional/nonfunctional requirements and the R01-R15 final-deliverable mapping. Stable IDs let tasks, tests, evidence and demo scenarios reference the same expected behavior.
 - [Feature/workflow overview](feature-scope.md) explains these requirements in user-facing terms. It is a companion view, not a competing source of requirements.
 - [Architecture](architecture.md), [data model](data-model.md) and [integration contracts](integrations.md) specify how responsibilities, fields, interfaces and failure handling realize the requirements. Do not copy their schemas or retry tables into another specification.
-- [Implementation plan](implementation-plan.md) and [team guide](team-guide.md) assign work boundaries and dependencies. [Validation](validation.md) defines test IDs and experiments; [demo manual](demo-manual.md) defines DM01-DM12 acceptance/presentation scenarios.
+- [Implementation plan](implementation-plan.md) and [team guide](team-guide.md) assign work boundaries and dependencies. [Validation](validation.md) defines test IDs and experiments; [demo manual](demo-manual.md) defines DM01-DM13 acceptance/presentation scenarios.
 - If implementation, a task or a proposed enhancement conflicts with this SRS, identify the conflict before changing the contract. An implementation does not silently redefine a requirement. Scope changes require the coordinator's approval and synchronized requirement/contract/test updates.
 
 ## Terms and requirement levels
@@ -31,6 +31,7 @@ Existing Doodle features are reused, not claimed as group-authored work. The gro
 - Existing student, teacher and administrator accounts and course boundaries.
 - Existing catalog/enrollment, basic course lessons/materials, role dashboards, assignment calendar, announcements, in-app notifications and basic profiles/theme as supporting LMS features; reuse and verify them without expanding them.
 - Existing assignment submission and grading screens, with minimal security-status additions.
+- Manual flashcard decks/cards and persisted recall review as an approved supporting study aid; no generated decks or graded quiz workflow.
 - Durable file revisions, scan attempts, background processing, bounded retries, shared quota pacing, results and failure reasons.
 - Automatic initial analysis and an authorized teacher request for a genuinely new analysis.
 - Reusable result component used by automatic processing and teacher-requested processing.
@@ -103,6 +104,7 @@ Each row states final observable behavior and its acceptance check. Task P0 is s
 | --- | --- | --- | --- |
 | FR25 | The assessed interface shall retain the approved supporting LMS features and offer assignments as its only assessment workflow. Quiz creation/taking/auto-grading and listed excluded modules are absent from navigation and denied through direct actions, including quiz actions on retained controllers. | Strengthen; P0b/P4/P5 | UI02, ST04; DM01-DM03/DM10 |
 | FR26 | A local worker/test configuration shall support deterministic harmless provider fixtures for development/failure demonstrations, with explicit distinction from real provider evidence. The final artifact must also include proof of real LMS-to-VirusTotal exchange. | New; P2/P3/P6 | CT01-CT04, FT01-FT03, LIVE01; DM05/DM09/DM11-DM12 |
+| FR27 | Authenticated users shall create manual question/answer decks, study permitted own/public/course decks, and persist recall ratings/next-review dates. Private decks are denied to unrelated users; course association requires course access. Deletion uses an authorized CSRF POST. Failed review requests do not advance visible progress. Generated decks remain excluded. | Retain/repair; P0/P4/P5 | FlashcardsTest.php, flashcard-study.test.cjs; UAT35a-e; DM13 |
 
 ## Nonfunctional requirements
 
@@ -132,9 +134,9 @@ Each row states final observable behavior and its acceptance check. Task P0 is s
 
 FR/NFR rows identify expected product behavior, tasks, checks and demo scenarios. The R table below preserves the original requirement IDs used by existing guides for assessment deliverables. It is not a second feature specification.
 
-At release, record each FR/NFR's implemented source, executed test/evidence reference and pass/fail/not-tested status in the evidence manifest. Do the same for R01-R15 and DM01-DM12. A planned test or expected demo result is not a pass. Requirements are not complete merely because isolated modules pass; verify the integrated role workflow and real provider exchange. Any exception requires an explicit documented team decision and honest disclosure, not deletion of the requirement ID.
+At release, record each FR/NFR's implemented source, executed test/evidence reference and pass/fail/not-tested status in the evidence manifest. Do the same for R01-R15 and DM01-DM13. A planned test or expected demo result is not a pass. Requirements are not complete merely because isolated modules pass; verify the integrated role workflow and real provider exchange. Any exception requires an explicit documented team decision and honest disclosure, not deletion of the requirement ID.
 
-The full manual acceptance catalogue is UAT01-UAT34 (with separately recorded named variants) in [demo-manual.md](demo-manual.md). It covers retained LMS features as well as scanning and links each case to FR/NFR IDs. Its actual-result/defect log is a separate run artifact under `evidence/uat/` when executed. DM01-DM12 are the shorter presenter sequence referencing those cases. Manual acceptance does not replace the automated/measurement evidence required by the validation guide.
+The full manual acceptance catalogue is UAT01-UAT35 (with separately recorded named variants) in [demo-manual.md](demo-manual.md). It covers retained LMS features as well as scanning and links each case to FR/NFR IDs. Its actual-result/defect log is a separate run artifact under `evidence/uat/` when executed. DM01-DM13 are the shorter presenter sequence referencing those cases. Manual acceptance does not replace the automated/measurement evidence required by the validation guide.
 
 ## Requirements and final submission mapping
 
