@@ -15,12 +15,15 @@ The catalogue/experiment settings below are checks/plans, not results. Manual ac
 | [Original source checks](../../evidence/baseline/php-checks.json), [initial installer check](../../evidence/baseline/localhost-check.json) | Upstream inspection and reproduced startup failures before repair | Historical input, not a current failure list |
 | [Local baseline smoke](../../evidence/baseline/localhost-smoke.json) | Installation, three role logins, course/enrollment, written submission, grading/feedback | Written-only baseline, not attachment or VirusTotal acceptance |
 | [Route/flashcard/seeder follow-up](../../evidence/baseline/routes-flashcards.json) | 16 PHP checks, JavaScript review checks, 131 syntax checks; role routes, private flashcards, repeatable fictional seeding | Snapshot only; final integrated UAT/load/fault/security/restore still pending |
+| [P0b cleanup](../../evidence/cleanup/p0b.json) | Final action allowlist, retained/denied routes and three-role dashboard inspection | Full UAT and historical-worker browser upgrade not claimed |
+| [P1a foundation](../../evidence/foundation/p1a.json) | 15 persistence checks, repeatable CLI migration, concurrent claims, lease/pointer/rollback checks | Repository fixtures do not prove P1b private upload/backfill or P3 processing |
+| [P5 HTTP](../../evidence/access/p5.json) | Authorized status/history/rescan/download fixtures, static-path bypass regressions, 42-check PHP suite | Connected upload/UI/worker acceptance remains open |
 
 P1b private attachment storage/MIME/move enforcement and P2/P3 scanning remain to build. P1a revision/attempt persistence is implemented; P5 HTTP access is fixture-verified. P0b action exclusions and retained-route checks are recorded in [cleanup evidence](../../evidence/cleanup/p0b.json); these do not certify the final integrated system. Baseline passes do not close them. The team plan owns completion; add raw evidence only when runs occur.
 
 ## Required test catalogue
 
-Current commands: `php tests/run.php` runs baseline, repeatable demo seeding, routing/three-role HTTP and flashcard checks without provider credentials. Optional developer JavaScript check: `node tests/flashcard-study.test.cjs` (standard Node only; Node is not an app runtime dependency). [Current evidence](../../evidence/baseline/routes-flashcards.json) records actual results. These checks do not complete final scan/security/load/UAT acceptance.
+Current command: `php tests/run.php` runs baseline, repeatable demo seeding, routing/three-role HTTP, flashcard, persistence and HTTP status/access checks without provider credentials. Focused groups include `--group=persistence`, `--group=access` and `--group=status`. Optional JavaScript checks: `node tests/flashcard-study.test.cjs` and `node tests/service-worker.test.cjs` (standard Node only; Node is not an app runtime dependency). Evidence snapshots above record their actual results and limits. These checks do not complete final scan/security/load/UAT acceptance.
 
 Requirements authority: [SRS](../SRS.md) defines FR01-FR27 and NFR01-NFR12; the Step A-F files in this folder define assessment criteria R01-R15. The catalogue below defines implementation/measurement checks. The [demo/manual UAT guide](../demo-manual.md) separately defines full manual feature acceptance, its actual-result/defect log, and the short panel sequence.
 

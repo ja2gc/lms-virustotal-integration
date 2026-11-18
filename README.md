@@ -84,6 +84,25 @@ Installer, three role logins/navigation, course/enrollment, written submissions,
 
 P0b feature/menu/action cleanup is complete. P1a shared persistence, P1b private upload delivery, P2/P3 VirusTotal processing, P4 scan UI, P5 private HTTP access and P6/P7 integrated acceptance have separate statuses in the [team plan](docs/team-plan.md#completion-record). The localhost router denies old public assignment-upload URLs. P1b legacy import and P4 file-ID links are required before real attachment delivery is accepted. Use synthetic files and loopback only. A running baseline is not the final integrated release.
 
+## Shared scan foundation
+
+After installing the baseline, apply the repeatable SQLite scan schema explicitly:
+
+```powershell
+php bin/migrate.php
+```
+
+This creates shared revision/attempt tables. It does not import old attachments, implement upload storage or start a worker. Member 1 follows the P1b storage/transaction contract in the team plan and integrations guide; Members 2–4 consume the same repository. Tests use disposable fictional databases and private files:
+
+```powershell
+php tests/run.php
+php tests/run.php --group=persistence
+php tests/run.php --group=access
+php tests/run.php --group=status
+```
+
+The coordinator's existing local database has not been migrated automatically. Current HTTP endpoints require the scan migration. Private byte storage defaults to `private/submissions`, or an external directory set through `SCAN_PRIVATE_DIR`; never use a public directory.
+
 ## Collaboration and schedule
 
 Claim a numbered stream in the group chat. Members fork the team repository and clone their fork; collaborator access is not required. Push task branches to your fork and open PRs targeting this team's `main`. Follow the [fork synchronization rules](.agents/rules/workflow.md#fork-synchronization) before work and PR updates. Member 4 reviews producer/consumer contracts and overlaps before integration. Update task checks and completion in the team plan; Ready for review becomes Done only after reviewed/merged verification. Preserve others' changes, Doodle history/license and required AI disclosure.
@@ -92,6 +111,6 @@ Finish target: November 20, 2026. Working presentation/submission assumption: No
 
 ## Source locations and provenance
 
-`app/` holds PHP MVC code; `config/`, `database/` and `public/` hold configuration/schema/assets. `router.local.php` is the loopback router; `tests/` and `evidence/` hold checks/output. `bin/seed-demo.php` exists; scan worker/migrations remain planned. The runtime manifest is runtime-requirements.json.
+`app/` holds PHP MVC code; `config/`, `database/` and `public/` hold configuration/schema/assets. `router.local.php` is the loopback router; `tests/` and `evidence/` hold checks/output. `bin/seed-demo.php` and `bin/migrate.php` exist; the scan worker remains planned. The runtime manifest is runtime-requirements.json.
 
 Doodle is by Death Legion Team under the original [license](LICENSE); history and source notices remain. Inspected upstream revision: `6e5365ed49199bfceec61f9b3ba41d83a94ccb3d`. [Original upstream source/README](https://github.com/deathlegionteamlk/doodle/tree/6e5365ed49199bfceec61f9b3ba41d83a94ccb3d) is provenance, not this project's feature list/runbook.

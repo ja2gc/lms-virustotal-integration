@@ -20,5 +20,11 @@
     "P2/P3 live processing/fresh-analysis proof remain unfinished",
     "No complete UAT/load/fault/live-provider/restore acceptance claimed",
     "Alternate web-server configurations and historical service-worker upgrade are not verified"
-  ]
+  ],
+  "publishedVerifiedRevision": "d13877f9e48cce0633b4e66128f2492b9d5ba2a5",
+  "mainVerification": {
+    "php": "42 passed; 0 failed",
+    "javascript": "Both checks passed",
+    "diffCheck": "passed"
+  }
 }

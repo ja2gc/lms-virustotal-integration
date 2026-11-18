@@ -22,5 +22,7 @@
     "No provider adapter or worker: Member 2 P2/P3",
     "No scan UI: Member 3 P4",
     "P5 endpoints not yet implemented"
-  ]
+  ],
+  "publishedVerifiedRevision": "f881393c4179e549c05221ea002e1d10ddcc0cb9",
+  "publicationVerification": "Fetched revision equals published main; 15 persistence checks passed again before P5 work."
 }
