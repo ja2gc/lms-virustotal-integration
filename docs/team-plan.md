@@ -6,23 +6,24 @@ Read your member row, dependencies and assigned P-task sections. The SRS owns pr
 
 | Member | Tasks and file ownership | Current state / dependency |
 | --- | --- | --- |
-| 1 — foundation/data | P1; migrations, immutable submissions/file revisions/attempts, repository/submission service, Student-controller seam, CLI/web bootstrap contract | Unclaimed. Baseline renderer/runner exists. Publish the data contract before connected consumers. |
-| 2 — scanning engine | P2/P3; provider adapter/transport, quota pacing, CLI worker, both result consumers and provider fixtures | Unclaimed. Isolated adapter/fixtures can start; persistence-backed worker waits for P1. |
-| 3 — LMS interface | P4; all student/teacher templates, status/history, polling, CSS/JS and shared navigation after initial cleanup | Unclaimed. Isolated partials/fixtures can start. Existing header/dashboard edits wait for P0b; connected UI waits for P3/P5. |
-| 4 — HTTP/access/local delivery | P0b cleanup/action map and one-time menu/dashboard sweep; P5 status/rescan/history/private-download controllers, authorization and local delivery | Active. P0b Done and verified on main. Connected P5 waits for Member 1 P1. |
+| 1 — upload/data delivery | P1b; immutable private-file storage, validated upload service, Student-controller upload seam, legacy attachment backfill; data/recovery and performance evidence in P6 | Not started. Consume P1a repository; do not add parallel scan SQL. |
+| 2 — scanning engine | P2/P3; provider adapter/transport, shared quota pacing, CLI worker, both result consumers and engine fixtures | Not started. P2 can start with offline fixtures. Worker persistence consumes published P1a. |
+| 3 — LMS interface | P4; student/teacher templates, scan status/history, polling, CSS/JS, shared navigation/dashboard ownership; UI acceptance evidence | Not started. P0b is Done. Isolated UI fixtures can start; connected status uses P5 and processing uses P3. |
+| 4 — shared foundation/HTTP/coordinator | P1a migrations/bootstrap/provider interface/repository, P5 status/rescan/history/private-download HTTP boundaries; P0b cleanup completed; contract review and integration when directed | P0b Done. P1a Ready for publication. P5 Not started. |
 
 P6/P7 are shared evidence/rehearsal gates. Each member supplies checks, docs and evidence for their code. Members use task branches and PRs; Member 4 reviews contracts/overlaps and integrates reviewed work. Ready for review is not Done. Full process rules are in AGENTS.md and its workflow file.
 
 ## Dependencies and parallel work
 
-P0a is complete for installation/rendering and the written-submission journey. P0b and P1 can proceed independently because they own different files. Member 4 performs shared navigation/dashboard cleanup once, then returns those files to Member 3. Do not edit another owner's shared file concurrently.
+P0a and P0b are Done. Shared navigation/dashboard templates belong to Member 3. Every member fetches current team main before work and respects the ownership table above.
 
-Provider fixtures, isolated status partials, route/access planning and contract review can start before connected endpoints. Use fixtures honestly. P3 can exercise orchestration with P1 plus provider fixtures, then connect P2. P5 uses P1's exact repository/IDs/JSON; P4 connects to P3/P5. Missing dependencies mean Waiting for dependency, not competing SQL/interfaces.
+P1a publishes the session-free bootstrap, migration and repository contract for all consumers. P1b uses that repository to deliver real upload storage and backfill. Members 2/3 can start isolated provider/UI fixtures immediately. Member 2's persistence-backed worker and Member 4's P5 consume verified, published P1a. Real submission-to-scan/download acceptance also requires P1b; processing requires P3. Missing prerequisites remain Waiting for dependency. A fixture pass never closes that integration gate.
 
 ```mermaid
 flowchart TD
     A[P0a: baseline and common test harness] --> B[P0b: local router and allowed actions]
-    A --> C[P1: interface, migrations and repository]
+    A --> C[P1a: shared interface, migrations and repository]
+    C --> U[P1b: private storage, uploads and backfill]
     C --> D[P2: tested provider adapter]
     C --> E[P3: worker with fixtures]
     D --> F[P3: connected scanning engine]
@@ -35,10 +36,11 @@ flowchart TD
     I --> J[P6: integrated checks and measured evidence]
     F --> J
     G --> J
+    U --> J
     J --> K[P7: documentation freeze and rehearsal]
 ```
 
-P0b and P1 can proceed in parallel after P0a because their owned files differ. Within scanning, implement/test the adapter before connecting the worker to it. Do not wait idle for a dependency: work on fixtures, isolated code/tests, review or your handoff documentation.
+Work concurrently within these boundaries. Member 1 owns the file producer; Member 2 owns external processing; Member 3 owns presentation; Member 4 owns shared persistence contracts and HTTP access. Tests and evidence belong to the feature owner. No member claims another stream complete.
 
 ## Handoff and prompting
 
@@ -72,7 +74,7 @@ Only implement assigned tasks. Numerical policies remain in the contracts; do no
 
 **P0a files (foundation first):** modify `app/core/Controller.php`, its rendering calls throughout `app/controllers/`, scoped teacher view links, `install.php`, `.gitignore`, `README.md`; create `tests/run.php`, `tests/BaselineTest.php`, `runtime-requirements.json` and `config/scan.example.php`. The runtime manifest/test files now exist; scan example configuration is still pending.
 
-**P0b files (Member 4; next chat after continue, following P0a merge):** extend existing `app/core/Router.php`, `router.local.php` and routing tests; create `config/routes.php` for the final action map as needed. Own the initial header/navigation/dashboard cleanup before handing those files back to P4. Follow the exact SRS cleanup matrix. The explicit action map denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
+**P0b files (Member 4; Done):** extend existing `app/core/Router.php`, `router.local.php` and routing tests; create `config/routes.php` for the final action map as needed. Own the initial header/navigation/dashboard cleanup before handing those files back to P4. Follow the exact SRS cleanup matrix. The explicit action map denies excluded controllers **and** quiz actions within retained controllers, rather than merely hiding links.
 
 **Interfaces:** preserve public `*/view/{id}` actions; rename the protected rendering helper to `render(string $view, array $data = []): void` and update every internal `$this->view(...)` render call. Preserve `viewRaw`. Align teacher URLs/forms with existing `gradeSubmission(int $id)`. Define CLI-safe loading in P1 rather than requiring `index.php` from jobs.
 
@@ -80,33 +82,43 @@ Only implement assigned tasks. Numerical policies remain in the contracts; do no
 - [x] Run `php tests/run.php --group=baseline`; observe the reproduced class conflict. Execute the installer in a disposable target to reproduce B07 before fixing bootstrap loading.
 - [x] In P0a rename the common renderer/callers and repair grade links/forms and proven installer defects; ignore local sessions/install/migration flags and secrets/data. Verify and merge this baseline sweep before other streams edit controllers/templates.
 - [x] Route aliases/class discovery/query links/page blockers and three-role navigation/guest/role checks reviewed in PR #1, merged at 8d15034 and verified on main (16 PHP checks plus JavaScript check). This is not final exclusion.
-- [x] Member 4 P0b after continue: implemented the final action map and initial navigation/dashboard cleanup from the [SRS cleanup matrix](SRS.md#cleanup-action-matrix). Extend routing tests to distinguish excluded routes from broken retained routes: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
+- [x] Member 4 P0b: implemented the final action map and initial navigation/dashboard cleanup from the [SRS cleanup matrix](SRS.md#cleanup-action-matrix). Extend routing tests to distinguish excluded routes from broken retained routes: block hidden/config/DB/private/docs/evidence paths; deny excluded modules/actions; preserve approved course/material/calendar/announcement/notification/profile/grading paths. Run `php tests/run.php --group=routing` plus direct-URL checks before merging.
 - [x] Rerun baseline checks; verify login, enrollment, assignment view, written save, teacher review/grading and student feedback through a browser. Test direct protected paths under the actual router command. Attachment/replacement acceptance remains a separate open gate.
 - [x] Add exact local dependency/setup commands to README/release guide, retaining unverified limitations. Commit only this repair task, with evidence; no scanning feature is implied by a green baseline.
 
 **Acceptance:** BT01/BT02, UI02's retained-route smoke check and ST03/ST04 pass; a second member can reproduce installation. No quiz page/action is included in the target interface. Record additional scoped blockers rather than expanding into every upstream feature.
 
-## P1: Establish revision, attempt and shared contract foundation
+## P1: Shared foundation and upload/data delivery
 
-**Files:** create `database/migrations/001_scan_foundation.php`, `bin/migrate.php`, `app/scan/bootstrap.php`, `app/scan/FileScanProvider.php`, `app/scan/ScanSubmissionService.php`, `app/scan/ScanAttemptRepository.php`, `tests/ScanPersistenceTest.php`; modify web bootstrap and `StudentController.php` at the agreed service seam.
+P1 is complete only when **both P1a and P1b** are reviewed, published and verified. Neither an interface nor fixture evidence certifies real uploads.
 
-**Interfaces:** `ScanSubmissionService::saveFileRevision(int $submissionId, array $validatedUpload): int` accepts normalized keys `tmpPath`, `originalName`, `sizeBytes`, `mimeType` after PHP-upload validation; returns immutable revision ID. `ScanAttemptRepository::saveResult(int $attemptId, string $leaseToken, array $result, array $transition): bool` guards lease ownership and persists result/lifecycle atomically. Publish `FileScanProvider::getResult(string $analysisId, string $expectedSha256): array` exactly as specified. Host services receive PDO/private-root/clock explicitly; no session dependency in reusable component.
+### P1a — Member 4: shared persistence contracts
 
-Freeze the additional repository contract in [integrations](integrations.md#shared-host-repository-contract) before handing off to scanning/HTTP work. The foundation stream owns submission/revision/attempt SQL; the scanning stream owns request-budget access to `scan_provider_state`. Do not create a second repository/parallel migration to resolve a consumer mismatch.
+**Files:** `database/migrations/001_scan_foundation.php`, `bin/migrate.php`, `app/scan/bootstrap.php`, `app/scan/ScanMigration.php`, `app/scan/FileScanProvider.php`, `app/scan/ScanAttemptRepository.php`, `tests/ScanPersistenceTest.php`, `tests/Support/ScanFixture.php`. Own repository changes and scan schema; consumers request changes rather than writing parallel SQL.
 
-- [ ] Write failing tests for repeatable migrations, same hash across submissions, revision replacement, pointer ownership, one automatic attempt/revision, file-write and transaction failures, and text-only updates retaining the existing file.
-- [ ] Run `php tests/run.php --group=persistence` and record the missing behavior failure.
-- [ ] Implement forward migrations and runner, `scan_provider_state`, private immutable storage, transactional queued work, uniqueness and guarded persistence. Backfill scoped old files safely with count/hash evidence; validate actual upload errors/MIME/move result before success. Do not make provider calls.
-- [ ] Rerun persistence tests; apply migrations twice on disposable DBs; verify no duplicates and old-file retention on a failed replacement. Update data-model/contract docs if practical details changed.
-- [ ] Commit this shared seam and have its consumers reviewed before parallel dependent merges.
+- [ ] Implement and verify repeatable forward migration, revision/attempt identities, pointer ownership and uniqueness.
+- [ ] Implement and verify revision registration, rescan idempotency, object context/history projections, due claims, guarded result/progress writes and conservative crash/deadline recovery.
+- [ ] Publish exact constructors, methods, schema details, offline fixtures and test evidence after read-only review. Update this status to Done only after publication and verification.
 
-**Acceptance:** IT01/IT02 persistence portion and file-failure cases pass. Authenticated streaming is completed by P5 before release; no temporary public-storage workaround is acceptable.
+### P1b — Member 1: private upload/data delivery
+
+**Files:** create `app/scan/ScanSubmissionService.php`, `tests/ScanSubmissionTest.php` and a safe CLI backfill utility; modify `StudentController.php`, web bootstrap, upload configuration and runtime checks as needed. Do not edit Member 3's templates; request necessary form/link changes. Use `ScanAttemptRepository::registerFileRevision` for revision/attempt writes.
+
+**Interface:** `ScanSubmissionService::saveFileRevision(int $submissionId, array $validatedUpload): int` accepts `tmpPath`, `originalName`, `sizeBytes`, `mimeType` and returns immutable file ID. Inject PDO/private root/clock. Use the P1a contract in integrations.md. `FileScanProvider::getResult(string $analysisId, string $expectedSha256): array` is shared unchanged.
+
+- [ ] Write failing tests for real upload error/type/size/MIME/move validation, immutable storage, same-hash separate submissions, replacement, transaction/file failures and text-only updates retaining the current attachment.
+- [ ] Implement private immutable storage and the Student-controller service seam. Commit academic content, revision registration and queued work atomically; reject failed uploads without reporting success. No provider calls.
+- [ ] Backfill scoped legacy files safely with counts/hash checks and path containment. Coordinate private-download readers with Member 4 and links with Member 3. Preserve original local data; no database reset or public fallback.
+- [ ] Run submission/persistence checks and disposable upgrade/backfill twice, including failed replacement and missing legacy file cases. Provide exact fixture-versus-real HTTP evidence.
+- [ ] Deliver matched database/private-file recovery and local performance evidence as Member 1's P6 contribution. Have a second member reproduce the procedure. Review/publish/verify before marking P1b Done.
+
+**Acceptance:** P1a proves the reusable repository contract. P1b closes IT01/IT02 persistence/upload and file-failure behavior. P5 closes authenticated download access; P3 closes processing. All remain separate completion gates.
 
 ## P2: Implement the reusable VirusTotal result adapter
 
 **Files:** create `app/scan/VirusTotalAdapter.php`, `app/scan/CurlTransport.php`, `tests/ScanAdapterTest.php`, `tests/fixtures/virustotal/`; extend bootstrap explicitly.
 
-**Interfaces:** implement P1's unchanged `FileScanProvider`; injected HTTP callable and four result fields follow `integrations.md`. Both analysis and item calls use the metered transport. Constructor receives server key and transport; no SQL/session/upload/retry loop.
+**Interfaces:** implement P1a's unchanged `FileScanProvider`; injected HTTP callable and four result fields follow `integrations.md`. Both analysis and item calls use the metered transport. Constructor receives server key and transport; no SQL/session/upload/retry loop.
 
 - [ ] Write fixtures and failing checks for each CT01/CT02/CT03 case, nonnegative integer `retryAfter`, input rejection without HTTP, pending analyses, provider errors and file-identity mismatch.
 - [ ] Run `php tests/run.php --group=adapter`; confirm missing/incorrect behavior fails.
@@ -150,7 +162,7 @@ Freeze the additional repository contract in [integrations](integrations.md#shar
 
 **Files:** create `app/scan/ScanAttemptService.php`, `app/controllers/ScanController.php`, `app/controllers/SubmissionFileController.php`, `tests/ScanAccessTest.php`, `tests/ScanStatusTest.php`; extend `Auth.php` only as needed and the task's P0b route/action map. Request template/link changes from P4 instead of editing its files concurrently. Use P1 repository methods rather than adding independent SQL.
 
-**Interfaces:** `ScanAttemptService::requestRescan(int $submissionId, int $actorId, string $requestToken): array` returns `attemptId`, `created`, actual `processingState`; `ScanController::status(int $submissionId): void`; `ScanController::rescan(int $submissionId): void`; `SubmissionFileController::download(int $fileId): void`. Service authorizes and invokes P1's idempotent enqueue; it does not scan. Status JSON matches IP09; rescan returns 202 for created work, 200 for token replay. P3 handles the teacher-origin result consumer.
+**Interfaces:** `ScanAttemptService::requestRescan(int $submissionId, int $actorId, string $requestToken): array` returns `attemptId`, `created`, actual `processingState`; `ScanController::status(int $submissionId): void`; `ScanController::rescan(int $submissionId): void`; `SubmissionFileController::download(int $fileId): void`. Service authorizes and invokes P1a's idempotent enqueue; it does not scan. Status JSON matches IP09; rescan returns 202 for created work, 200 for token replay. P3 handles the teacher-origin result consumer.
 
 - [ ] Write failing checks for status JSON fields/unknown-status fallback, no-file not_applicable, owner/cross-course/admin scope, missing file, GET rescan rejection, invalid CSRF, duplicate token, authorized history and direct-path download bypass.
 - [ ] Run `php tests/run.php --group=access`; confirm unauthorized cases fail before implementation.
@@ -197,14 +209,16 @@ Use the SRS and full UAT catalogue as end-goal checks throughout implementation,
 - [x] Local installer/renderer/course/grade routes and sidebar selection repaired; localhost runbook and evidence published in `645a43a`.
 - [x] Route/role/flashcard/demo-seeder follow-up reviewed, merged via [PR #1](https://github.com/ja2gc/lms-virustotal-integration/pull/1) and verified on main at `8d15034`. Owner: Member 4. Evidence: `evidence/baseline/routes-flashcards.json`.
 
-- [x] Documentation consolidation — Done. Owner: Member 4; [PR #3](https://github.com/ja2gc/lms-virustotal-integration/pull/3), merged at `31e9424` and reverified on main. Reduced docs from 21 to 13, removed obsolete scope/index/handoff files, used member numbers and separated original Parts A-F. Read-only review corrections applied; 73 local links, all FR/NFR/R/P/RK/UAT IDs and unchanged technical contract blocks verified; `git diff --check` passed. Application files are unchanged. The replacement chat is a separate follow-up after publication and must wait for **continue**; feature cleanup is not started.
+- [x] Documentation consolidation — Done. Owner: Member 4; [PR #3](https://github.com/ja2gc/lms-virustotal-integration/pull/3), merged at `31e9424` and reverified on main. Reduced docs from 21 to 13, removed obsolete scope/index/handoff files, used member numbers and separated original Parts A-F. Read-only review corrections applied; 73 local links, all FR/NFR/R/P/RK/UAT IDs and unchanged technical contract blocks verified; `git diff --check` passed. Application files are unchanged. Runtime implementation status is recorded by the P-task checks and current completion records below.
 
 For every task/PR append: member number, task ID, branch/PR/merge, actual behavior/files, exact checks/results, sanitized evidence, contract/config/migration effects, downstream readiness and unresolved dependencies. Use Ready for review before integration; Done only after reviewed/merged verification. Update P-task checkboxes. Keep personal-name assignments in team communication.
 
-- [x] Fork collaboration rules — Done. Owner: Member 4; [PR #5](https://github.com/ja2gc/lms-virustotal-integration/pull/5), reviewed, merged at `b4d80b9` and reverified on main. Added synchronization triggers, remote verification, preservation/divergence/conflict rules and fork-to-team PR flow; linked the agent entry, README and handoff guidance. Documentation only; feature cleanup remains not started. Verified 77 local links, preserved requirement/case IDs and technical contract blocks, no runtime-file changes and clean `git diff --check`.
+- [x] Fork collaboration rules — Done. Owner: Member 4; [PR #5](https://github.com/ja2gc/lms-virustotal-integration/pull/5), reviewed, merged at `b4d80b9` and reverified on main. Added synchronization triggers, remote verification, preservation/divergence/conflict rules and fork-to-team PR flow; linked the agent entry, README and handoff guidance. Documentation-only evidence; runtime completion is recorded separately below. Verified 77 local links, preserved requirement/case IDs and technical contract blocks, no runtime-file changes and clean `git diff --check`.
 
-The baseline route/flashcard/seeder follow-up is Done via PR #1/source merge 8d15034. It passed 16 PHP checks, the JavaScript check, 131 syntax checks and 145 links at that snapshot. Raw evidence remains under evidence/baseline/. Cleanup, private uploads and VirusTotal remain pending as the P-task checks show.
+The baseline route/flashcard/seeder follow-up is Done via PR #1/source merge 8d15034. It passed 16 PHP checks, the JavaScript check, 131 syntax checks and 145 links at that snapshot. Raw evidence remains under evidence/baseline/. P0b cleanup is recorded separately below. Private uploads and VirusTotal remain pending as the P-task checks show.
 
 
 - [x] P0b — Done; published and reverified on main at `669569b`. Owner: Member 4; branch `codex/member4-p0b`, based on fetched team main `bd684d7`. The coordinator explicitly authorized publication to main in this chat, replacing the PR-only rule for this task; PR reference: not applicable. Applied the SRS action map before controller loading; removed excluded menus/promotions/dashboard counters, OAuth/Push setting writes and quiz grade displays/queries. Preserved Backup, manual flashcards, account actions, schema history/local data and still-called Gamification internals. Prevented stored excluded notification links from reopening disabled actions. Retired offline worker/cache behavior and added private/no-store headers. No migration or scan contract changed. Checks: 22 PHP checks, 2 Node checks, 133 PHP syntax checks, and native in-app three-role dashboard/login/logout inspection. Evidence: [P0b](../evidence/cleanup/p0b.json). Independent read-only review found no remaining material issue after corrections. Full UAT, historical-worker browser upgrade and wide layout acceptance are not claimed.
-  Shared-view ownership has transferred back to Member 3 after publication/verification of this reviewed change: `app/views/layout/header.php`, role dashboards and retained templates. Member 4 keeps the route map/HTTP boundary. P5 remains Waiting for dependency: P1 repository, immutable revisions/private storage and identity contracts are absent from current source. Member 1 takeover was discussed but not started while ownership is being decided. Members 2/3 can work on agreed isolated fixtures now. Do not mark P5 or P6/P7 Done.
+  Shared-view ownership has transferred back to Member 3 after publication/verification of this reviewed change: `app/views/layout/header.php`, role dashboards and retained templates. Member 4 keeps the route map/HTTP boundary. P5 is Not started and depends on published P1a. P1b private upload integration and P3 processing remain required for end-to-end acceptance. Members 2/3 can work on agreed isolated fixtures now. Do not mark P1b, P5 or P6/P7 Done from P0b evidence.
+
+- [ ] P1a — Ready for publication. Owner: Member 4; branch `codex/shared-p1-foundation`, base `eb5e124`. Implemented SQLite versioned migration/CLI-safe bootstrap, provider interface and shared repository, including Member 1 revision-registration seam. Evidence: [P1a](../evidence/foundation/p1a.json). Checks: 37 PHP checks including 15 persistence checks, two Node checks and 141 syntax checks; read-only review corrections verified. No local database migrated. P1b/P2/P3/P4/P5 remain unfinished; fixture rows do not prove uploads or scanning. Coordinator-authorized main publication; no PR.

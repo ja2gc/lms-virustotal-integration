@@ -2,7 +2,7 @@
 
 This repository extends Doodle for **Secure File Submission System with VirusTotal Integration**. Read [README](README.md#project-documents), [.agents/rules/workflow.md](.agents/rules/workflow.md), [SRS](docs/SRS.md) and your assigned member/task sections in [the team plan](docs/team-plan.md) before work.
 
-The SRS owns final behavior and the [cleanup matrix](docs/SRS.md#cleanup-action-matrix); source/tests/evidence establish implementation truth. Apply that matrix without further scope changes unless proposed first. Feature cleanup is reserved for Member 4's replacement chat and must not begin before explicit **continue**. Documentation maintenance does not authorize that work.
+The SRS owns final behavior and the [cleanup matrix](docs/SRS.md#cleanup-action-matrix); source/tests/evidence establish implementation truth. Apply that matrix without further scope changes unless proposed first. P0b cleanup is complete. Current member ownership and P1a/P1b/P2-P7 statuses are authoritative in docs/team-plan.md. Complete only assigned work; fixture or interface checks must not mark another task Done.
 
 | Task | Additional context |
 | --- | --- |

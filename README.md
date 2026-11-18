@@ -4,7 +4,7 @@ An assignment-focused LMS extending [Doodle](https://github.com/deathlegionteaml
 
 ## Start here
 
-Every member reads the SRS, their member/task sections in the team plan and the demo/UAT targets. Agents start with AGENTS.md and its workflow rules. Use the map below for task-specific context.
+Every member reads the SRS, their current ownership row and task sections in the team plan, and the demo/UAT targets. Member 1 owns P1b upload/data delivery; Member 2 P2/P3 scanning; Member 3 P4 UI; Member 4 P1a shared persistence and P5 HTTP access. P1a and P1b have separate completion gates. Agents start with AGENTS.md and its workflow rules. Use the map below for task-specific context.
 
 ## Project documents
 
@@ -82,7 +82,7 @@ In another terminal, run `php tests/run.php`. Optional developer UI logic check:
 
 Installer, three role logins/navigation, course/enrollment, written submissions, grading/feedback, manual flashcards and repeatable fictional seeding have executed checks. [Step C](docs/final-project/step-c-performance-reliability-security-validation.md#baseline-verification) links actual evidence and limits.
 
-**Pending:** final feature/menu/action cleanup, VirusTotal/worker/scan persistence, private downloads and final integrated UAT/load/fault/security/restore proof. Public upstream upload URLs still exist: synthetic files and loopback only. A running baseline is not the final integrated release. The [team plan](docs/team-plan.md#completion-record) owns completion; the SRS owns scope. Member 4's replacement cleanup chat waits for explicit continue.
+P0b feature/menu/action cleanup is complete. P1a shared persistence, P1b private upload delivery, P2/P3 VirusTotal processing, P4 scan UI, P5 private HTTP access and P6/P7 integrated acceptance have separate statuses in the [team plan](docs/team-plan.md#completion-record). Public upstream upload URLs still exist until the private-delivery boundary is published: synthetic files and loopback only. A running baseline is not the final integrated release.
 
 ## Collaboration and schedule
 

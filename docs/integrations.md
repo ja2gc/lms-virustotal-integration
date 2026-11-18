@@ -76,6 +76,16 @@ Status JSON v1 contains `contractVersion`, `submissionId`, nullable `fileId`, nu
 
 ### Shared host repository contract
 
+**P1a implementation handoff:** Member 4 owns scan schema/repository/bootstrap; Member 1 owns P1b upload storage, submission integration and legacy backfill. Current publication/readiness is recorded in the team plan. Requiring `app/scan/bootstrap.php` loads classes only: no configuration, sessions, database connection, migration or processing side effect. Run `php bin/migrate.php` explicitly against an installed SQLite baseline; it is repeatable and does not import legacy files. MySQL scan migrations are not supported by the tested runtime.
+
+`new ScanAttemptRepository(PDO $db, ?callable $clock = null)` accepts a clock returning exact UTC `YYYY-MM-DDTHH:MM:SSZ` strings. All injected `now`, lease and deadline strings use that format. The constructor enables SQLite foreign keys and a five-second busy timeout. No method performs HTTP or file writes.
+
+Member 1 registers bytes through `registerFileRevision(int $submissionId, array $file): int`. Keys are `storageKey` (32–64 lowercase hexadecimal characters, basename only), `originalName` (1–255 bytes, no control characters), `sha256` (64 lowercase hexadecimal characters), `sizeBytes` (nonnegative integer), `mimeType` (MIME string). It returns the immutable file ID and atomically creates one automatic attempt and both current pointers. Duplicate hashes remain distinct. Write/validate immutable bytes first; remove only the newly written file if the transaction fails. For an atomic academic save, begin a transaction with the same PDO, create/update the submission, register the revision, then commit; repository savepoints preserve the caller's transaction. An outer rollback removes revision/queue/pointer changes. File rollback and upload validation remain Member 1's responsibility.
+
+The P1a migration adds `scan_schema_versions` (version 1), `submission_files`, `scan_attempts`, `submissions.current_file_id`, and singleton `scan_provider_state`. The provider-state row uses `id=1`, `request_timestamps_json` (default `[]`), `reservations_json` (default `[]`), nullable `paused_until`, and `updated_at` UTC. Member 2 owns budget logic and publishes the JSON entry shapes with that implementation; no credentials belong in these columns. Changes to physical schema require a new forward migration coordinated with Member 4.
+
+Claim and registration methods use short SQLite write transactions. Result/progress writes require the current nonexpired lease and running state; stale writes return false. Uncertain expired starts fail without replay. Overdue inactive polling work terminates Unresolved. These are repository checks, not an implemented worker. Context/history are internal records; HTTP consumers authorize and explicitly project public fields.
+
 These methods belong to `ScanAttemptRepository` in the foundation/data stream. Implement and test them in P1 before consumers merge. Other streams request contract changes rather than creating parallel table writers.
 
 | Method | Consumer / required semantics |

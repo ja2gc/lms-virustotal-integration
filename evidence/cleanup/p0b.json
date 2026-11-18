@@ -21,7 +21,7 @@
     "No VirusTotal/worker/private-download integration exists",
     "No live browser upgrade from an installed historical service worker was exercised",
     "No full manual UAT, wide viewport, load/fault/live-provider or restore acceptance claimed",
-    "P5 waits for P1; P1 ownership decision pending"
+    "P5 consumes P1a; P1b private upload integration remains a separate gate"
   ],
   "publishedVerifiedRevision": "669569b3fad3806a677849741b28eede9feff44c",
   "mainVerification": {
