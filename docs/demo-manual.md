@@ -2,11 +2,11 @@
 
 This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. Local baseline/route/flashcard repairs are implemented; VirusTotal and feature cleanup remain pending. New test records start Not run; use actual evidence rather than copying expected outcomes.
 
-The [SRS](SRS.md) is the requirements authority; the [feature overview](feature-scope.md) explains the approved assignment-focused LMS. This manual is a shared end goal: build toward its scenarios and SRS requirements, not extra modules. Successful presentation does not replace load, reliability, security, risk and AI-use evidence. Team-run manual tests are rehearsal/acceptance evidence; do not claim independent stakeholder sign-off unless a real stakeholder reviews and accepts the results.
+The [SRS](SRS.md) is the requirements authority; the [feature overview](SRS.md#cleanup-action-matrix) explains the approved assignment-focused LMS. This manual is a shared end goal: build toward its scenarios and SRS requirements, not extra modules. Successful presentation does not replace load, reliability, security, risk and AI-use evidence. Team-run manual tests are rehearsal/acceptance evidence; do not claim independent stakeholder sign-off unless a real stakeholder reviews and accepts the results.
 
 ## Setup and rehearsal checklist
 
-- [ ] Use the actual verified commands in [local release instructions](release.md), on the same tagged/reviewed revision on all machines. The baseline app/seeder commands are verified; worker commands remain planned until implemented.
+- [ ] Use the actual verified commands in [local release instructions](final-project/step-a-working-integrated-system.md#project-response), on the same tagged/reviewed revision on all machines. The baseline app/seeder commands are verified; worker commands remain planned until implemented.
 - [ ] Prepare fictional Admin Demo, Teacher A, Teacher B, Student A and Student B accounts. Keep passwords local; do not put credentials in slides, source or this manual.
 - [ ] Prepare a course named Systems Integration Lab, a short lesson/material, an assignment named Integration Reflection, a visible future deadline, and maximum score 100. Teacher B owns another course for access-control testing. Student A and Student B remain distinct owners.
 - [ ] Prepare harmless synthetic `reflection-v1.txt` and `reflection-v2.txt` with different contents/hashes. No private coursework or real malware. Keep fixtures and any retained downloads in the agreed private/test locations.

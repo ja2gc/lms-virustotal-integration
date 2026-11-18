@@ -4,15 +4,11 @@
 
 **Purpose:** define what the final system must do and the evidence needed to accept it. All members and agents must read this document before planning their part. It consolidates the approved requirements; it does not add quizzes, providers, cloud deployment or other new scope.
 
-**Status:** target requirements, not implemented or verified behavior. Existing Doodle features must also be tested; upstream source presence alone is not acceptance. The [baseline audit](baseline-audit.md) records the checks actually executed.
+**Status:** target requirements, not implemented or verified behavior. Existing Doodle features must also be tested; upstream source presence alone is not acceptance. The [baseline audit](final-project/step-c-performance-reliability-security-validation.md#baseline-verification) records the checks actually executed.
 
-## Authority and reading map
+## Authority
 
-- This SRS owns functional/nonfunctional requirements and the R01-R15 final-deliverable mapping. Stable IDs let tasks, tests, evidence and demo scenarios reference the same expected behavior.
-- [Feature/workflow overview](feature-scope.md) explains these requirements in user-facing terms. It is a companion view, not a competing source of requirements.
-- [Architecture](architecture.md), [data model](data-model.md) and [integration contracts](integrations.md) specify how responsibilities, fields, interfaces and failure handling realize the requirements. Do not copy their schemas or retry tables into another specification.
-- [Implementation plan](implementation-plan.md) and [team guide](team-guide.md) assign work boundaries and dependencies. [Validation](validation.md) defines test IDs and experiments; [demo manual](demo-manual.md) defines DM01-DM13 acceptance/presentation scenarios.
-- If implementation, a task or a proposed enhancement conflicts with this SRS, identify the conflict before changing the contract. An implementation does not silently redefine a requirement. Scope changes require the coordinator's approval and synchronized requirement/contract/test updates.
+This file owns functional/nonfunctional requirements and the cleanup action matrix. Use [the root document map](../README.md#project-documents) to find design, implementation, verification and submission artifacts. Scope/contract changes require coordinator approval and corresponding checks; source/evidence establish current behavior.
 
 ## Terms and requirement levels
 
@@ -42,7 +38,7 @@ No additional external API is committed to by the supplied Technical 2 and Techn
 
 ## Out of scope
 
-Quizzes (creation, taking and auto-grading) and the excluded modules listed in [approved features](feature-scope.md); custom malware engine; AI model training; cloud deployment; mobile application; redesign of the LMS; all upstream feature repairs; live malware testing; production use with real student work. Assignment grading/feedback remain required. The supplied six AI-project phases can guide problem/data/evaluation discipline, but do not introduce a model-development requirement.
+Quizzes (creation, taking and auto-grading) and the excluded modules listed in [approved features](SRS.md#cleanup-action-matrix); custom malware engine; AI model training; cloud deployment; mobile application; redesign of the LMS; all upstream feature repairs; live malware testing; production use with real student work. Assignment grading/feedback remain required. The supplied six AI-project phases can guide problem/data/evaluation discipline, but do not introduce a model-development requirement.
 
 ## Actors and permission boundaries
 
@@ -57,7 +53,7 @@ Catalog/course previews follow inspected existing visibility rules; this SRS doe
 
 ## Functional requirements
 
-Each row states final observable behavior and its acceptance check. Task P0 is split into P0a/P0b in the plan. Test IDs are defined in validation.md; DM IDs are in the demo manual. These mappings specify work/proof, not current pass results.
+Each row states final observable behavior and its acceptance check. Task P0 is split into P0a/P0b in the plan. Test IDs are defined in docs/final-project/step-c-performance-reliability-security-validation.md; DM IDs are in the demo manual. These mappings specify work/proof, not current pass results.
 
 ### Accounts and retained LMS support
 
@@ -111,61 +107,41 @@ Each row states final observable behavior and its acceptance check. Task P0 is s
 | ID | Required quality / acceptance | Tasks and proof |
 | --- | --- | --- |
 | NFR01: authorization | Authenticate and authorize every private result, file, grading and rescan action by role/object scope; negative cross-user/course/direct-route cases are denied. | P0b/P5/P6; ST01/ST02/ST04; DM10 |
-| NFR02: privacy/secrets | Use fictional users and synthetic attachments. Keep keys server-side and out of source/browser/logs/evidence; neither file nor hash queries may disclose confidential student content. | All streams; security.md, ST03, LIVE01 preparation |
+| NFR02: privacy/secrets | Use fictional users and synthetic attachments. Keep keys server-side and out of source/browser/logs/evidence; neither file nor hash queries may disclose confidential student content. | All streams; docs/engineering.md, ST03, LIVE01 preparation |
 | NFR03: boundary validation | Validate upload errors/size/type/MIME, IDs and provider data; escape displayed values. Provider requests use fixed permitted origins and verified TLS; local HTTP is loopback only. | P0b/P1/P2/P5; CT02, ST02/ST03 |
 | NFR04: durability | Provider timeout, error, quota pause, malformed evidence or worker failure shall not lose an accepted submission or invent a favorable result. Recorded saved counts/files remain consistent through the planned fault trials. | P1/P3/P6; FT01-FT03, IT01/IT02; DM09 |
 | NFR05: consistency | Persist file/revision/attempt ownership and result/lifecycle transitions atomically where specified; use guarded claims/current pointers. No cross-submission or stale-result overwrite is accepted in concurrency tests. | P1/P3; IT02-IT04/IT06 |
 | NFR06: bounded resource use | External requests have timeouts; retry/poll/lease budgets are bounded and metered. Unknown POST outcomes are not blindly replayed; no account multiplication or provider load test is used to bypass limits. | P2/P3/P6; IT04-IT06, FT02/FT03 |
-| NFR07: measured performance | Report environment, increased workload, latency/throughput/errors/queue behavior, degradation point or tested bound, and failure mode. Separate application load tests with fixtures from provider capability. | P6; validation.md performance experiment; R08; DM12 |
+| NFR07: measured performance | Report environment, increased workload, latency/throughput/errors/queue behavior, degradation point or tested bound, and failure mode. Separate application load tests with fixtures from provider capability. | P6; docs/final-project/step-c-performance-reliability-security-validation.md performance experiment; R08; DM12 |
 | NFR08: usability | Retained/student/teacher workflows use consistent labels and navigation, clear loading/empty/error/Unresolved states, keyboard access, escaped long filenames and usable narrow/wide layouts. Do not rely on color alone. | P4; UI01/UI02; DM01-DM11 |
 | NFR09: maintainability/compatibility | Reuse Doodle patterns and one provider-result contract. Publish stable interface/version behavior and field/ID/unit meanings; producer/consumer changes update contracts and checks together. | P1-P5; CT04, shared handoff checks; R04/R07 |
 | NFR10: reproducibility/recovery | Provide the actual dependency manifest, safe example configuration, repeatable migrations/demo-data setup, app/worker commands and clean-machine instructions. Restore DB and private files together in a disposable test target. | P0/P1/P5-P7; BT01, RESTORE01, release evidence; DM12 |
 | NFR11: evidence honesty | Preserve real commands/results, distinguish fixtures from live exchange, identify unresolved risks/failed or untested requirements, disclose actual AI use and retain upstream notices/history. Documentation must match the built release. | All streams/P6/P7; R01-R15 evidence; DM12 |
-| NFR12: testability | Contract/failure checks and ordinary demo-data setup shall run offline with injected provider transport and fictional data. Tests must fail nonzero and must not depend on real API keys or disabled PHP assertions. | P0a/P1-P3/P6; tests/run.php planned harness, CT/FT catalogue |
+| NFR12: testability | Contract/failure checks and ordinary demo-data setup shall run offline with injected provider transport and fictional data. Tests must fail nonzero and must not depend on real API keys or disabled PHP assertions. | P0a/P1-P3/P6; tests/run.php harness, CT/FT catalogue |
 
 ### Targets and business rules not to invent
 
-- The proposed local submission latency target is p95 <=2 seconds at 10 concurrent clients, excluding upload transfer, using the controlled fixture experiment in validation.md. It is not an achieved result or a provider completion guarantee; report actual measurements and agree any revision explicitly.
-- File allowlist/size, request pacing, retry/poll/deadline defaults and test workload settings retain their proposed status in security.md/integrations.md/validation.md until validated in the common contract gate. An agent cannot silently substitute its own values.
+- The proposed local submission latency target is p95 <=2 seconds at 10 concurrent clients, excluding upload transfer, using the controlled fixture experiment in [Step C](final-project/step-c-performance-reliability-security-validation.md). It is not an achieved result or a provider completion guarantee; report actual measurements and agree any revision explicitly.
+- File allowlist/size, request pacing, retry/poll/deadline defaults and test workload settings retain their proposed status in [engineering](engineering.md), [integrations](integrations.md) and [Step C](final-project/step-c-performance-reliability-security-validation.md) until validated in the common contract gate. An agent cannot silently substitute its own values.
 - Preserve inspected existing assignment rules for deadlines, resubmission eligibility, score representation and enrollment/course visibility. If behavior is unclear or broken, record and resolve the specific rule with the coordinator before changing it; do not add a new late-submission, grading or sharing policy on assumption.
-- PHP 8.3.30 is the only inspected runtime. No upgrade, cloud runtime, new framework, malware engine or ML training pipeline is authorized by this SRS.
+- PHP 8.3.30 is the tested baseline runtime. No upgrade, cloud runtime, new framework, malware engine or ML training pipeline is authorized by this SRS.
 
 ## Acceptance and traceability
 
-FR/NFR rows identify expected product behavior, tasks, checks and demo scenarios. The R table below preserves the original requirement IDs used by existing guides for assessment deliverables. It is not a second feature specification.
+FR/NFR rows identify expected product behavior, tasks, checks and demo scenarios. Assessment IDs R01-R15 are defined with their Step A-F files under final-project/. They are deliverable traceability, not another feature specification.
 
 At release, record each FR/NFR's implemented source, executed test/evidence reference and pass/fail/not-tested status in the evidence manifest. Do the same for R01-R15 and DM01-DM13. A planned test or expected demo result is not a pass. Requirements are not complete merely because isolated modules pass; verify the integrated role workflow and real provider exchange. Any exception requires an explicit documented team decision and honest disclosure, not deletion of the requirement ID.
 
 The full manual acceptance catalogue is UAT01-UAT35 (with separately recorded named variants) in [demo-manual.md](demo-manual.md). It covers retained LMS features as well as scanning and links each case to FR/NFR IDs. Its actual-result/defect log is a separate run artifact under `evidence/uat/` when executed. DM01-DM13 are the shorter presenter sequence referencing those cases. Manual acceptance does not replace the automated/measurement evidence required by the validation guide.
 
-## Requirements and final submission mapping
+## Cleanup action matrix
 
-| ID | Observable acceptance criterion | Final part | Design and required proof |
-| --- | --- | --- | --- |
-| R01 | Panel starts the app and worker from a clean local setup using documented dependencies and configuration | A | `release.md`; clean-machine setup record; dependency manifest and example configuration |
-| R02 | LMS exchanges real data with VirusTotal and binds the returned analysis to the submitted file revision | A/B | `integrations.md`; limited live synthetic-file trace; fixture mode separately labeled |
-| R03 | Submission survives provider timeout, error and malformed response; no favorable result is fabricated | C | `validation.md`; fault results and submission counts |
-| R04 | Automatic and teacher-requested processing use the same unchanged result interface | B | Two real call sites, compatibility tests, published contract |
-| R05 | Cross-user/cross-course result reads, downloads and rescans are denied | C | `security.md`; role and object-ownership tests |
-| R06 | Replacement files and late results cannot overwrite the latest revision's advisory | B/C | `data-model.md`; concurrency, duplicate-job and stale-response tests |
-| R07 | Every boundary lists protocol, format, authentication, synchronicity, errors, retry and versioning | B | `integrations.md`; reconcile with built code |
-| R08 | Load test identifies environment, increased variable, measurements, degradation point and failure mode | C | Raw measurements and analysis; app capacity separated from provider quota |
-| R09 | Fault injection measures recovery after timeout, error and malformed data | C | Timestamped state and recovery evidence |
-| R10 | All five required trends have an adoption/rejection decision and engineering reason | D | `evaluation.md`; final implementation references |
-| R11 | Two documented cases each cause a traceable design change | E | `evaluation.md`; decision, code and test links at release |
-| R12 | All risks receive an evidence-backed final status; materialized risks compare prediction with outcome | F | `risks.md`; do not invent earlier predictions |
-| R13 | Actual AI assistance and human review/corrections are disclosed | F | `ai-use.md`; transcript references |
-| R14 | Corrected Technical 1 models and Technical 4 release work are reconciled with the system as built | B | Source artifacts still required; divergence log |
-| R15 | Approved LMS support features remain usable; assignments are the only assessed activity; excluded menus/actions cannot be entered by direct URLs | A/B | `feature-scope.md`; UI02 and ST04; documented action allowlist |
+| Treatment | Controllers/actions and visible entry points |
+| --- | --- |
+| Keep | Home, Auth login/logout/profile/theme; Admin users/roles/courses/categories/announcements/basic settings; Teacher courses/modules/materials/assignments/assignment grading; Student learning/submission/assignment grades; Course, Catalog, Assignment, Calendar, Notifications; manual Flashcard index/create/view/study/review/delete |
+| Deny and remove links/panels | Quiz; Teacher quizzes/createQuiz/quiz/addQuestion/deleteQuestion; AI; Gamification; Message; Forum; Certificate; Poll; LearningPath; Whiteboard; Wiki; Group; Code; Analytics; Review; generic Api; OAuth/Push configuration |
+| Deny within retained controller | Flashcard::generateFromCourse; keep its manual actions. Remove generated-deck promotions and AI links from retained screens. |
+| Cover aliases too | flashcard/flashcards, message/messages, certificate/certificates, learningpath/learning_paths and all canonical controller names. An alternative spelling must not bypass the final action map. |
+| Preserve shared internals | Existing schema history, enrollment/grade/notification helpers, and any still-called Gamification helper. The combined WikiGroupPushBackup file also contains Backup; do not delete the file wholesale. Existing setup/recovery utilities not listed for exclusion need an explicit decision before removal. |
 
-## Source reconciliation
-
-The supplied sources are Technical 2, Technical 3, Module 7 lecture slides and the pasted final Parts A-F. Technical 3 supersedes earlier result-classification and component-boundary proposals where it revises them. Its prototype execution was explicitly unverified. Technical 2's prose test claims are historical claims, not current raw evidence.
-
-Not supplied: Technical 1 corrected models; Technical 4 artifact; the group's original populated RMMM register; original reusable PHP files and preserved AI transcript; full second-submission/live-session instructions. The coordinator gave November 20, 2026 as the ideal finish date; November 21 is the working presentation-date interpretation of a message that still said October 21. Confirm that final date against the class instructions. Reconcile missing sources before final submission. This foundation neither fabricates those artifacts nor claims their requirements are satisfied.
-
-## Completion boundary for this session
-
-Produce the shared README/documentation map, approved feature/workflow baseline, verified baseline findings, agent-readable contracts, four workstream/task boundaries, start/wait/handoff guide, optional prompting openers and demo manual/acceptance scenarios. Provide the four-person handoff summary in chat; names can be assigned by the team. Product implementation and final assessment validation happen in subsequent team work.
-
-This SRS consolidates those approved expectations so members and agents have one requirements entry point. Its existence does not certify implementation or close missing historical evidence.
+P0b in the team plan applies this matrix to menus, promotions and direct actions/aliases. Test both intentional denial and retained workflows. Do not infer removal from an omitted chat mention or delete schema/data. Trace callers before deleting source: submission code still calls `Gamification::award(...)`, and shared helpers may remain behind disabled UI. No feature-flag framework is needed. Further scope changes require a proposal.
