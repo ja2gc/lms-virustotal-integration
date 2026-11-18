@@ -1,0 +1,9 @@
+{
+  "data": {
+    "type": "analysis",
+    "id": "analysis/fixture?01",
+    "attributes": {
+      "status": "queued"
+    }
+  }
+}

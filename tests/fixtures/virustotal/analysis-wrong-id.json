@@ -1,0 +1,20 @@
+{
+  "data": {
+    "type": "analysis",
+    "id": "different-analysis-id",
+    "attributes": {
+      "status": "completed",
+      "results": {"FixtureEngine": {"category": "undetected", "engine_name": "FixtureEngine", "method": "blacklist", "result": null}},
+      "stats": {
+        "malicious": 0,
+        "suspicious": 0,
+        "harmless": 12,
+        "undetected": 58,
+        "timeout": 0,
+        "confirmed-timeout": 0,
+        "failure": 0,
+        "type-unsupported": 0
+      }
+    }
+  }
+}

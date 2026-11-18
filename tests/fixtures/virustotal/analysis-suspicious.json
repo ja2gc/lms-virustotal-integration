@@ -1,0 +1,39 @@
+{
+  "data": {
+    "type": "analysis",
+    "id": "analysis/fixture?01",
+    "attributes": {
+      "status": "completed",
+      "results": {
+        "FixtureEngine1": {
+          "category": "suspicious",
+          "engine_name": "FixtureEngine1",
+          "method": "blacklist",
+          "result": null
+        },
+        "FixtureEngine2": {
+          "category": "harmless",
+          "engine_name": "FixtureEngine2",
+          "method": "blacklist",
+          "result": null
+        },
+        "FixtureEngine3": {
+          "category": "undetected",
+          "engine_name": "FixtureEngine3",
+          "method": "blacklist",
+          "result": null
+        }
+      },
+      "stats": {
+        "malicious": 0,
+        "suspicious": 1,
+        "harmless": 1,
+        "undetected": 1,
+        "timeout": 0,
+        "confirmed-timeout": 0,
+        "failure": 0,
+        "type-unsupported": 0
+      }
+    }
+  }
+}
