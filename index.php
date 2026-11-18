@@ -39,6 +39,7 @@ spl_autoload_register(function ($class) {
 
 // Helper functions
 require_once APP_DIR . '/helpers/functions.php';
+require_once APP_DIR . '/scan/bootstrap.php';
 
 // Run schema migrations if needed (auto-upgrade for existing installs)
 if (IS_INSTALLED && !file_exists(ROOT_DIR . '/.v3_migrated')) {

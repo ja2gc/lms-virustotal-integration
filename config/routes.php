@@ -1,6 +1,8 @@
 <?php
 /** SRS cleanup action matrix: public actions only; role/object checks remain in controllers. */
 return [
+    'Scan' => ['status','history','rescan'],
+    'SubmissionFile' => ['download'],
     'Home' => ['index'],
     'Auth' => ['login', 'register', 'logout', 'profile', 'settheme', 'setup2fa'],
     'Admin' => ['index', 'users', 'createuser', 'edituser', 'deleteuser', 'courses', 'categories', 'deletecategory', 'announcements', 'deleteannouncement', 'settings', 'importusers', 'exportusers'],

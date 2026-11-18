@@ -27,6 +27,11 @@ class Router
         if (in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['POST', 'PUT', 'DELETE'])) {
             if (!CSRF::verify()) {
                 http_response_code(419);
+                if ($ctrlClass === ScanController::class) {
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode(['error'=>['code'=>'csrf_mismatch','message'=>'Refresh the page and try again.']]);
+                    return;
+                }
                 die('CSRF token mismatch. Please go back, refresh the page, and try again.');
             }
         }
@@ -41,7 +46,7 @@ class Router
         if (array_map('strtolower', $parts) === ['admin', 'backups']) $parts = ['backup'];
         $name = array_shift($parts) ?: 'home';
         $aliases = ['flashcards'=>'Flashcard', 'messages'=>'Message', 'certificates'=>'Certificate',
-            'learning_paths'=>'LearningPath', 'learningpath'=>'LearningPath', 'ai'=>'AI', 'oauth'=>'OAuth'];
+            'learning_paths'=>'LearningPath', 'learningpath'=>'LearningPath', 'ai'=>'AI', 'oauth'=>'OAuth', 'submissionfile'=>'SubmissionFile'];
         if (!preg_match('/^[A-Za-z]+$/', $name) && !isset($aliases[$name])) return null;
         $controller = $aliases[strtolower($name)] ?? ucfirst(strtolower($name));
         $method = array_shift($parts) ?? 'index';

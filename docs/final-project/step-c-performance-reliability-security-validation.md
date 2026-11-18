@@ -16,7 +16,7 @@ The catalogue/experiment settings below are checks/plans, not results. Manual ac
 | [Local baseline smoke](../../evidence/baseline/localhost-smoke.json) | Installation, three role logins, course/enrollment, written submission, grading/feedback | Written-only baseline, not attachment or VirusTotal acceptance |
 | [Route/flashcard/seeder follow-up](../../evidence/baseline/routes-flashcards.json) | 16 PHP checks, JavaScript review checks, 131 syntax checks; role routes, private flashcards, repeatable fictional seeding | Snapshot only; final integrated UAT/load/fault/security/restore still pending |
 
-Private attachment storage, MIME/move-result enforcement, immutable revision/attempt linkage, scanning remain to build. P0b action exclusions and retained-route checks are recorded in [cleanup evidence](../../evidence/cleanup/p0b.json); these do not certify the final integrated system. Baseline passes do not close them. The team plan owns completion; add raw evidence only when runs occur.
+P1b private attachment storage/MIME/move enforcement and P2/P3 scanning remain to build. P1a revision/attempt persistence is implemented; P5 HTTP access is fixture-verified. P0b action exclusions and retained-route checks are recorded in [cleanup evidence](../../evidence/cleanup/p0b.json); these do not certify the final integrated system. Baseline passes do not close them. The team plan owns completion; add raw evidence only when runs occur.
 
 ## Required test catalogue
 

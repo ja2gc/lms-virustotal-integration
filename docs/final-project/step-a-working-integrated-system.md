@@ -19,9 +19,9 @@ The working local Doodle baseline is verified; the final LMS-to-VirusTotal excha
 ## Remaining release work
 
 - [ ] Provide safe example configuration: `VT_API_KEY`, `SCAN_MODE=fixture|live`, `SCAN_PRIVATE_DIR`, `SCAN_MAX_UPLOAD_BYTES`, `SCAN_REQUESTS_PER_MINUTE`, `SCAN_REQUESTS_PER_DAY`. Reuse `DOODLE_DB_TYPE=sqlite`/`DOODLE_ENV`; use process configuration, never committed real credentials. Values/units follow the integration and security contracts.
-- [ ] Implement the scan migration runner and CLI-safe bootstrap. The existing installer/seeder create upstream tables and fictional inputs only.
+- [x] P1a provides explicit `php bin/migrate.php` and session-free `app/scan/bootstrap.php`, verified twice on a disposable installed baseline. The installer/seeder do not apply project scan migrations.
 - [ ] Implement `php bin/scan-worker.php` with `--once`, explicit fixture/live mode and no browser-session/web-migration dependency.
-- [ ] Complete private storage and protected downloads. P0b implements the final scope/action map; loopback file blocking alone is insufficient for file authorization.
+- [ ] Complete P1b private upload storage/backfill and P4 file-ID links. P5 authorized download HTTP behavior is fixture-verified; integrated attachment delivery remains open. P0b action scope is complete.
 - [ ] Execute full offline/integration checks, limited live synthetic exchange and second-machine reproduction; record final commands/revision/evidence.
 
 ## Release gate and rollback

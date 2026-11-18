@@ -36,6 +36,7 @@ public/uploads/submissions/*
 logs/
 tmp/
 temp/
+private/
 .cache/
 
 # ---- OS junk ----

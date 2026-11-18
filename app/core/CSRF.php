@@ -19,6 +19,7 @@ class CSRF
     public static function verify(): bool
     {
         $token = $_POST[CSRF_TOKEN_NAME] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+        if (!is_string($token)) return false;
         if (!hash_equals(Session::get(CSRF_TOKEN_NAME, ''), $token)) {
             return false;
         }

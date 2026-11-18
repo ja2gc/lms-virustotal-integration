@@ -82,7 +82,7 @@ In another terminal, run `php tests/run.php`. Optional developer UI logic check:
 
 Installer, three role logins/navigation, course/enrollment, written submissions, grading/feedback, manual flashcards and repeatable fictional seeding have executed checks. [Step C](docs/final-project/step-c-performance-reliability-security-validation.md#baseline-verification) links actual evidence and limits.
 
-P0b feature/menu/action cleanup is complete. P1a shared persistence, P1b private upload delivery, P2/P3 VirusTotal processing, P4 scan UI, P5 private HTTP access and P6/P7 integrated acceptance have separate statuses in the [team plan](docs/team-plan.md#completion-record). Public upstream upload URLs still exist until the private-delivery boundary is published: synthetic files and loopback only. A running baseline is not the final integrated release.
+P0b feature/menu/action cleanup is complete. P1a shared persistence, P1b private upload delivery, P2/P3 VirusTotal processing, P4 scan UI, P5 private HTTP access and P6/P7 integrated acceptance have separate statuses in the [team plan](docs/team-plan.md#completion-record). The localhost router denies old public assignment-upload URLs. P1b legacy import and P4 file-ID links are required before real attachment delivery is accepted. Use synthetic files and loopback only. A running baseline is not the final integrated release.
 
 ## Collaboration and schedule
 

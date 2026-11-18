@@ -67,3 +67,7 @@ AI assistance inspected controllers/callers, applied the approved action matrix,
 ### 2026-11-18 — Member 4 P1a
 
 AI assistance implemented the shared schema/bootstrap/repository and disposable persistence/CLI/concurrent-process checks. Independent read-only AI review identified a deletion-constraint regression; a failing regression reproduced it, then compatible metadata cascades and requester-null history retention passed. Legacy attachments remain Unresolved until P1b import. Current member ownership and completion gates are explicit in the team plan. No real upload, provider exchange, local migration, backfill or recovery acceptance is claimed.
+
+### 2026-11-18 — Member 4 P5 HTTP
+
+AI assistance implemented authorized status/history/rescan/download HTTP behavior, endpoint fixtures, CSRF-array validation and localhost path containment. Independent read-only AI review reproduced a Windows short-name static-file bypass; canonical resolved-path checks closed it with a failing-then-passing regression. The native in-app browser rendered queued status/history from disposable fixtures. Current member assignments and exact P1a/P1b/P2-P7 completion gates are maintained in project instructions; no real upload/backfill, live worker, final scan UI or full UAT success is claimed.

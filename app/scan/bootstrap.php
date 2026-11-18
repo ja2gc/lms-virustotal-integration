@@ -4,3 +4,4 @@ declare(strict_types=1);
 require_once __DIR__.'/FileScanProvider.php';
 require_once __DIR__.'/ScanMigration.php';
 require_once __DIR__.'/ScanAttemptRepository.php';
+require_once __DIR__.'/ScanAttemptService.php';

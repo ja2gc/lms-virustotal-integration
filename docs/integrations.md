@@ -86,7 +86,7 @@ The P1a migration adds `scan_schema_versions` (version 1), `submission_files`, `
 
 Claim and registration methods use short SQLite write transactions. Result/progress writes require the current nonexpired lease and running state; stale writes return false. Uncertain expired starts fail without replay. Overdue inactive polling work terminates Unresolved. These are repository checks, not an implemented worker. Context/history are internal records; HTTP consumers authorize and explicitly project public fields.
 
-These methods belong to `ScanAttemptRepository` in the foundation/data stream. Implement and test them in P1 before consumers merge. Other streams request contract changes rather than creating parallel table writers.
+These methods belong to Member 4's P1a `ScanAttemptRepository`. Connected consumers use the published, verified P1a contract. P1b remains required for real uploads. Other streams request contract changes rather than creating parallel table writers.
 
 | Method | Consumer / required semantics |
 | --- | --- |
@@ -105,6 +105,16 @@ Claim rows use camelCase keys: `attemptId`, `fileId`, `submissionId`, `origin`, 
 Submission context contains IP09 fields plus `studentId`, `courseId` and `teacherId`. File context contains `fileId`, `submissionId`, `studentId`, `courseId`, `teacherId`, `storageKey`, `originalName`, `mimeType` and `sizeBytes`. History records contain attempt ID/origin/state/advisory/reason/counts and requested/completed UTC times; no raw provider payload. Never use ownership fields supplied by the browser in place of these authoritative joins.
 
 ### Shared pending-response example
+
+**P5 consumer handoff:** `GET scan/status/{submissionId}` returns the fields below. A permitted owning teacher/admin also receives optional `rescanToken`, issued for that submission in the current browser session. Students do not receive it. After an operation uses a token, the next status read provides a new one; old issued tokens remain valid for same-session replay. Tokens are not CSRF tokens and must not be logged.
+
+Member 3 submits `POST scan/rescan/{submissionId}` with form fields `_csrf_token` (existing CSRF token) and `requestToken` (the issued rescanToken). New work returns 202 and `created=true`; token replay returns 200, the same attempt ID and its actual stored processing state. GET returns 405; CSRF failure 419; missing session 401; wrong owner/course/role 403; missing submission 404; invalid/unissued request token or no file 422. All endpoint errors use `error.code` and `error.message`. No HTTP action calls a provider. End-to-end fresh-analysis proof remains P3 integration work.
+
+`GET scan/history/{submissionId}` is teacher/admin-only under the same course ownership rule. It returns `{contractVersion, submissionId, fileId, history}`. History entries contain `attemptId`, `origin`, `processingState`, nullable `advisoryStatus`, `reason`, nullable validated `stats`, `requestedAt` and nullable `completedAt`. It contains the current file revision's attempts, newest first. Empty/no-file history is `[]`. Unknown status values display Unresolved, not favorable evidence.
+
+Member 3 builds attachment links with **fileId**, not submissionId: `submissionFile/download/{fileId}`. The endpoint permits owner/course-teacher/admin, streams attachment/octet-stream with no-store/nosniff, and returns 404 for missing or size-mismatched bytes. Member 1 writes immutable bytes directly under `SCAN_PRIVATE_DIR` using the repository `storageKey` as the basename. Default root: `ROOT_DIR/private/submissions`; that directory is ignored and denied by the localhost router. An external private root is also supported. A root inside `public` is rejected. Links/symlinks that escape the configured root are denied. Do not append an extension to the storage key or build a caller-selected path.
+
+The localhost router denies old `public/uploads/submissions` URLs, including resolved Windows short-name aliases. Original files are preserved on disk; legacy attachment links remain unavailable until Member 1 imports them and Member 3 switches links to file IDs. This is an explicit integration gate, not completed backfill or attachment acceptance. Course lesson uploads are a separate retained workflow. The supported/verified web command is the README localhost router; alternate web-server deployment is not claimed.
 
 ```json
 {

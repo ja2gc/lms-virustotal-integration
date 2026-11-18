@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 $path = rawurldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+$path = preg_replace('~/+~', '/', $path);
 $notFound = static function (): void {
     http_response_code(404);
     echo 'Not found';
@@ -10,7 +11,7 @@ $notFound = static function (): void {
 
 // The built-in server ignores .htaccess: never expose source or dot paths.
 if (str_contains($path, "\0") || str_contains($path, '\\')
-    || preg_match('~(?:^|/)\.[^/]*|^/(?:app|config|database|docs|evidence|tests|tmp|temp|vendor|bin)(?:/|$)~i', $path)) {
+    || preg_match('~(?:^|/)\.[^/]*|^/(?:app|config|database|docs|evidence|tests|tmp|temp|vendor|bin|private)(?:/|$)|^/public/uploads/submissions(?:/|$)~i', $path)) {
     $notFound();
     return;
 }
@@ -18,6 +19,13 @@ if (str_contains($path, "\0") || str_contains($path, '\\')
 if (str_starts_with($path, '/public/')) {
     $file = realpath(__DIR__ . $path);
     $public = realpath(__DIR__ . '/public') . DIRECTORY_SEPARATOR;
+    // Windows short names and filesystem aliases must not bypass the URL guard.
+    $submissions = realpath(__DIR__ . '/public/uploads/submissions');
+    if ($file !== false && $submissions !== false
+        && ($file === $submissions || str_starts_with(strtolower($file), strtolower($submissions) . DIRECTORY_SEPARATOR))) {
+        $notFound();
+        return;
+    }
     $types = [
         'css' => 'text/css', 'js' => 'application/javascript', 'json' => 'application/json',
         'png' => 'image/png', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg',
@@ -39,7 +47,7 @@ if (str_starts_with($path, '/public/')) {
     }
     header('Content-Type: ' . $type);
     header('X-Content-Type-Options: nosniff');
-    // Upstream uploads remain public until P1/P5 implement private downloads.
+    // Retained course materials stay public; assignment attachments are denied above.
     if (str_starts_with($path, '/public/uploads/')) {
         header('Content-Disposition: attachment');
     }
