@@ -42,7 +42,7 @@ P0b and P1 can proceed in parallel after P0a because their owned files differ. W
 
 ## Handoff and prompting
 
-Send a PR/handoff containing: branch and revision; changed files; provided interface or JSON example; migration/config requirements; exact test commands and observed results; sanitized evidence; current limitations; which downstream task can now connect. Another member reviews it, then merge before consumers update from main. Do not copy chunks of another branch by hand or independently rename fields to make a local version work.
+Follow [fork synchronization](../.agents/rules/workflow.md#fork-synchronization) before starting/resuming a task, after a dependency merges and before submitting/updating its PR. Send the PR from your fork to the team main, with: branch and revision; changed files; provided interface or JSON example; migration/config requirements; exact test commands and observed results; sanitized evidence; current limitations; which downstream task can now connect. Another member reviews it, then merge before consumers connect. Do not copy chunks of another branch by hand or independently rename fields to make a local version work.
 
 The baseline rendering sweep is complete. Request contract changes from their owner before updating dependent code.
 
@@ -200,5 +200,7 @@ Use the SRS and full UAT catalogue as end-goal checks throughout implementation,
 - [x] Documentation consolidation — Done. Owner: Member 4; [PR #3](https://github.com/ja2gc/lms-virustotal-integration/pull/3), merged at `31e9424` and reverified on main. Reduced docs from 21 to 13, removed obsolete scope/index/handoff files, used member numbers and separated original Parts A-F. Read-only review corrections applied; 73 local links, all FR/NFR/R/P/RK/UAT IDs and unchanged technical contract blocks verified; `git diff --check` passed. Application files are unchanged. The replacement chat is a separate follow-up after publication and must wait for **continue**; feature cleanup is not started.
 
 For every task/PR append: member number, task ID, branch/PR/merge, actual behavior/files, exact checks/results, sanitized evidence, contract/config/migration effects, downstream readiness and unresolved dependencies. Use Ready for review before integration; Done only after reviewed/merged verification. Update P-task checkboxes. Keep personal-name assignments in team communication.
+
+- [ ] Fork collaboration rules — Ready for review. Owner: Member 4; branch: `codex/fork-sync-rules`. Added synchronization triggers, remote verification, preservation/divergence/conflict rules and fork-to-team PR flow; linked the agent entry, README and handoff guidance. Documentation only; feature cleanup remains not started. Verified 77 local links, preserved requirement/case IDs and technical contract blocks, no runtime-file changes and clean `git diff --check`. Review and PR/merge reference pending.
 
 The baseline route/flashcard/seeder follow-up is Done via PR #1/source merge 8d15034. It passed 16 PHP checks, the JavaScript check, 131 syntax checks and 145 links at that snapshot. Raw evidence remains under evidence/baseline/. Cleanup, private uploads and VirusTotal remain pending as the P-task checks show.
