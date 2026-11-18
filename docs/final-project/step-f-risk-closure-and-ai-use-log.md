@@ -71,3 +71,7 @@ AI assistance implemented the shared schema/bootstrap/repository and disposable 
 ### 2026-11-18 — Member 4 P5 HTTP
 
 AI assistance implemented authorized status/history/rescan/download HTTP behavior, endpoint fixtures, CSRF-array validation and localhost path containment. Independent read-only AI review reproduced a Windows short-name static-file bypass; canonical resolved-path checks closed it with a failing-then-passing regression. The native in-app browser rendered queued status/history from disposable fixtures. Current member assignments and exact P1a/P1b/P2-P7 completion gates are maintained in project instructions; no real upload/backfill, live worker, final scan UI or full UAT success is claimed.
+
+### 2026-11-18 — Member 4 local environment setup
+
+AI assistance added local key setup instructions, an empty tracked environment example, a native non-executing configuration loader, Git/release exclusions and offline configuration checks. A local ignored template was copied without adding a real key. Independent read-only review identified an installer fixture dependency and Windows case-insensitive environment override issue; regression checks confirmed corrections. No real environment values were inspected or printed, no key was retrieved or shared, and no provider call or release publication was performed. Live adapter/worker implementation remains separate.

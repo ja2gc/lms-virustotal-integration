@@ -84,6 +84,30 @@ Installer, three role logins/navigation, course/enrollment, written submissions,
 
 P0b feature/menu/action cleanup is complete. P1a shared persistence, P1b private upload delivery, P2/P3 VirusTotal processing, P4 scan UI, P5 private HTTP access and P6/P7 integrated acceptance have separate statuses in the [team plan](docs/team-plan.md#completion-record). The localhost router denies old public assignment-upload URLs. P1b legacy import and P4 file-ID links are required before real attachment delivery is accepted. Use synthetic files and loopback only. A running baseline is not the final integrated release.
 
+## VirusTotal API key on your own computer
+
+Live VirusTotal requests require a personal API key, including when the LMS runs on localhost. Each member who needs live testing signs in to their own [VirusTotal account](https://www.virustotal.com/gui/my-apikey), opens **API key**, and keeps that value private. Members using offline fixtures do not need a key. Follow the account's permitted usage and quota; multiple accounts must not be used to bypass limits.
+
+From the project root, create your local configuration once:
+
+```powershell
+if (-not (Test-Path -LiteralPath .env)) { Copy-Item -LiteralPath .env.example -Destination .env }
+notepad .env
+```
+
+In your own editor, set `VT_API_KEY=your_actual_key` and save. Keep `SCAN_MODE=fixture` during offline development; set `SCAN_MODE=live` when running the completed live adapter/worker. Do not paste your key into chat, screenshots, source code or a terminal command. Restart the PHP server/worker after changing local settings. The live adapter/worker remains Member 2's implementation task; configuring a key alone does not implement scanning.
+
+PHP's shared configuration loads the root `.env` for web and CLI entry points. Use simple `NAME=value` lines, `#` comment lines, and **double quotes** around values containing spaces. This is a small INI-style configuration file: no shell commands, `export` or variable interpolation. Existing process environment settings take priority. The session-free scan class bootstrap remains side-effect free; a worker entry point loads `config/config.php` before constructing its services.
+
+`.env` and `.env.*` variants are ignored by Git, denied over localhost HTTP and excluded from release packages. Only the root `.env.example`, containing an empty key, is committed. Check before pushing:
+
+```powershell
+git check-ignore .env
+git ls-files -- '.env' '.env.*' '**/.env' '**/.env.*'
+```
+
+The first command should print `.env`. The tracked-file list should contain only `.env.example`. Never force-add your `.env`; `.gitignore` cannot protect a file someone explicitly forces into Git. GitHub Actions secrets are not required for localhost and are not automatically available on your computer. Keep ordinary tests offline.
+
 ## Shared scan foundation
 
 After installing the baseline, apply the repeatable SQLite scan schema explicitly:

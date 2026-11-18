@@ -7,8 +7,8 @@
 .v2_migrated
 .v3_migrated
 .env
-.env.local
-.env.*.local
+.env.*
+!/.env.example
 *.secret
 config/local.php
 

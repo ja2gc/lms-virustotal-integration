@@ -35,7 +35,7 @@ return ['group' => 'baseline', 'tests' => [
         foreach (['config', 'app/helpers', 'app/core', 'sessions'] as $directory) {
             mkdir($sandbox . '/' . $directory, 0700, true);
         }
-        foreach (['install.php', 'config/config.php', 'config/database.php', 'app/helpers/functions.php', 'app/core/Session.php'] as $file) {
+        foreach (['install.php', 'config/config.php', 'config/environment.php', 'config/database.php', 'app/helpers/functions.php', 'app/core/Session.php'] as $file) {
             copy($root . '/' . $file, $sandbox . '/' . $file);
         }
         $code = '$_SERVER["REQUEST_METHOD"]="GET"; $_SERVER["SCRIPT_NAME"]="/install.php"; $_SERVER["HTTP_HOST"]="127.0.0.1"; require "install.php";';

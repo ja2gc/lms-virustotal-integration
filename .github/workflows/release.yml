@@ -91,6 +91,8 @@ jobs:
           # Create a clean build directory
           mkdir -p build/doodle
           rsync -av --exclude='.git' \
+                       --include='/.env.example' \
+                       --exclude='.env*' \
                        --exclude='.github' \
                        --exclude='.installed' \
                        --exclude='.v2_migrated' \

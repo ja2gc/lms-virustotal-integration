@@ -9,12 +9,21 @@ final class WebFixture
     private array $cookies = [];
     private string $password;
     private string $directory;
+    private array $environment;
 
     public function __construct()
     {
         $root = dirname(__DIR__, 2);
         $dir = $root . '/tmp/tests/web-' . bin2hex(random_bytes(6));
         $this->directory = $dir;
+        $overrides = ['DOODLE_DB_TYPE'=>'sqlite', 'VT_API_KEY'=>'',
+            'SCAN_MODE'=>'fixture', 'SCAN_PRIVATE_DIR'=>$dir.'/private/submissions'];
+        $environment = getenv();
+        // Windows variable names are case-insensitive: remove aliases before adding overrides.
+        foreach (array_keys($environment) as $name) {
+            if (array_key_exists(strtoupper($name), $overrides)) unset($environment[$name]);
+        }
+        $this->environment = array_merge($environment, $overrides);
         mkdir($dir . '/sessions', 0700, true);
         foreach (['app', 'config', 'database', 'public', 'bin'] as $folder) {
             if (!is_dir($root . '/' . $folder)) continue;
@@ -53,7 +62,7 @@ foreach([[2,null,0],[2,1,0],[4,null,1],[5,null,0]] as $i=>[$owner,$course,$publi
 file_put_contents('.installed','fixture'); file_put_contents('.v3_migrated','fixture');
 PHP;
         $seedProcess = proc_open([PHP_BINARY, '-r', $seed, $this->password],
-            [0 => ['pipe', 'r'], 1 => ['file', $dir . '/seed.log', 'a'], 2 => ['file', $dir . '/seed.log', 'a']], $pipes, $dir);
+            [0 => ['pipe', 'r'], 1 => ['file', $dir . '/seed.log', 'a'], 2 => ['file', $dir . '/seed.log', 'a']], $pipes, $dir, $this->environment);
         if (!is_resource($seedProcess)) throw new RuntimeException('Cannot initialize disposable database.');
         fclose($pipes[0]);
         if (proc_close($seedProcess) !== 0) throw new RuntimeException('Disposable database setup failed; inspect ignored tmp/tests seed log.');
@@ -64,7 +73,7 @@ PHP;
         fclose($socket);
         $this->baseUrl = 'http://127.0.0.1:' . $port;
         $this->process = proc_open([PHP_BINARY, '-d', 'session.save_path=' . $dir . '/sessions', '-S', '127.0.0.1:' . $port, '-t', $dir, $dir . '/router.local.php'],
-            [0 => ['pipe', 'r'], 1 => ['file', $dir . '/server.log', 'a'], 2 => ['file', $dir . '/server.log', 'a']], $pipes, $dir);
+            [0 => ['pipe', 'r'], 1 => ['file', $dir . '/server.log', 'a'], 2 => ['file', $dir . '/server.log', 'a']], $pipes, $dir, $this->environment);
         if (!is_resource($this->process)) throw new RuntimeException('Cannot start HTTP fixture.');
         fclose($pipes[0]);
         for ($attempt = 0; $attempt < 40; $attempt++) {
@@ -119,7 +128,7 @@ PHP;
     public function php(array $arguments): array
     {
         $process = proc_open(array_merge([PHP_BINARY], $arguments),
-            [0=>['pipe','r'], 1=>['pipe','w'], 2=>['pipe','w']], $pipes, $this->directory);
+            [0=>['pipe','r'], 1=>['pipe','w'], 2=>['pipe','w']], $pipes, $this->directory, $this->environment);
         if (!is_resource($process)) throw new RuntimeException('Cannot run fixture PHP command.');
         fclose($pipes[0]);
         $output = stream_get_contents($pipes[1]) . stream_get_contents($pipes[2]);

@@ -11,6 +11,9 @@
 // ---------------------------------------------------------------------------
 // Environment
 // ---------------------------------------------------------------------------
+require_once __DIR__ . '/environment.php';
+LocalEnvironment::load(dirname(__DIR__) . '/.env');
+
 define('APP_NAME', 'doodle');
 define('APP_TEAM', 'Death Legion Team');
 define('APP_VERSION', '0.2.0-beta');
