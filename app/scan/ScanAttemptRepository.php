@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+final class ScanAnalysisReused extends DomainException {}
+
 final class ScanAttemptRepository
 {
     private Closure $clock;
@@ -83,15 +85,20 @@ final class ScanAttemptRepository
             return ['attemptId'=>$id,'created'=>true,'processingState'=>'queued'];
         });
     }
+    private static function evidenceMode(?string $analysisId): ?string
+    {
+        if ($analysisId===null) return null;
+        return preg_match('/\Afixture-[a-f0-9]{64}-[a-f0-9]{16}\z/',$analysisId)?'fixture':'provider';
+    }
     public function getSubmissionContext(int $submissionId): ?array
     {
-        $row=$this->query('SELECT s.id,s.student_id,s.file_path,c.id AS course_id,c.teacher_id,f.id AS file_id,a.id AS attempt_id,a.state,a.advisory_status,a.reason,a.completed_at FROM submissions s JOIN assignments x ON x.id=s.assignment_id JOIN courses c ON c.id=x.course_id LEFT JOIN submission_files f ON f.id=s.current_file_id AND f.submission_id=s.id LEFT JOIN scan_attempts a ON a.id=f.active_scan_attempt_id AND a.submission_file_id=f.id WHERE s.id=?',[$submissionId])->fetch();
+        $row=$this->query('SELECT s.id,s.student_id,s.file_path,c.id AS course_id,c.teacher_id,f.id AS file_id,a.id AS attempt_id,a.state,a.advisory_status,a.reason,a.completed_at,a.analysis_id FROM submissions s JOIN assignments x ON x.id=s.assignment_id JOIN courses c ON c.id=x.course_id LEFT JOIN submission_files f ON f.id=s.current_file_id AND f.submission_id=s.id LEFT JOIN scan_attempts a ON a.id=f.active_scan_attempt_id AND a.submission_file_id=f.id WHERE s.id=?',[$submissionId])->fetch();
         if (!$row) return null;
         $legacy=$row['file_id']===null && !empty($row['file_path']);
         return ['contractVersion'=>1,'submissionId'=>(int)$row['id'],'studentId'=>(int)$row['student_id'],'courseId'=>(int)$row['course_id'],'teacherId'=>(int)$row['teacher_id'],
             'fileId'=>$row['file_id']===null?null:(int)$row['file_id'],'attemptId'=>$row['attempt_id']===null?null:(int)$row['attempt_id'],
             'processingState'=>$row['file_id']===null?($legacy?'failed':'not_applicable'):($row['state']??'failed'),'advisoryStatus'=>$legacy?'Unresolved':$row['advisory_status'],
-            'reason'=>$row['file_id']===null?($legacy?'legacy_file_pending_migration':'no_attachment'):($row['reason']??'missing_evidence'),'checkedAt'=>$row['completed_at']];
+            'reason'=>$row['file_id']===null?($legacy?'legacy_file_pending_migration':'no_attachment'):($row['reason']??'missing_evidence'),'checkedAt'=>$row['completed_at'],'evidenceMode'=>self::evidenceMode($row['analysis_id'])];
     }
     public function getFileContext(int $fileId): ?array
     {
@@ -103,7 +110,7 @@ final class ScanAttemptRepository
     public function getAttemptHistory(int $fileId): array
     {
         return array_map(static fn(array $r):array=>['attemptId'=>(int)$r['id'],'origin'=>$r['origin'],'processingState'=>$r['state'],'advisoryStatus'=>$r['advisory_status'],'reason'=>$r['reason'],
-            'stats'=>$r['stats_json']===null?null:json_decode($r['stats_json'],true,512,JSON_THROW_ON_ERROR),'requestedAt'=>$r['requested_at'],'completedAt'=>$r['completed_at']],
+            'stats'=>$r['stats_json']===null?null:json_decode($r['stats_json'],true,512,JSON_THROW_ON_ERROR),'requestedAt'=>$r['requested_at'],'completedAt'=>$r['completed_at'],'evidenceMode'=>self::evidenceMode($r['analysis_id'])],
             $this->query('SELECT * FROM scan_attempts WHERE submission_file_id=? ORDER BY id DESC',[$fileId])->fetchAll());
     }
     public function claimDue(string $leaseToken,string $nowUtc,string $leaseUntilUtc): ?array
@@ -122,6 +129,36 @@ final class ScanAttemptRepository
                 'startInFlight'=>(bool)$r['start_in_flight'],'nextRunAt'=>$r['next_run_at'],'failureCount'=>(int)$r['failure_count']];
         });
     }
+    /** A fresh request must not reuse a stored handle for this immutable revision. */
+    public function hasAnalysisId(int $fileId,string $analysisId): bool
+    {
+        return $this->analysisIdExists($fileId,$analysisId);
+    }
+    private function analysisIdExists(int $fileId,string $analysisId,int $exceptAttempt=0): bool
+    {
+        $rows=$this->query('SELECT f.sha256,a.analysis_id FROM submission_files f JOIN scan_attempts a ON a.submission_file_id=f.id WHERE f.id=? AND a.id<>? AND a.analysis_id IS NOT NULL',[$fileId,$exceptAttempt])->fetchAll();
+        foreach ($rows as $row) {
+            if (self::analysisIdentity($analysisId,$row['sha256'])===self::analysisIdentity($row['analysis_id'],$row['sha256'])) return true;
+        }
+        return false;
+    }
+    private static function analysisIdentity(string $id,string $sha256): string
+    {
+        $decoded=base64_decode($id,true);
+        if ($decoded!==false && base64_encode($decoded)===$id && preg_match('/\A[a-f0-9]{32}:([1-9][0-9]{0,11})\z/',$decoded,$descriptor)) {
+            return 'f-'.$sha256.'-'.$descriptor[1];
+        }
+        return $id;
+    }
+    /** Result consumers reload only the durable work they still own. */
+    public function getClaimContext(int $attemptId,string $leaseToken): ?array
+    {
+        $r=$this->query("SELECT a.*,f.submission_id,f.sha256,f.storage_key FROM scan_attempts a JOIN submission_files f ON f.id=a.submission_file_id WHERE a.id=? AND a.lease_token=? AND a.state='running' AND a.lease_until>?",[$attemptId,$leaseToken,$this->now()])->fetch();
+        if (!$r) return null;
+        return ['attemptId'=>(int)$r['id'],'fileId'=>(int)$r['submission_file_id'],'submissionId'=>(int)$r['submission_id'],'origin'=>$r['origin'],'state'=>$r['state'],'step'=>$r['step'],
+            'analysisId'=>$r['analysis_id'],'sha256'=>$r['sha256'],'storageKey'=>$r['storage_key'],'leaseToken'=>$r['lease_token'],'pollDeadlineAt'=>$r['poll_deadline_at'],
+            'startInFlight'=>(bool)$r['start_in_flight'],'nextRunAt'=>$r['next_run_at'],'failureCount'=>(int)$r['failure_count']];
+    }
     public function saveProgress(int $attemptId,string $leaseToken,array $changes): bool
     {
         $map=['state'=>'state','step'=>'step','analysisId'=>'analysis_id','startInFlight'=>'start_in_flight','pollDeadlineAt'=>'poll_deadline_at','nextRunAt'=>'next_run_at','failureCount'=>'failure_count','reason'=>'reason','leaseUntil'=>'lease_until'];
@@ -135,10 +172,17 @@ final class ScanAttemptRepository
             if ($key==='reason' && (!is_string($value)||!preg_match('/\A[a-z][a-z0-9_]{0,99}\z/',$value))) throw new InvalidArgumentException('Invalid reason.');
             if ($key==='analysisId' && $value!==null && (!is_string($value)||!preg_match('/\A[\x21-\x7e]{1,512}\z/',$value))) throw new InvalidArgumentException('Invalid analysis ID.');
         }
-        $set=[]; $values=[];
-        foreach ($changes as $key=>$value) { $set[]=$map[$key].'=?'; $values[]=is_bool($value)?(int)$value:$value; }
-        $now=$this->now(); $values[]=$now; $values[]=$attemptId; $values[]=$leaseToken; $values[]=$now;
-        return $this->query('UPDATE scan_attempts SET '.implode(',',$set).",updated_at=? WHERE id=? AND lease_token=? AND state='running' AND lease_until>?",$values)->rowCount()===1;
+        return $this->transaction(function()use($attemptId,$leaseToken,$changes,$map):bool {
+            $claim=$this->getClaimContext($attemptId,$leaseToken);
+            if ($claim===null) return false;
+            if (isset($changes['analysisId']) && $this->analysisIdExists($claim['fileId'],$changes['analysisId'],$attemptId)) {
+                throw new ScanAnalysisReused('Analysis already belongs to another attempt.');
+            }
+            $set=[]; $values=[];
+            foreach ($changes as $key=>$value) { $set[]=$map[$key].'=?'; $values[]=is_bool($value)?(int)$value:$value; }
+            $now=$this->now(); $values[]=$now; $values[]=$attemptId; $values[]=$leaseToken; $values[]=$now;
+            return $this->query('UPDATE scan_attempts SET '.implode(',',$set).",updated_at=? WHERE id=? AND lease_token=? AND state='running' AND lease_until>?",$values)->rowCount()===1;
+        });
     }
     public function saveResult(int $attemptId,string $leaseToken,array $result,array $transition): bool
     {

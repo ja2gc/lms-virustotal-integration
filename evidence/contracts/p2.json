@@ -92,7 +92,7 @@
   "localhost": {
     "fixtureOrigin": "http://127.0.0.1:64175",
     "setup": "WebFixture disposable database/private root; forced fixture mode and empty API key; documented offline demo seeder and scan migration run only in that disposable target",
-    "screenshot": "p2-localhost.png",
+    "screenshot": null,
     "limits": "Visible retained-page smoke check only; no new scan UI, full manual UAT or attachment acceptance claimed",
     "browser": "native in-app browser",
     "observed": [
@@ -119,5 +119,6 @@
     "P6 load/reliability/security/full-UAT/restore and P7 final artifacts remain open",
     "Original Technical 3 PHP and AI transcript unavailable for comparison",
     "No user database migrated/reset and no user upload/private file changed"
-  ]
+  ],
+  "artifactCleanup": "2026-11-19: superseded screenshot archived in ignored local tmp; historical observations retained. Current representative screenshots are under evidence/validation."
 }

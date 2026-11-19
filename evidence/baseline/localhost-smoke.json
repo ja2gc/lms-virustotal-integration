@@ -58,7 +58,7 @@
     {
       "check": "My Courses sidebar selection after reload: only My Courses active",
       "result": "Pass",
-      "screenshot": "local-courses.jpg"
+      "screenshot": null
     },
     {
       "check": "Existing Calendar page after user navigation",
@@ -89,5 +89,6 @@
     "result": "No actionable findings; ready to merge for localhost-baseline scope",
     "independent_harness_result": "7 passed; 0 failed",
     "human_final_acceptance": "Not claimed"
-  }
+  },
+  "artifactCleanup": "2026-11-19: superseded screenshot archived in ignored local tmp; historical observations retained. Current representative screenshots are under evidence/validation."
 }

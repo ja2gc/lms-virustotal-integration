@@ -1,0 +1,189 @@
+{
+  "date": "2026-11-19",
+  "tester": "Member 4",
+  "mode": "disposable browser fixture",
+  "cases": [
+    {
+      "case": "UAT01",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT02",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT03",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT04",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT05",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT06",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT07",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT08",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT09",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT10",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT11",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT12",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT13",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT14",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT15",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT16",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT17",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT18",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT19",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT20",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT21",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT22",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT23",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT24",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT25",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT26",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT27",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT28",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT29",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT30",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT31",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT32",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT33",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT34",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    },
+    {
+      "case": "UAT35",
+      "status": "Not run",
+      "note": "Full case and named variants are not claimed from automated tests or partial browser observations."
+    }
+  ],
+  "observedSubsets": [
+    "UAT01: student/teacher login and logout",
+    "UAT15: browser text-only update retains attachment; multipart replacement negatives automated",
+    "UAT19: teacher current result/history/counts",
+    "UAT20: browser fresh request queues; duplicate replay/new handle verified by connected automated fixture",
+    "UAT33: narrow student and wide teacher layout inspection"
+  ]
+}

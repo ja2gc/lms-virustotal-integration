@@ -1,0 +1,880 @@
+{
+    "experiment": "P6 synthetic provider-read recovery",
+    "executedAtUtc": "2026-11-19T07:28:45Z",
+    "command": "php tests/reliability/runner.php --write",
+    "source": "working tree; final verified revision recorded in team completion manifest",
+    "phpVersion": "8.3.30",
+    "osFamily": "Windows",
+    "database": "SQLite in memory",
+    "mode": "offline fixtures; actual ScanWorker, repository and VirusTotalAdapter",
+    "providerRequests": 0,
+    "simulatedHttpStarts": 51,
+    "limits": [
+        "Fake-clock durations measure configured scheduling, not provider latency or wall-clock recovery guarantees.",
+        "Each trial uses a separate disposable in-memory SQLite database and synthetic private files.",
+        "Malformed evidence recovers only through an explicit new teacher attempt; no self-repair claim.",
+        "No real key, environment file, live provider connection or user database was used."
+    ],
+    "trials": [
+        {
+            "fault": "timeout",
+            "trial": 1,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:01:31Z",
+            "recoveredAt": "2026-11-19T00:01:31Z",
+            "recoveryFakeSeconds": 30,
+            "wallClockSeconds": 0.048032,
+            "recoveryTrigger": "Operator restores valid fixture responses before the scheduled read retry; same durable analysis ID is resumed.",
+            "firstRetryAt": "2026-11-19T00:01:31Z",
+            "faultFailureCount": 1,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 1,
+            "requestCount": 5,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 0,
+                    "transportError": "timeout"
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "provider_timeout"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "attemptId": 1,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "timeout",
+            "trial": 2,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:01:31Z",
+            "recoveredAt": "2026-11-19T00:01:31Z",
+            "recoveryFakeSeconds": 30,
+            "wallClockSeconds": 0.030894,
+            "recoveryTrigger": "Operator restores valid fixture responses before the scheduled read retry; same durable analysis ID is resumed.",
+            "firstRetryAt": "2026-11-19T00:01:31Z",
+            "faultFailureCount": 1,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 1,
+            "requestCount": 5,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 0,
+                    "transportError": "timeout"
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "provider_timeout"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "attemptId": 1,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "timeout",
+            "trial": 3,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:01:31Z",
+            "recoveredAt": "2026-11-19T00:01:31Z",
+            "recoveryFakeSeconds": 30,
+            "wallClockSeconds": 0.027127,
+            "recoveryTrigger": "Operator restores valid fixture responses before the scheduled read retry; same durable analysis ID is resumed.",
+            "firstRetryAt": "2026-11-19T00:01:31Z",
+            "faultFailureCount": 1,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 1,
+            "requestCount": 5,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 0,
+                    "transportError": "timeout"
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "provider_timeout"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "attemptId": 1,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "503",
+            "trial": 1,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:01:31Z",
+            "recoveredAt": "2026-11-19T00:01:31Z",
+            "recoveryFakeSeconds": 30,
+            "wallClockSeconds": 0.019688,
+            "recoveryTrigger": "Operator restores valid fixture responses before the scheduled read retry; same durable analysis ID is resumed.",
+            "firstRetryAt": "2026-11-19T00:01:31Z",
+            "faultFailureCount": 1,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 1,
+            "requestCount": 5,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 503,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "provider_unavailable"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "attemptId": 1,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "503",
+            "trial": 2,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:01:31Z",
+            "recoveredAt": "2026-11-19T00:01:31Z",
+            "recoveryFakeSeconds": 30,
+            "wallClockSeconds": 0.022906,
+            "recoveryTrigger": "Operator restores valid fixture responses before the scheduled read retry; same durable analysis ID is resumed.",
+            "firstRetryAt": "2026-11-19T00:01:31Z",
+            "faultFailureCount": 1,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 1,
+            "requestCount": 5,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 503,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "provider_unavailable"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "attemptId": 1,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "503",
+            "trial": 3,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:01:31Z",
+            "recoveredAt": "2026-11-19T00:01:31Z",
+            "recoveryFakeSeconds": 30,
+            "wallClockSeconds": 0.034337,
+            "recoveryTrigger": "Operator restores valid fixture responses before the scheduled read retry; same durable analysis ID is resumed.",
+            "firstRetryAt": "2026-11-19T00:01:31Z",
+            "faultFailureCount": 1,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 1,
+            "requestCount": 5,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 503,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "provider_unavailable"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:01:31Z",
+                    "attemptId": 1,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "malformed",
+            "trial": 1,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:02:02Z",
+            "recoveredAt": "2026-11-19T00:03:03Z",
+            "recoveryFakeSeconds": 122,
+            "wallClockSeconds": 0.025097,
+            "recoveryTrigger": "Operator restores valid fixture responses; authorized teacher creates a new rescan attempt. Original malformed attempt remains failed/Unresolved.",
+            "firstRetryAt": null,
+            "faultFailureCount": 0,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 2,
+            "requestCount": 7,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "phase": "recovery",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "phase": "recovery",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "failed",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "malformed_response"
+                },
+                {
+                    "event": "authorized_teacher_requested_new_attempt",
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "attemptId": 2,
+                    "processingState": "queued",
+                    "advisoryStatus": null,
+                    "reason": "scan_queued"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "attemptId": 2,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "malformed",
+            "trial": 2,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:02:02Z",
+            "recoveredAt": "2026-11-19T00:03:03Z",
+            "recoveryFakeSeconds": 122,
+            "wallClockSeconds": 0.023574,
+            "recoveryTrigger": "Operator restores valid fixture responses; authorized teacher creates a new rescan attempt. Original malformed attempt remains failed/Unresolved.",
+            "firstRetryAt": null,
+            "faultFailureCount": 0,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 2,
+            "requestCount": 7,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "phase": "recovery",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "phase": "recovery",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "failed",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "malformed_response"
+                },
+                {
+                    "event": "authorized_teacher_requested_new_attempt",
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "attemptId": 2,
+                    "processingState": "queued",
+                    "advisoryStatus": null,
+                    "reason": "scan_queued"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "attemptId": 2,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        },
+        {
+            "fault": "malformed",
+            "trial": 3,
+            "status": "Pass",
+            "clock": "injected UTC; zero jitter; no real waiting",
+            "faultAt": "2026-11-19T00:01:01Z",
+            "recoveryTriggerAt": "2026-11-19T00:02:02Z",
+            "recoveredAt": "2026-11-19T00:03:03Z",
+            "recoveryFakeSeconds": 122,
+            "wallClockSeconds": 0.030811,
+            "recoveryTrigger": "Operator restores valid fixture responses; authorized teacher creates a new rescan attempt. Original malformed attempt remains failed/Unresolved.",
+            "firstRetryAt": null,
+            "faultFailureCount": 0,
+            "savedBefore": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "savedAfter": {
+                "submissions": 2,
+                "fileRevisions": 1
+            },
+            "byteAndHashCheck": "Pass",
+            "attemptCount": 2,
+            "requestCount": 7,
+            "requests": [
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "phase": "start",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "phase": "fault",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "phase": "recovery",
+                    "operation": "lookup",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "phase": "recovery",
+                    "operation": "start",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "phase": "recovery",
+                    "operation": "analysis",
+                    "httpStatus": 200,
+                    "transportError": null
+                },
+                {
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "phase": "recovery",
+                    "operation": "identity",
+                    "httpStatus": 200,
+                    "transportError": null
+                }
+            ],
+            "events": [
+                {
+                    "event": "fresh_analysis_saved",
+                    "fakeUtc": "2026-11-19T00:00:00Z",
+                    "attemptId": 1,
+                    "processingState": "waiting",
+                    "advisoryStatus": null,
+                    "reason": "analysis_pending"
+                },
+                {
+                    "event": "fault_persisted",
+                    "fakeUtc": "2026-11-19T00:01:01Z",
+                    "attemptId": 1,
+                    "processingState": "failed",
+                    "advisoryStatus": "Unresolved",
+                    "reason": "malformed_response"
+                },
+                {
+                    "event": "authorized_teacher_requested_new_attempt",
+                    "fakeUtc": "2026-11-19T00:02:02Z",
+                    "attemptId": 2,
+                    "processingState": "queued",
+                    "advisoryStatus": null,
+                    "reason": "scan_queued"
+                },
+                {
+                    "event": "valid_fixture_evidence_persisted",
+                    "fakeUtc": "2026-11-19T00:03:03Z",
+                    "attemptId": 2,
+                    "processingState": "completed",
+                    "advisoryStatus": "No Detections Reported",
+                    "reason": "no_detections_reported"
+                }
+            ]
+        }
+    ],
+    "passed": 9,
+    "failed": 0
+}

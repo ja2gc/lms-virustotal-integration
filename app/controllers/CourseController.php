@@ -54,9 +54,10 @@ class CourseController extends Controller
             "SELECT a.*, u.full_name AS author_name
              FROM announcements a
              JOIN users u ON a.user_id = u.id
-             WHERE a.course_id = :cid OR a.course_id IS NULL
+             WHERE (a.course_id = :cid OR a.course_id IS NULL)
+               AND (:is_admin = 1 OR a.audience = 'all' OR a.audience = :audience)
              ORDER BY a.created_at DESC LIMIT 5",
-            ['cid' => $id]
+            ['cid' => $id, 'is_admin'=>Auth::isAdmin()?1:0, 'audience'=>Auth::isStudent()?'students':(Auth::isTeacher()?'teachers':'all')]
         );
 
         $isEnrolled = Auth::isStudent() && Auth::isEnrolled($id);
@@ -138,7 +139,7 @@ class CourseController extends Controller
             $this->redirect('course/view/' . $id);
         }
         Database::delete('enrollments', 'course_id = :cid AND student_id = :sid', ['cid' => $id, 'sid' => Auth::id()]);
-        Database::query('UPDATE courses SET enroll_count = GREATEST(enroll_count - 1, 0) WHERE id = :id', ['id' => $id]);
+        Database::query('UPDATE courses SET enroll_count = CASE WHEN enroll_count > 0 THEN enroll_count - 1 ELSE 0 END WHERE id = :id', ['id' => $id]);
         $this->flash('success', 'You have been unenrolled.');
         $this->redirect('course/view/' . $id);
     }
@@ -269,7 +270,7 @@ class CourseController extends Controller
         $total = (int) Database::fetch("SELECT COUNT(*) AS c FROM lessons l JOIN modules m ON l.module_id = m.id WHERE m.course_id = :cid", ['cid' => $courseId])['c'];
         $done  = (int) Database::count('lesson_completions lc JOIN lessons l ON lc.lesson_id = l.id JOIN modules m ON l.module_id = m.id', 'm.course_id = :cid AND lc.student_id = :sid', ['cid' => $courseId, 'sid' => $studentId]);
         $pct = $total > 0 ? round(($done / $total) * 100, 2) : 0;
-        $updates = ['progress' => $pct, 'updated_at' => date('Y-m-d H:i:s')];
+        $updates = ['progress' => $pct];
         if ($pct >= 100) $updates['completed_at'] = date('Y-m-d H:i:s');
         Database::update('enrollments', $updates, 'course_id = :cid AND student_id = :sid', ['cid' => $courseId, 'sid' => $studentId]);
         return $pct;

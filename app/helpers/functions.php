@@ -191,3 +191,47 @@ function renderFlash(array $flashes): string
     }
     return $html;
 }
+
+/** Public advisory labels only; grading and provider classification remain separate. */
+function scanDisplay(array $context): string
+{
+    $state=$context['processingState']??'failed';
+    $labels=['not_applicable'=>'Not applicable','queued'=>'Queued','running'=>'Checking','waiting'=>'Waiting / retrying'];
+    if (isset($labels[$state])) return $labels[$state];
+    if ($state!=='completed') return 'Unresolved';
+    $status=$context['advisoryStatus']??null;
+    return in_array($status,['Flagged','Review Recommended','No Detections Reported','Unresolved'],true)?$status:'Unresolved';
+}
+
+function scanEvidenceLabel(array $context): string
+{
+    return match ($context['evidenceMode']??null) {
+        'fixture'=>'Offline fixture — simulated provider evidence',
+        'provider'=>'Provider analysis',
+        default=>'',
+    };
+}
+
+/** Called only from already-authorized submission views; never calls a provider. */
+function renderSubmissionScan(array $submission,bool $teacher=false): void
+{
+    if (empty($submission['id'])) return;
+    $submissionId=(int)$submission['id']; $history=[]; $file=null;
+    try {
+        $repository=new ScanAttemptRepository(Database::getInstance());
+        $context=$repository->getSubmissionContext($submissionId);
+        if ($context===null) return;
+        if ($context['fileId']!==null) {
+            $file=$repository->getFileContext($context['fileId']);
+            if ($teacher) $history=$repository->getAttemptHistory($context['fileId']);
+        }
+    } catch (Throwable) {
+        $context=['processingState'=>'failed','advisoryStatus'=>'Unresolved','reason'=>'status_unavailable','checkedAt'=>null];
+    }
+    require dirname(__DIR__).'/views/scan/_status.php';
+    static $scriptPrinted=false;
+    if (!$scriptPrinted) {
+        echo '<script defer src="'.e(asset('js/scan-status.js')).'"></script>';
+        $scriptPrinted=true;
+    }
+}

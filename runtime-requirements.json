@@ -9,7 +9,8 @@
     "json",
     "mbstring",
     "fileinfo",
-    "openssl"
+    "openssl",
+    "Phar"
   ],
   "integration_extensions": [
     "curl"
@@ -21,15 +22,16 @@
     "loopback TCP available",
     "writable tmp directory"
   ],
-  "web_command": "php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php",
+  "web_command": "php -d session.save_path=tmp/sessions -d upload_tmp_dir=tmp/uploads -d upload_max_filesize=10M -d post_max_size=12M -S 127.0.0.1:8173 -t . router.local.php",
   "test_command": "php tests/run.php",
   "notes": [
-    "Run from the repository root after creating tmp/sessions.",
+    "Run from the repository root after creating tmp/sessions and tmp/uploads.",
     "No Composer, npm, Node, MySQL or cloud account is needed for the current baseline.",
-    "VirusTotal and its worker are not implemented yet; a future live adapter needs cURL, a trusted CA store and an allowed API key.",
     "Upstream views request Google Fonts/icons; full offline visual fidelity has not been verified.",
-    "Other PHP versions, MySQL and other operating systems have not been runtime-tested."
+    "Other PHP versions, MySQL and other operating systems have not been runtime-tested.",
+    "Live scanning requires cURL, a trusted CA store and a personal VirusTotal key. Fixture mode performs no provider requests."
   ],
   "demo_seed_command": "php bin/seed-demo.php",
-  "optional_javascript_check": "node tests/flashcard-study.test.cjs (Node standard library only; not required to run the LMS)"
+  "optional_javascript_check": "node tests/flashcard-study.test.cjs (Node standard library only; not required to run the LMS)",
+  "worker_command": "php bin/scan-worker.php"
 }

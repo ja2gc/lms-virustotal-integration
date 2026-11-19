@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-19",
+  "owner": "Member 4",
+  "baseRevision": "f2dec3ead6f413160178e051f46f760b5a5d291a",
+  "scope": "Integrated implementation and local verification; publication revision is the commit containing this record.",
+  "checks": {
+    "phpSuite": {
+      "command": "php tests/run.php",
+      "passed": 106,
+      "failed": 0
+    },
+    "phpSyntax": {
+      "files": 174,
+      "failures": 0
+    },
+    "node": [
+      "tests/flashcard-study.test.cjs",
+      "tests/service-worker.test.cjs",
+      "tests/scan-status.test.cjs"
+    ],
+    "reliability": "../reliability/summary.json",
+    "live": "../live/synthetic-check.json",
+    "performance": "../performance/summary.json",
+    "freshInstall": "Actual HTTP installer, repeated migration/seeder, CLI worker, fixture advisory and exact private download passed.",
+    "releaseWorkflows": "Teacher course/module/text lesson/assignment publish; student enrollment/completion; admin users/categories/settings; profile/theme/calendar; role-targeted announcements; grading/feedback and flashcards covered by existing and release checks.",
+    "localMarkdownLinks": {
+      "checked": 98,
+      "errors": 0
+    }
+  },
+  "browser": {
+    "mode": "disposable synthetic local fixture",
+    "observed": [
+      "Student login and existing attachment/advisory",
+      "Student text-only save retains file ID and advisory",
+      "Student private download link uses file ID",
+      "Teacher login and grade review",
+      "Teacher request changes current display to queued",
+      "Prior fixture result/counts stay in history",
+      "Narrow student and 1280px teacher layouts inspected",
+      "Branded LMSTotal three-role pages and text-only brand",
+      "Actual Playwright student replacement upload -> background fixture advisory -> teacher fresh request/history -> grading -> student feedback",
+      "Saved 1280x800 WebM with animated cursor and 20px click indicator; frame decoded and visually inspected"
+    ],
+    "screenshots": [
+      "student-advisory.png",
+      "teacher-rescan.png"
+    ],
+    "limitations": "Not a full manual UAT catalogue or completed live UI run.",
+    "recording": "Ignored local tmp/recordings/lmstotal-final-demo.webm; 36086297 bytes, 1280x800, approximately 6m21s; rehearsal includes setup pauses, not a polished final team recording."
+  },
+  "privacy": {
+    "envContentsToolRead": false,
+    "envIgnored": true,
+    "trackedEnvFiles": [
+      ".env.example"
+    ],
+    "existingDatabaseMigrated": false,
+    "existingUploadsChanged": false,
+    "liveContent": "one harmless synthetic text file only"
+  },
+  "review": {
+    "result": "No blocking runtime findings after scoped independent read-only review",
+    "corrections": [
+      "DOCX bounded ZIP inspection with extensionless keys",
+      "import count after commit",
+      "invalid new upload form state",
+      "contradictory failed advisory display",
+      "persisted fixture provenance",
+      "SQLite GREATEST incompatibility and absent enrollment updated_at column",
+      "Announcement role/audience filters for notifications and course reads",
+      "Strict provider descriptor alias tied to timestamp/SHA-256/item MD5",
+      "Atomic per-revision fresh-analysis identity guard across descriptor/canonical aliases",
+      "Explicit writable ignored PHP upload temporary directory in setup and HTTP fixtures"
+    ]
+  },
+  "cleanup": {
+    "archivedLocally": [
+      "initial startup failure JSON (2)",
+      "superseded screenshots (3)",
+      "superseded internal planning notes (2)"
+    ],
+    "retained": "reproducible tests/fixtures, small sanitized verification results, upstream license/history and accurate AI disclosure"
+  },
+  "remaining": [
+    "Full UAT01-UAT35 and all variants",
+    "Independent member setup and rehearsal",
+    "Missing original T1/T4/register/component/transcript provenance",
+    "Stakeholder acceptance"
+  ],
+  "liveResult": "Completed real provider evidence retrieved for the original synthetic file: Unresolved/inconclusive_engines (60 undetected,14 unsupported). Original in-memory worker observation was pending; later component read is not a continuous live UI/deadline claim."
+}

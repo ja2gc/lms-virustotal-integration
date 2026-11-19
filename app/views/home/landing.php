@@ -8,6 +8,7 @@ $stats = $stats ?? [];
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:,">
 <title><?= e(APP_NAME) ?> · Personalized Learning Platform</title>
 <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -18,7 +19,6 @@ $stats = $stats ?? [];
 <header class="landing-nav">
   <div class="container flex-between">
     <div class="brand">
-      <div class="brand-mark">d</div>
       <div class="brand-text">
         <h1><?= e(APP_NAME) ?></h1>
         <p>by <?= e(APP_TEAM) ?></p>
@@ -36,7 +36,7 @@ $stats = $stats ?? [];
   <div class="container">
     <div class="hero-content">
       <span class="hero-pill"><span class="material-icons">stars</span> Open-source LMS · GPL-3.0</span>
-      <h1>Learning, reimagined.<br><span>by Death Legion Team.</span></h1>
+      <h1>Learning, reimagined.<br><span>by <?= e(APP_TEAM) ?>.</span></h1>
       <p class="hero-sub">A complete, Moodle-like platform for schools and companies — built for educators, students, and administrators. Host it yourself, customize every line, scale to thousands.</p>
       <div class="hero-actions">
         <a href="<?= url('auth/register') ?>" class="btn btn-primary btn-lg">Start learning free <span class="material-icons">arrow_forward</span></a>
@@ -162,7 +162,6 @@ $stats = $stats ?? [];
 <style>
 .landing-nav { padding: 18px 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); z-index: 50; }
 .landing-nav .brand { display: flex; align-items: center; gap: 12px; }
-.landing-nav .brand-mark { width: 38px; height: 38px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }
 .landing-nav .brand-text h1 { font-size: 1.2rem; line-height: 1; }
 .landing-nav .brand-text p { font-size: .72rem; color: var(--text-muted); }
 .landing-nav nav a { color: var(--text); font-weight: 500; }

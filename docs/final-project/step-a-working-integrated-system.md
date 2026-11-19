@@ -1,12 +1,8 @@
 # Step A — Working Integrated System
 
-## Original submission instruction — Part A
+## Overview
 
-> Deliver a running system in which at least TWO (2) systems or services exchange data or capability through middleware, APIs, or enterprise service technologies. Submit source code, a dependency manifest, configuration, and build and run instructions sufficient for the panel to run it without your help.
-
-## Project response
-
-The working local Doodle baseline is verified; the final LMS-to-VirusTotal exchange and worker remain pending. [README setup](../../README.md#run-the-current-lms-on-localhost) is authoritative for actual app/seeder commands and demo credentials. [Runtime manifest](../../runtime-requirements.json) lists tested PHP/extensions. The team repository preserves Doodle history/license.
+The local LMS includes private upload revisions, asynchronous processing, shared quota reservations, advisory/history views and protected downloads. Live-provider verification is recorded separately from fixtures in validation evidence. [README setup](../../README.md#run-the-current-lms-on-localhost) is authoritative for actual app/seeder commands and demo credentials. [Runtime manifest](../../runtime-requirements.json) lists tested PHP/extensions. The team repository preserves Doodle history/license.
 
 ## Release contents
 
@@ -18,11 +14,12 @@ The working local Doodle baseline is verified; the final LMS-to-VirusTotal excha
 
 ## Remaining release work
 
-- [ ] Provide safe example configuration: `VT_API_KEY`, `SCAN_MODE=fixture|live`, `SCAN_PRIVATE_DIR`, `SCAN_MAX_UPLOAD_BYTES`, `SCAN_REQUESTS_PER_MINUTE`, `SCAN_REQUESTS_PER_DAY`. Reuse `DOODLE_DB_TYPE=sqlite`/`DOODLE_ENV`; use process configuration, never committed real credentials. Values/units follow the integration and security contracts.
+- [x] Provide safe example configuration: `VT_API_KEY`, `SCAN_MODE=fixture|live`, `SCAN_PRIVATE_DIR`, `SCAN_MAX_UPLOAD_BYTES`, `SCAN_REQUESTS_PER_MINUTE`, `SCAN_REQUESTS_PER_DAY`. Reuse `DOODLE_DB_TYPE=sqlite`/`DOODLE_ENV`; use process configuration, never committed real credentials. Values/units follow the integration and security contracts.
 - [x] P1a provides explicit `php bin/migrate.php` and session-free `app/scan/bootstrap.php`, verified twice on a disposable installed baseline. The installer/seeder do not apply project scan migrations.
-- [ ] Implement `php bin/scan-worker.php` with `--once`, explicit fixture/live mode and no browser-session/web-migration dependency.
-- [ ] Complete P1b private upload storage/backfill and P4 file-ID links. P5 authorized download HTTP behavior is fixture-verified; integrated attachment delivery remains open. P0b action scope is complete.
-- [ ] Execute full offline/integration checks, limited live synthetic exchange and second-machine reproduction; record final commands/revision/evidence.
+- [x] Implement `php bin/scan-worker.php` with `--once`, explicit fixture/live mode and no browser-session/web-migration dependency.
+- [x] Implement private upload/backfill, file-ID links and connected protected attachment delivery. Automatic processing and teacher-requested fresh analysis pass connected fixture checks. Original local data is preserved; imports require explicit application.
+- [x] Execute local offline/integration checks, actual fresh installation, limited real synthetic exchange and recording rehearsal; record results in validation.
+- [ ] Complete independent second-member/machine reproduction and final team rehearsal.
 
 ## Release gate and rollback
 
@@ -30,12 +27,12 @@ Run focused tests, then the complete task-scoped harness and role/browser workfl
 
 Before a schema release, stop web writes and worker, copy the SQLite DB plus private file tree to a protected local backup, and verify restore in a different temporary target. Do not commit or share the backup. Resume only when migration exits successfully and scoped workflows pass. If migration fails, keep the worker stopped, preserve evidence and restore the matched application/DB/files backup to the disposable demo environment. Never run destructive reset commands against an unverified local path.
 
-The final submission must include measured recovery/restore proof, not just this plan. Technical 4 was not supplied; reconcile it here before release and record any divergence in [architecture](../architecture.md).
+A matched database/private-file restore passes in a disposable target; see submission tests and validation. Independent member setup/rehearsal remains open. Original Technical 4 was not supplied; no provenance is invented.
 
-## Assessment traceability
+## Verification mapping
 
 | ID | Observable acceptance criterion | Final part | Design and required proof |
 | --- | --- | --- | --- |
 | R01 | Panel starts the app and worker from a clean local setup using documented dependencies and configuration | A | `docs/final-project/step-a-working-integrated-system.md`; clean-machine setup record; dependency manifest and example configuration |
 | R02 | LMS exchanges real data with VirusTotal and binds the returned analysis to the submitted file revision | A/B | `integrations.md`; limited live synthetic-file trace; fixture mode separately labeled |
-| R15 | Approved LMS support features remain usable; assignments are the only assessed activity; excluded menus/actions cannot be entered by direct URLs | A/B | `docs/SRS.md`; UI02 and ST04; documented action allowlist |
+| R15 | Approved LMS support features remain usable; assignments are the only assessed activity; unlisted actions cannot be entered by direct URLs | A/B | `docs/SRS.md`; UI02 and ST04; documented action allowlist |

@@ -4,9 +4,9 @@
 
 Extend Doodle with a durable, advisory scanning workflow while preserving submission and grading behavior. Four students share one repository. The agreed demo runs locally. PHP views, vanilla CSS/JavaScript, PDO and the existing auth model remain the baseline. Use PHP 8.3 and SQLite for the assessed local target; MySQL support is not claimed until separately exercised.
 
-This document describes the target, not current implementation. See [baseline audit](final-project/step-c-performance-reliability-security-validation.md#baseline-verification) for inspected behavior and [scope](SRS.md) for requirements.
+This document describes the architecture; the team record distinguishes implemented components from remaining acceptance gates. See [baseline audit](final-project/step-c-performance-reliability-security-validation.md#baseline-verification) for inspected behavior and [scope](SRS.md) for requirements.
 
-The [approved feature list](SRS.md#cleanup-action-matrix) is authoritative for pages/routes: retain supporting LMS courses/materials, calendar, announcements, notifications and dashboards, but assessments are assignments only. No quiz workflow is part of this project. Keep assignment grading and student feedback.
+The [supported action matrix](SRS.md#cleanup-action-matrix) defines the public pages/routes. Assignment grading and student feedback are separate from file security advisories.
 
 ## Approaches considered
 
@@ -81,7 +81,7 @@ Before a scan-start POST, persist an in-flight marker. If the worker crashes wit
 | ID | Decision / change | Reason and status |
 | --- | --- | --- |
 | D01 | Doodle; one app with worker; localhost | Coordinator selections. Deployment and schema complexity fit a four-person course project. |
-| D02 | Database-backed attempts replace the earlier uncommitted Redis/queue and sweeper proposals | Durable due-work query and expiring leases cover the initial recovery need with SQLite. Target design, not implemented. |
+| D02 | Database-backed attempts and expiring leases | Implemented durable due-work queries and short SQLite transactions support restart recovery. |
 | D03 | Keep Technical 3 advisory meanings and separate job state from verdict | Earlier Technical 2 grouped suspicious findings with malicious and mixed processing labels with conclusions. |
 | D04 | Preserve the narrow Technical 3 result interface; host owns start/upload/retry/persistence | Reuse without coupling the component to LMS sessions or SQL. PHP source and original transcript still need reconciliation. |
 | D05 | Hash lookup never masquerades as a new analysis | Known hash uses explicit re-analysis; absent hash uploads the synthetic file. Always persist the returned analysis ID. Verify account capability in a limited live smoke check. |
@@ -90,8 +90,14 @@ Before a scan-start POST, persist an in-flight marker. If the worker crashes wit
 | D08 | No guaranteed 100 submissions/day or five-minute scan target | Request cost varies with polls, identity checks, failures and provider quota. Measure rather than reuse earlier estimates. |
 | D09 | Conservative Technical 3 no-detection policy retained initially | Unsupported/failed engines yield Unresolved, potentially often. Measure the effect and record any future policy revision before changing semantics. |
 | D10 | Cloud and containers are evaluated, not implementation requirements | Coordinator selected localhost. GitHub stores source; GitHub Pages cannot execute PHP. |
-| D11 | Retain a coherent teaching/submission/review workflow while excluding quizzes and unrelated modules | Coordinator approved assignment-only scope after reviewing Doodle extras. Source exclusions are planned tasks; no module has yet been deleted. |
+| D11 | Assignment-based teaching, submission and review | The supported public action map is enforced before controller loading. |
 | D12 | Allocate work by module/file ownership and ordered handoffs | No contribution-size target. Baseline/shared contracts merge first; provider/worker, data, UI and HTTP/access use agreed boundaries. |
-| D13 | Repair upstream startup, renderer and course/grade URLs; add a loopback router and writable local session directory | Implemented for localhost access and the written-submission-to-feedback baseline. No framework/runtime upgrade. Public uploads, explicit action exclusions and scanning remain pending; see baseline evidence. |
+| D13 | Repair upstream startup, renderer and course/grade URLs; add a loopback router and writable local session directory | Implemented for localhost access and the written-submission-to-feedback baseline. No framework/runtime upgrade. Private file delivery and worker processing are verified separately in the current validation record. |
 
 Builders may choose internal SQL/query organization and test harness details consistent with these contracts. Changes to public methods, state meanings, file access, external disclosure, provider budget or revision ownership require updating the shared design before dependent work is merged.
+
+## Implementation reconciliation
+
+The built system uses the selected single PHP application, SQLite revision/attempt repository, private storage and CLI worker. `ScanSubmissionService` commits uploads before asynchronous work; `ScanWorker` routes both origins through the shared adapter/result processor. Status polling and private downloads use authenticated existing routes. No queue broker, frontend framework, microservice, container or additional provider was introduced.
+
+The reserved fixture analysis-handle namespace supplies durable demo provenance without a schema rewrite. Conservative engine classification and the explicit migration/version-1 schema remain unchanged. Existing private bytes are retained after metadata deletion for reviewed operator cleanup. Read-only reviews and connected fixture checks verify the implemented boundaries; live, performance and remaining human acceptance are separately recorded in validation.

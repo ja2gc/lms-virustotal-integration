@@ -24,7 +24,7 @@ $s = $settings;
     <div id="general" class="tab-pane">
       <h3 style="margin-bottom: 14px;">Site branding</h3>
       <div class="form-grid">
-        <div class="form-group"><label>Site name</label><input type="text" name="site_name" value="<?= e($s['site_name'] ?? 'doodle') ?>"></div>
+        <div class="form-group"><label>Site name</label><input type="text" name="site_name" value="<?= e($s['site_name'] ?? APP_NAME) ?>"></div>
         <div class="form-group"><label>Site tagline</label><input type="text" name="site_tagline" value="<?= e($s['site_tagline'] ?? '') ?>"></div>
       </div>
       <div class="form-group"><label>Site description (for SEO / meta)</label><textarea name="site_description" rows="2"><?= e($s['site_description'] ?? '') ?></textarea></div>
@@ -72,7 +72,7 @@ $s = $settings;
       </div>
       <div class="form-grid">
         <div class="form-group"><label>From email</label><input type="email" name="smtp_from_email" value="<?= e($s['smtp_from_email'] ?? '') ?>"></div>
-        <div class="form-group"><label>From name</label><input type="text" name="smtp_from_name" value="<?= e($s['smtp_from_name'] ?? 'doodle') ?>"></div>
+        <div class="form-group"><label>From name</label><input type="text" name="smtp_from_name" value="<?= e($s['smtp_from_name'] ?? APP_NAME) ?>"></div>
       </div>
     </div>
 
@@ -87,7 +87,7 @@ $s = $settings;
     <hr style="border:0;border-top:1px solid var(--border);margin:24px 0;">
     <h3 style="margin-bottom: 14px;">System information</h3>
     <div style="font-size:.85rem;line-height:1.9;color:var(--text-muted);">
-      <div class="flex-between"><span>doodle version</span><strong><?= APP_VERSION ?></strong></div>
+      <div class="flex-between"><span><?= e(APP_NAME) ?> version</span><strong><?= APP_VERSION ?></strong></div>
       <div class="flex-between"><span>PHP version</span><strong><?= PHP_VERSION ?></strong></div>
       <div class="flex-between"><span>Database</span><strong><?= e(strtoupper(DB_TYPE)) ?></strong></div>
       <div class="flex-between"><span>License</span><strong>GPL-3.0</strong></div>

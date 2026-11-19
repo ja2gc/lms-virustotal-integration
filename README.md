@@ -1,140 +1,88 @@
-# LMS with VirusTotal Integration
+# LMSTotal
 
-An assignment-focused LMS extending [Doodle](https://github.com/deathlegionteamlk/doodle). Technical 3's original title is *Secure File Submission System with VirusTotal Integration*. Team repository: [ja2gc/lms-virustotal-integration](https://github.com/ja2gc/lms-virustotal-integration).
+By group MuscleMan.
 
-## Start here
+An assignment-focused LMS extending [Doodle](https://github.com/deathlegionteamlk/doodle). Students submit written work and private attachments. A background worker requests VirusTotal analysis; teachers review advisories, request fresh scans and provide grades/feedback.
 
-Every member reads the SRS, their current ownership row and task sections in the team plan, and the demo/UAT targets. Member 1 owns P1b upload/data delivery; Member 2 P2/P3 scanning; Member 3 P4 UI; Member 4 P1a shared persistence and P5 HTTP access. P1a and P1b have separate completion gates. Agents start with AGENTS.md and its workflow rules. Use the map below for task-specific context.
-
-## Project documents
-
-| Working guide | Purpose / readers |
-| --- | --- |
-| [SRS](docs/SRS.md) | Final behavior, FR/NFR IDs, roles and exact keep/exclude matrix; everyone |
-| [Team plan](docs/team-plan.md) | Member ownership, dependencies, P0-P7 tasks, prompting guidance and completion; everyone reads their sections |
-| [Demo/manual UAT](docs/demo-manual.md) | Full manual acceptance and shorter panel sequence; everyone |
-| [Architecture](docs/architecture.md) | Component/context/sequence diagrams, failure design and decision/divergence log |
-| [Data model](docs/data-model.md) | ERD, identities, lifecycle, concurrency and migration constraints; data and consumers |
-| [Integration contracts](docs/integrations.md) | Point register, component/repository/status semantics, scheduling and versioning; producers/consumers |
-| [Engineering/security](docs/engineering.md) | Existing implementation patterns, UI conventions, test harness and boundary controls |
-
-Architecture, persistence and integration contracts stay separate because they have different owners. They link to shared rules rather than redefine them. Original Submission 1 Parts A-F are separated below from project plans/evidence. AI assistance is allowed with disclosure in Step F; the quoted requirements remain distinct from our responses.
-
-| Submission 1 | File |
-| --- | --- |
-| Step A — Working Integrated System | [Part A and delivery plan](docs/final-project/step-a-working-integrated-system.md) |
-| Step B — Integration Documentation | [Part B and artifact/source reconciliation](docs/final-project/step-b-integration-documentation.md) |
-| Step C — Performance, Reliability and Security Validation | [Part C, test catalogue/experiments and evidence](docs/final-project/step-c-performance-reliability-security-validation.md) |
-| Step D — Trends Evaluation | [Part D and engineering decisions](docs/final-project/step-d-trends-evaluation.md) |
-| Step E — Case-Based Lessons | [Part E and traceable design effects](docs/final-project/step-e-case-based-lessons.md) |
-| Step F — Risk Closure and AI-Use Log | [Part F, RMMM and disclosure](docs/final-project/step-f-risk-closure-and-ai-use-log.md) |
+Advisories are **Flagged**, **Review Recommended**, **No Detections Reported**, or **Unresolved**. They do not guarantee a file is safe. Use fictional accounts and synthetic files for this local demonstration.
 
 ## Run the current LMS on localhost
 
-Tested on Windows with **PHP 8.3.30 and SQLite**. You do not need hosting, MySQL, Composer or Node for this baseline. Install PHP with the extensions listed in [the runtime manifest](runtime-requirements.json). If `php` is not recognized, add your PHP folder to PATH; Laragon users can use its terminal or the full path to `php.exe`.
-
-To contribute without collaborator access, first click **Fork** on the team repository. In PowerShell, replace `YOUR-GITHUB-USERNAME` below with your own username, clone your fork and set the team remote. For a panel/read-only demo, clone the team URL instead and omit the remote-add line.
+Requirements: Git, PHP 8.3 with extensions in [runtime-requirements.json](runtime-requirements.json), and SQLite. Node.js is optional for JavaScript checks and browser recording.
 
 ```powershell
-git clone https://github.com/YOUR-GITHUB-USERNAME/lms-virustotal-integration.git
+git clone https://github.com/ja2gc/lms-virustotal-integration.git
 cd lms-virustotal-integration
-git remote add upstream https://github.com/ja2gc/lms-virustotal-integration.git
-php -v
-php -m
-New-Item -ItemType Directory -Force tmp/sessions | Out-Null
-php -d session.save_path=tmp/sessions -S 127.0.0.1:8173 -t . router.local.php
+New-Item -ItemType Directory -Force tmp/sessions, tmp/uploads | Out-Null
+php -d session.save_path=tmp/sessions -d upload_tmp_dir=tmp/uploads -d upload_max_filesize=10M -d post_max_size=12M -S 127.0.0.1:8173 -t . router.local.php
 ```
 
-Keep that terminal running and open **[http://127.0.0.1:8173](http://127.0.0.1:8173)**. The first visit opens the installer: choose your own local administrator account/password, install, then sign in. SQLite tables and initial settings are created automatically. No VirusTotal key is needed to try the existing LMS.
+Open [localhost](http://127.0.0.1:8173), complete the installer once, then use another terminal in the project folder:
+
+```powershell
+php bin/migrate.php
+php bin/seed-demo.php
+php bin/scan-worker.php
+```
+
+Keep the server and worker running. Restart with the same commands; do not delete the database or reinstall. Existing clones can use `git pull --ff-only` after preserving local changes. Never replace a folder containing local work.
 
 ### Fictional localhost demo accounts
-
-After installation, in another terminal at the project root run:
-
-```powershell
-php bin/seed-demo.php
-```
 
 | Role | Username | Local demo password |
 | --- | --- | --- |
 | Administrator | `panel_admin` | `DemoOnly!2026` |
-| Teacher A | `panel_teacher` | `DemoOnly!2026` |
-| Student A | `panel_student` | `DemoOnly!2026` |
-| Teacher B / Student B (permission checks) | `panel_teacher_b` / `panel_student_b` | `DemoOnly!2026` |
+| Teacher | `panel_teacher` | `DemoOnly!2026` |
+| Student | `panel_student` | `DemoOnly!2026` |
+| Other course teacher/student | `panel_teacher_b` / `panel_student_b` | `DemoOnly!2026` |
 
-These are deliberately public **fictional localhost credentials**, not provider keys or production passwords. The offline seeder creates two courses, enrollments, one text lesson, assignments and a two-card manual deck. Run it twice safely: existing/manual records and reviews are preserved. If a demo identity's password/role was changed or its name collides, seeding stops instead of resetting it. The installer account you chose remains separate. Keep the server bound to loopback.
-
-Already cloned? Reuse that folder and follow the [fork synchronization rules](.agents/rules/workflow.md#fork-synchronization) to get the team main without losing your work; do not clone over it or add duplicate remotes blindly. Then create `tmp/sessions` and run the documented web-server command near the top. Seeding is optional. Stop the server with **Ctrl+C**; restart with the same command. Your local users/courses remain in the ignored SQLite database. Never delete `.installed` or the database just to restart. Use `127.0.0.1` consistently rather than switching hosts during a session.
-
-In another terminal, run `php tests/run.php`. Optional developer UI logic check: `node tests/flashcard-study.test.cjs`. Step A lists remaining release gates.
-
-
-## Setup troubleshooting
-
-- **PHP not recognized:** use a terminal whose PATH contains PHP, or replace `php` with `& 'C:\path\to\php.exe'` in PowerShell. Do not copy the original upstream quick-start over this command.
-- **Could not find driver:** enable `pdo_sqlite` in the PHP configuration actually used by the terminal, then restart PHP.
-- **Session permission error or repeated sign-in:** create `tmp/sessions`, start from the repository root with the documented `-d session.save_path` argument, and keep the host/port consistent. The machine's original default session folder was not writable during the check.
-- **Port already in use:** stop your earlier server with Ctrl+C or select an unused loopback port and open that exact URL. Do not terminate unrelated processes.
-- **Private paths or arbitrary PHP return 404:** expected. Always start with `router.local.php`; a plain `php -S` command ignores `.htaccess` and can expose source files.
-- **Stopped/restarted server:** reuse the same DB and `.installed` flag. Do not rerun installation/reset steps on an existing member's data. A disposable clean install belongs in a separate clone/folder.
-
-## Current readiness
-
-Installer, three role logins/navigation, course/enrollment, written submissions, grading/feedback, manual flashcards and repeatable fictional seeding have executed checks. [Step C](docs/final-project/step-c-performance-reliability-security-validation.md#baseline-verification) links actual evidence and limits.
-
-P0b feature/menu/action cleanup, P1a shared persistence and the P2 result adapter are complete within their recorded scope. P2 passes offline provider fixtures; P3 worker/two consumers, P1b private upload delivery, P4 scan UI, P5 connected HTTP acceptance and P6/P7 integrated acceptance remain open in the [team plan](docs/team-plan.md#completion-record). The localhost router denies old public assignment-upload URLs. P1b legacy import and P4 file-ID links are required before real attachment delivery is accepted. Use synthetic files and loopback only. A running baseline is not the final integrated release.
+These public credentials are for fictional localhost data only. Seeding is repeatable and does not reset changed accounts.
 
 ## VirusTotal API key on your own computer
 
-Live VirusTotal requests require a personal API key, including when the LMS runs on localhost. Each member who needs live testing signs in to their own [VirusTotal account](https://www.virustotal.com/gui/my-apikey), opens **API key**, and keeps that value private. Members using offline fixtures do not need a key. Follow the account's permitted usage and quota; multiple accounts must not be used to bypass limits.
-
-From the project root, create your local configuration once:
+Each member obtains their own key from [VirusTotal's API key page](https://www.virustotal.com/gui/my-apikey). Create local configuration once:
 
 ```powershell
-if (-not (Test-Path -LiteralPath .env)) { Copy-Item -LiteralPath .env.example -Destination .env }
+if (-not (Test-Path -LiteralPath .env)) { Copy-Item .env.example .env }
 notepad .env
 ```
 
-In your own editor, set `VT_API_KEY=your_actual_key` and save. Keep `SCAN_MODE=fixture` during offline development; set `SCAN_MODE=live` when running the completed live adapter/worker. Do not paste your key into chat, screenshots, source code or a terminal command. Restart the PHP server/worker after changing local settings. Member 2's result adapter is offline-verified; the P3 worker and live integration remain unfinished. Configuring a key alone does not start scanning.
+Enter the key privately as `VT_API_KEY=...`. Keep `SCAN_MODE=fixture` for offline demonstrations; use `SCAN_MODE=live` for permitted online tests. Restart PHP and the worker after changes. Never share/commit the key or show `.env` in a recording. Only the empty `.env.example` is tracked; `.env` is ignored. Existing process settings take priority.
 
-PHP's shared configuration loads the root `.env` for web and CLI entry points. Use simple `NAME=value` lines, `#` comment lines, and **double quotes** around values containing spaces. This is a small INI-style configuration file: no shell commands, `export` or variable interpolation. Existing process environment settings take priority. The session-free scan class bootstrap remains side-effect free; a worker entry point loads `config/config.php` before constructing its services.
+Uploads allow PDF, TXT and DOCX up to 10 MiB. Private bytes default to `private/submissions`; `SCAN_PRIVATE_DIR` can point outside the project. Inspect legacy attachments with `php bin/import-legacy-submissions.php`; add `--apply` only after a matched database/files backup. Originals are preserved and old public URLs are blocked.
 
-`.env` and `.env.*` variants are ignored by Git, denied over localhost HTTP and excluded from release packages. Only the root `.env.example`, containing an empty key, is committed. Check before pushing:
+The worker supports `--once`, offline `--fixture-case=malicious` (also suspicious, inconclusive, pending, timeout, auth, quota, malformed, no-detections), and `--resume-provider` after correcting a provider pause. Offline results are explicitly labeled. Live analysis is asynchronous and subject to quotas. Browser refreshes never start provider requests.
 
-```powershell
-git check-ignore .env
-git ls-files -- '.env' '.env.*' '**/.env' '**/.env.*'
-```
-
-The first command should print `.env`. The tracked-file list should contain only `.env.example`. Never force-add your `.env`; `.gitignore` cannot protect a file someone explicitly forces into Git. GitHub Actions secrets are not required for localhost and are not automatically available on your computer. Keep ordinary tests offline.
-
-## Shared scan foundation
-
-After installing the baseline, apply the repeatable SQLite scan schema explicitly:
-
-```powershell
-php bin/migrate.php
-```
-
-This creates shared revision/attempt tables. It does not import old attachments, implement upload storage or start a worker. Member 1 follows the P1b storage/transaction contract in the team plan and integrations guide; Members 2–4 consume the same repository. Tests use disposable fictional databases and private files:
+## Checks
 
 ```powershell
 php tests/run.php
-php tests/run.php --group=persistence
-php tests/run.php --group=access
-php tests/run.php --group=status
+node tests/flashcard-study.test.cjs
+node tests/service-worker.test.cjs
+node tests/scan-status.test.cjs
 ```
 
-The coordinator's existing local database has not been migrated automatically. Current HTTP endpoints require the scan migration. Private byte storage defaults to `private/submissions`, or an external directory set through `SCAN_PRIVATE_DIR`; never use a public directory.
+Tests use disposable databases/private files. [Validation](docs/final-project/step-c-performance-reliability-security-validation.md) records measured results and remaining acceptance gates. Small sanitized `evidence/` records support validation; generated diagnostics, recordings, databases and private files belong in ignored local folders.
 
-## Collaboration and schedule
+## Project documents
 
-Claim a numbered stream in the group chat. Members fork the team repository and clone their fork; collaborator access is not required. Push task branches to your fork and open PRs targeting this team's `main`. Follow the [fork synchronization rules](.agents/rules/workflow.md#fork-synchronization) before work and PR updates. Member 4 reviews producer/consumer contracts and overlaps before integration. Update task checks and completion in the team plan; Ready for review becomes Done only after reviewed/merged verification. Preserve others' changes, Doodle history/license and required AI disclosure.
+| Guide | Purpose |
+| --- | --- |
+| [Requirements](docs/SRS.md) | Scope, behavior and acceptance criteria |
+| [Architecture](docs/architecture.md), [data model](docs/data-model.md), [integration contracts](docs/integrations.md) | Components, persistence and provider/HTTP semantics |
+| [Engineering](docs/engineering.md), [team record](docs/team-plan.md), [demo/UAT guide](docs/demo-manual.md) | Development, ownership, verification and demonstration |
+| [A — System delivery](docs/final-project/step-a-working-integrated-system.md) | Local setup, configuration and recovery |
+| [B — Integration design](docs/final-project/step-b-integration-documentation.md) | Boundaries and reusable component |
+| [C — Validation](docs/final-project/step-c-performance-reliability-security-validation.md) | Performance, reliability and security |
+| [D — Engineering decisions](docs/final-project/step-d-trends-evaluation.md) | Architecture trade-offs |
+| [E — Case lessons](docs/final-project/step-e-case-based-lessons.md) | Traceable lessons applied to the system |
+| [F — Risks and review](docs/final-project/step-f-risk-closure-and-ai-use-log.md) | Risk outcomes and AI-use disclosure |
 
-Finish target: November 20, 2026. Working presentation/submission assumption: November 21, 2026; confirm against the class notice because the original correction still contained October 21 for the final date. Reserve rehearsal/evidence time before the panel.
+## Troubleshooting
 
-## Source locations and provenance
+- PHP missing: add its folder to PATH. SQLite errors: enable `pdo_sqlite`. Live transport needs cURL and a trusted CA store.
+- Session/upload temporary-file errors: create `tmp/sessions` and `tmp/uploads` and use the documented command. Use `127.0.0.1` consistently.
+- Upload errors: use the documented PHP limits and writable private storage; run the scan migration explicitly.
+- Port busy: stop your earlier server or select another loopback port. Always use `router.local.php`; PHP's built-in server does not enforce `.htaccess`.
 
-`app/` holds PHP MVC code; `config/`, `database/` and `public/` hold configuration/schema/assets. `router.local.php` is the loopback router; `tests/` and `evidence/` hold checks/output. `bin/seed-demo.php` and `bin/migrate.php` exist; the scan worker remains planned. The runtime manifest is runtime-requirements.json.
-
-Doodle is by Death Legion Team under the original [license](LICENSE); history and source notices remain. Inspected upstream revision: `6e5365ed49199bfceec61f9b3ba41d83a94ccb3d`. [Original upstream source/README](https://github.com/deathlegionteamlk/doodle/tree/6e5365ed49199bfceec61f9b3ba41d83a94ccb3d) is provenance, not this project's feature list/runbook.
+Doodle is by Death Legion Team under the original [GPL license](LICENSE). Original notices/history remain. This project targets local demonstration rather than production deployment.

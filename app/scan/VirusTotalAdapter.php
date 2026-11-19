@@ -64,7 +64,14 @@ final class VirusTotalAdapter implements FileScanProvider
         $data=json_decode($response['body']??'',true);
         $analysis=$data['data']??null;
         if (!is_array($analysis) || ($analysis['type']??null)!=='analysis' || !is_string($analysis['id']??null)) return $this->result('Unresolved','malformed_response');
-        if ($analysis['id']!==$analysisId) return $this->result('Unresolved','analysis_mismatch');
+        $descriptorMd5=null;
+        if ($analysis['id']!==$analysisId) {
+            $decoded=base64_decode($analysisId,true);
+            if ($decoded===false || base64_encode($decoded)!==$analysisId
+                || !preg_match('/\A([a-f0-9]{32}):([1-9][0-9]{0,11})\z/',$decoded,$descriptor)
+                || $analysis['id']!=='f-'.strtolower($expectedSha256).'-'.$descriptor[2]) return $this->result('Unresolved','analysis_mismatch');
+            $descriptorMd5=$descriptor[1];
+        }
         $attributes=$analysis['attributes']??null;
         $state=is_array($attributes)?($attributes['status']??null):null;
         if ($state==='queued' || $state==='in-progress') return $this->result('Unresolved','analysis_pending',true);
@@ -93,6 +100,7 @@ final class VirusTotalAdapter implements FileScanProvider
         $itemId=$item['id']??null;
         if (!is_string($itemId) || !preg_match('/\A[0-9a-fA-F]{64}\z/',$itemId)) return $this->result('Unresolved','identity_unavailable');
         if (strtolower($sha)!==strtolower($expectedSha256) || strtolower($itemId)!==strtolower($expectedSha256)) return $this->result('Unresolved','file_mismatch');
+        if ($descriptorMd5!==null && ($item['attributes']['md5']??null)!==$descriptorMd5) return $this->result('Unresolved','analysis_mismatch');
         if ($counts['malicious']>0) $result=$this->result('Flagged','malicious_detected');
         elseif ($counts['suspicious']>0) $result=$this->result('Review Recommended','suspicious_detected');
         elseif (($counts['harmless']>0 || $counts['undetected']>0) && $counts['timeout']===0 && $counts['confirmed-timeout']===0 && $counts['failure']===0 && $counts['type-unsupported']===0) $result=$this->result('No Detections Reported','no_detections_reported');

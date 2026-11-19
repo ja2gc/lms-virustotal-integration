@@ -242,19 +242,25 @@ class AdminController extends Controller
             $body    = trim($this->input('body', ''));
             $audience= $this->input('audience', 'all');
             $courseId = (int) $this->input('course_id', 0) ?: null;
-            if (empty($title) || empty($body)) {
+            if (!in_array($audience, ['all','students','teachers'], true)) {
+                $this->flash('error', 'Choose a valid announcement audience.');
+            } elseif (empty($title) || empty($body)) {
                 $this->flash('error', 'Title and body are required.');
             } else {
                 $id = Database::insert('announcements', [
                     'course_id' => $courseId, 'user_id' => Auth::id(),
                     'title' => $title, 'body' => $body, 'audience' => $audience,
                 ]);
-                // Notify all users (or those in the course)
-                if ($courseId) {
-                    $users = Database::fetchAll("SELECT student_id AS id FROM enrollments WHERE course_id = :cid AND status = 'active'", ['cid' => $courseId]);
-                } else {
-                    $users = Database::fetchAll("SELECT id FROM users WHERE status = 'active'");
+                $conditions = ["u.status = 'active'"]; $params = [];
+                if ($audience !== 'all') {
+                    $conditions[] = 'u.role = :audience_role';
+                    $params['audience_role'] = $audience === 'students' ? 'student' : 'teacher';
                 }
+                if ($courseId) {
+                    $conditions[] = '(u.id = (SELECT teacher_id FROM courses WHERE id = :teacher_course) OR EXISTS (SELECT 1 FROM enrollments e WHERE e.student_id = u.id AND e.course_id = :student_course AND e.status = :enrollment_status))';
+                    $params += ['teacher_course'=>$courseId,'student_course'=>$courseId,'enrollment_status'=>'active'];
+                }
+                $users = Database::fetchAll('SELECT u.id FROM users u WHERE '.implode(' AND ', $conditions), $params);
                 foreach ($users as $u) {
                     Database::insert('notifications', [
                         'user_id' => $u['id'], 'title' => $title, 'body' => truncate($body, 200),

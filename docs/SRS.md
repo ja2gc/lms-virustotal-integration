@@ -2,13 +2,13 @@
 
 **Project:** LMS with VirusTotal Integration. Technical 3's original title is *Secure File Submission System with VirusTotal Integration*.
 
-**Purpose:** define what the final system must do and the evidence needed to accept it. All members and agents must read this document before planning their part. It consolidates the approved requirements; it does not add quizzes, providers, cloud deployment or other new scope.
+**Purpose:** define what the final system must do and the evidence needed to accept it. All members and agents must read this document before planning their part. It defines the approved assignment-based LMS and its supporting features.
 
-**Status:** target requirements, not implemented or verified behavior. Existing Doodle features must also be tested; upstream source presence alone is not acceptance. The [baseline audit](final-project/step-c-performance-reliability-security-validation.md#baseline-verification) records the checks actually executed.
+**Status:** requirements baseline. The [team record](team-plan.md) and [validation guide](final-project/step-c-performance-reliability-security-validation.md) distinguish implemented behavior, executed checks and remaining acceptance.
 
 ## Authority
 
-This file owns functional/nonfunctional requirements and the cleanup action matrix. Use [the root document map](../README.md#project-documents) to find design, implementation, verification and submission artifacts. Scope/contract changes require coordinator approval and corresponding checks; source/evidence establish current behavior.
+This file owns functional/nonfunctional requirements and the supported action matrix. Use [the root document map](../README.md#project-documents) to find design, implementation, verification and submission artifacts. Scope/contract changes require coordinator approval and corresponding checks; source/evidence establish current behavior.
 
 ## Terms and requirement levels
 
@@ -34,11 +34,11 @@ Existing Doodle features are reused, not claimed as group-authored work. The gro
 - Protected attachment downloads and a local installation/demo another group member can reproduce.
 - The final assessment's documentation, measurements, risk closure and AI-use disclosure.
 
-No additional external API is committed to by the supplied Technical 2 and Technical 3. Internal UI routes, SQL and queue operations are integration points, not extra external providers. Doodle's optional OAuth, email, push and AI-study features are outside the assessed workflow; do not configure them merely because upstream includes them.
+VirusTotal is the external provider. Internal UI routes, SQL and queue operations are integration points within the application.
 
-## Out of scope
+## Deployment boundary
 
-Quizzes (creation, taking and auto-grading) and the excluded modules listed in [approved features](SRS.md#cleanup-action-matrix); custom malware engine; AI model training; cloud deployment; mobile application; redesign of the LMS; all upstream feature repairs; live malware testing; production use with real student work. Assignment grading/feedback remain required. The supplied six AI-project phases can guide problem/data/evaluation discipline, but do not introduce a model-development requirement.
+The supported target is a local demonstration using fictional accounts and synthetic files. Production deployment, confidential coursework and real malware testing are outside this target.
 
 ## Actors and permission boundaries
 
@@ -98,9 +98,9 @@ Each row states final observable behavior and its acceptance check. Task P0 is s
 
 | ID | Requirement and acceptance criterion | Change / tasks | Verification |
 | --- | --- | --- | --- |
-| FR25 | The assessed interface shall retain the approved supporting LMS features and offer assignments as its only assessment workflow. Quiz creation/taking/auto-grading and listed excluded modules are absent from navigation and denied through direct actions, including quiz actions on retained controllers. | Strengthen; P0b/P4/P5 | UI02, ST04; DM01-DM03/DM10 |
+| FR25 | The assessed interface shall retain the approved supporting LMS features and offer assignments as its only assessment workflow. Navigation and direct actions follow the supported action allowlist. | Strengthen; P0b/P4/P5 | UI02, ST04; DM01-DM03/DM10 |
 | FR26 | A local worker/test configuration shall support deterministic harmless provider fixtures for development/failure demonstrations, with explicit distinction from real provider evidence. The final artifact must also include proof of real LMS-to-VirusTotal exchange. | New; P2/P3/P6 | CT01-CT04, FT01-FT03, LIVE01; DM05/DM09/DM11-DM12 |
-| FR27 | Authenticated users shall create manual question/answer decks, study permitted own/public/course decks, and persist recall ratings/next-review dates. Private decks are denied to unrelated users; course association requires course access. Deletion uses an authorized CSRF POST. Failed review requests do not advance visible progress. Generated decks remain excluded. | Retain/repair; P0/P4/P5 | FlashcardsTest.php, flashcard-study.test.cjs; UAT35a-e; DM13 |
+| FR27 | Authenticated users shall create manual question/answer decks, study permitted own/public/course decks, and persist recall ratings/next-review dates. Private decks are denied to unrelated users; course association requires course access. Deletion uses an authorized CSRF POST. Failed review requests do not advance visible progress.  | Retain/repair; P0/P4/P5 | FlashcardsTest.php, flashcard-study.test.cjs; UAT35a-e; DM13 |
 
 ## Nonfunctional requirements
 
@@ -122,7 +122,7 @@ Each row states final observable behavior and its acceptance check. Task P0 is s
 ### Targets and business rules not to invent
 
 - The proposed local submission latency target is p95 <=2 seconds at 10 concurrent clients, excluding upload transfer, using the controlled fixture experiment in [Step C](final-project/step-c-performance-reliability-security-validation.md). It is not an achieved result or a provider completion guarantee; report actual measurements and agree any revision explicitly.
-- File allowlist/size, request pacing, retry/poll/deadline defaults and test workload settings retain their proposed status in [engineering](engineering.md), [integrations](integrations.md) and [Step C](final-project/step-c-performance-reliability-security-validation.md) until validated in the common contract gate. An agent cannot silently substitute its own values.
+- Implemented file limits, request pacing and retry/poll/deadline defaults are published in [engineering](engineering.md) and [integrations](integrations.md); measured workloads and limits are recorded in [Step C](final-project/step-c-performance-reliability-security-validation.md). Changes require corresponding contract and verification updates.
 - Preserve inspected existing assignment rules for deadlines, resubmission eligibility, score representation and enrollment/course visibility. If behavior is unclear or broken, record and resolve the specific rule with the coordinator before changing it; do not add a new late-submission, grading or sharing policy on assumption.
 - PHP 8.3.30 is the tested baseline runtime. No upgrade, cloud runtime, new framework, malware engine or ML training pipeline is authorized by this SRS.
 
@@ -134,14 +134,17 @@ At release, record each FR/NFR's implemented source, executed test/evidence refe
 
 The full manual acceptance catalogue is UAT01-UAT35 (with separately recorded named variants) in [demo-manual.md](demo-manual.md). It covers retained LMS features as well as scanning and links each case to FR/NFR IDs. Its actual-result/defect log is a separate run artifact under `evidence/uat/` when executed. DM01-DM13 are the shorter presenter sequence referencing those cases. Manual acceptance does not replace the automated/measurement evidence required by the validation guide.
 
-## Cleanup action matrix
+<a id="cleanup-action-matrix"></a>
 
-| Treatment | Controllers/actions and visible entry points |
+## Supported action matrix
+
+| Area | Public actions |
 | --- | --- |
-| Keep | Home, Auth login/logout/profile/theme; Admin users/roles/courses/categories/announcements/basic settings; Teacher courses/modules/materials/assignments/assignment grading; Student learning/submission/assignment grades; Course, Catalog, Assignment, Calendar, Notifications; manual Flashcard index/create/view/study/review/delete |
-| Deny and remove links/panels | Quiz; Teacher quizzes/createQuiz/quiz/addQuestion/deleteQuestion; AI; Gamification; Message; Forum; Certificate; Poll; LearningPath; Whiteboard; Wiki; Group; Code; Analytics; Review; generic Api; OAuth/Push configuration |
-| Deny within retained controller | Flashcard::generateFromCourse; keep its manual actions. Remove generated-deck promotions and AI links from retained screens. |
-| Cover aliases too | flashcard/flashcards, message/messages, certificate/certificates, learningpath/learning_paths and all canonical controller names. An alternative spelling must not bypass the final action map. |
-| Preserve shared internals | Existing schema history, enrollment/grade/notification helpers, and any still-called Gamification helper. The combined WikiGroupPushBackup file also contains Backup; do not delete the file wholesale. Existing setup/recovery utilities not listed for exclusion need an explicit decision before removal. |
+| Accounts | Sign in, register, sign out, profile and theme |
+| Administration | Users/roles, courses, categories, announcements, basic settings and backups |
+| Teaching | Course/module/material authoring, assignments, submission review and grading |
+| Learning | Catalog, enrollment, lessons/completion, submissions and assignment feedback |
+| Supporting tools | Assignment calendar, in-app notifications and manual flashcard decks/cards/review |
+| File security | Authorized status/history, fresh rescan requests and private file-ID downloads |
 
-P0b in the team plan applies this matrix to menus, promotions and direct actions/aliases. Test both intentional denial and retained workflows. Do not infer removal from an omitted chat mention or delete schema/data. Trace callers before deleting source: submission code still calls `Gamification::award(...)`, and shared helpers may remain behind disabled UI. No feature-flag framework is needed. Further scope changes require a proposal.
+`config/routes.php` is the explicit public action allowlist, applied before controller loading. Unlisted actions and aliases return 404. Role/object/HTTP-method checks still apply to every listed action. Schema history, persisted local data and shared internal callers are preserved.

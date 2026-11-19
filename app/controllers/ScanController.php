@@ -10,6 +10,7 @@ class ScanController extends Controller
             if ($context===null) return;
             $fields=['contractVersion','submissionId','fileId','attemptId','processingState','advisoryStatus','reason','checkedAt'];
             $result=array_intersect_key($context,array_flip($fields));
+            if (($context['evidenceMode']??null)!==null) $result['evidenceMode']=$context['evidenceMode'];
             if (!in_array($result['processingState'],['not_applicable','queued','running','waiting','completed','failed'],true)) {
                 $result['processingState']='failed'; $result['advisoryStatus']='Unresolved'; $result['reason']='unknown_processing_state'; $result['checkedAt']=null;
             }

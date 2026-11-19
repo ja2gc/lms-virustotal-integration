@@ -1,12 +1,12 @@
 # Demo manual and manual UAT
 
-This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. Local baseline/route/flashcard repairs are implemented; P0b scope cleanup is implemented and checked; VirusTotal remains pending. Full manual acceptance remains unexecuted. New test records start Not run; use actual evidence rather than copying expected outcomes.
+This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. The integrated workflow, limited real provider exchange and browser recording rehearsal are verified in the validation guide. Full manual acceptance remains open. New test records start Not run; use actual evidence rather than copying expected outcomes.
 
 The [SRS](SRS.md) is the requirements authority; the [feature overview](SRS.md#cleanup-action-matrix) explains the approved assignment-focused LMS. This manual is a shared end goal: build toward its scenarios and SRS requirements, not extra modules. Successful presentation does not replace load, reliability, security, risk and AI-use evidence. Team-run manual tests are rehearsal/acceptance evidence; do not claim independent stakeholder sign-off unless a real stakeholder reviews and accepts the results.
 
 ## Setup and rehearsal checklist
 
-- [ ] Use the actual verified commands in [local release instructions](final-project/step-a-working-integrated-system.md#project-response), on the same tagged/reviewed revision on all machines. The baseline app/seeder commands are verified; worker commands remain planned until implemented.
+- [ ] Use the actual verified commands in [local release instructions](final-project/step-a-working-integrated-system.md#overview), on the same tagged/reviewed revision on all machines. The installer, migration, seeder and worker commands pass disposable setup checks.
 - [ ] Prepare fictional Admin Demo, Teacher A, Teacher B, Student A and Student B accounts. Keep passwords local; do not put credentials in slides, source or this manual.
 - [ ] Prepare a course named Systems Integration Lab, a short lesson/material, an assignment named Integration Reflection, a visible future deadline, and maximum score 100. Teacher B owns another course for access-control testing. Student A and Student B remain distinct owners.
 - [ ] Prepare harmless synthetic `reflection-v1.txt` and `reflection-v2.txt` with different contents/hashes. No private coursework or real malware. Keep fixtures and any retained downloads in the agreed private/test locations.
@@ -17,7 +17,7 @@ The [SRS](SRS.md) is the requirements authority; the [feature overview](SRS.md#c
 
 ## Full manual acceptance catalogue
 
-Run this catalogue before the final rehearsal, not during the entire panel slot. It covers retained LMS support as well as the new integration. Test excluded features only to confirm they are absent/denied; do not test them as supported functionality. Use a new record per case/subcase and keep its actual result, evidence and defect link.
+Run this catalogue before the final rehearsal, not during the entire panel slot. It covers retained LMS support as well as the new integration. Check unlisted direct actions return 404. Use a new record per case/subcase and keep its actual result, evidence and defect link.
 
 If a prerequisite is missing, mark Blocked with its owner/dependency; do not infer Pass. Some cases are operator-assisted (fixture injection, worker stop/restart, request counters or disposable restore). Use rehearsed local test controls/evidence, not a new debug UI or real malware. Live-provider proof and simulated failures must be recorded separately.
 
@@ -31,7 +31,7 @@ Case numbers group coverage rather than mandate execution order: establish clean
 | UAT04 | Student A; available course with known visibility/enrollment rules | Find course in catalog, enroll through the existing allowed flow, reopen enrolled course; check a course for which access is not allowed. | Catalog/enrollment and permitted content access work according to inspected rules; unauthorized private content is denied. | FR03; NFR01 |
 | UAT05 | Teacher A; enrolled Student A | Create/edit a short text lesson and harmless course material through existing controls; view them as Student A. | Content/link/file and ordering/context are usable as authorized. This does not claim lesson files are part of assignment scanning. | FR03; NFR03/NFR08 |
 | UAT06 | Admin; accounts in/out of a chosen announcement audience | Publish an announcement through existing controls; view it in the intended student/teacher audience and outside that audience. | Intended users see the correct content; audience restrictions hold. No external email/push is claimed. | FR02/FR04; NFR01 |
-| UAT07 | Roles with seeded course/submission records | Open student, teacher and admin dashboards; follow their main links and compare displayed context/counts with prepared records. | Role-appropriate useful destinations/context remain; no quiz/excluded-module links or misleading scan/grade labels. | FR04/FR25; NFR08 |
+| UAT07 | Roles with seeded course/submission records | Open student, teacher and admin dashboards; follow their main links and compare displayed context/counts with prepared records. | Role-appropriate useful destinations/context remain; only supported destinations and accurate scan/grade labels. | FR04/FR25; NFR08 |
 | UAT08 | Assignment with a known future deadline | View deadline on the assignment and existing calendar; change it as the authorized teacher and revisit both. | The same assignment/deadline is shown consistently in the intended local display; no invented late-submission policy. | FR04/FR06; NFR08 |
 | UAT09 | Student A or Teacher A | Edit a supported basic profile field, save, reload and revisit another session as needed. | Own supported changes persist without exposing/editing another user's account. | FR05; NFR01/NFR08 |
 | UAT10 | Logged-in account with existing theme switch | Toggle theme, navigate and reload; return to original preference. | Existing supported preference behavior works; no redesign or extra customization is required. | FR05; NFR08 |
@@ -51,7 +51,7 @@ Case numbers group coverage rather than mandate execution order: establish clean
 | UAT24 | Old response held in fixture; replacement/current attempts | Submit new revision while old scan is pending; deliver old response later. Also test two submissions with identical bytes/hash. | New revision's current advisory remains correct; old result stays associated with its own attempt; identical content does not merge submissions. | FR09/FR20; NFR05 |
 | UAT25a-c | Controlled timeout, server-error and malformed-response fixtures | Run each fault separately on saved work; observe displayed state/reason, restore valid responses where policy permits, record timing. | Work remains saved; waiting/Unresolved is honest; recovery/operator action is measured. Malformed evidence need not self-repair and can require a new authorized attempt. | FR21/FR22; NFR04/NFR06 |
 | UAT26 | Student B, Teacher B and logged-out session; known foreign objects | Try foreign status, submission review, download, grade and rescan actions; test CSRF/GET rescan rejection using approved local checks. | Server enforces role/object/HTTP protections; hiding buttons is not the evidence. | FR02/FR10/FR18/FR23; NFR01 |
-| UAT27 | Approved/excluded action list | Follow retained menus and try excluded quiz/module actions directly, including quiz actions under Teacher controller. | Retained LMS support remains available; excluded actions and links do not remain accessible. Shared internal helpers may still exist. | FR25; NFR01 |
+| UAT27 | Supported action list | Follow supported menus and check unlisted direct actions. | Supported workflows remain available; unlisted direct actions are denied. | FR25; NFR01 |
 | UAT28a-b | Rehearsed local worker-crash fixtures and request log | Restart after a saved analysis ID; separately interrupt an in-flight start before local ID persistence. | Reads resume for saved IDs; ambiguous starts become Unresolved/start_outcome_unknown with no blind repeated POST. | FR22; NFR04/NFR05/NFR06 |
 | UAT29 | Fixture clock/budget and recorded request counts | Simulate minute/day quota deferral, both quota-error categories and a wait beyond the persisted polling deadline. | Requests are paced/paused, submissions remain saveable, overdue polling ends Unresolved without another call. Do not exhaust a live account to test this. | FR21/FR22; NFR06 |
 | UAT30 | Authorized synthetic status/rescan requests and response inspector | Compare pending, terminal, text-only, error and rescan replay responses with the published JSON examples; inspect allowed fields only. | Correct names/types/nulls/status/error meanings; no raw provider payload, disk path, key or ownership internals. UI does not reclassify counts. | FR17/FR24; NFR02/NFR03/NFR09 |
@@ -90,7 +90,7 @@ The full UAT run can be long. The final presentation is a selective connected na
 | DM07: grading, feedback, notification, download | UAT21/UAT22/UAT23 |
 | DM08: replacement correctness | UAT15/UAT24 |
 | DM09: failure/recovery, with other cases shown as evidence | UAT14/UAT25a-c/UAT28a-b/UAT29 |
-| DM10: denied access and exclusions | UAT26/UAT27 |
+| DM10: access boundaries | UAT26/UAT27 |
 | DM11: four advisory meanings | UAT17a-d |
 | DM12: engineering evidence | UAT30/UAT31/UAT32/UAT33/UAT34 |
 
@@ -101,12 +101,12 @@ Use one connected story. Confirm the actual panel time allowance before fixing t
 | Scenario | Presenter action | Expected visible result / point to explain | Tasks / requirements |
 | --- | --- | --- | --- |
 | DM01: LMS context and administration | Briefly show fictional users/roles, a course and an announcement. Open a profile/theme only if useful; do not tour every setting. | This is an LMS supporting teachers and students; users have distinct roles. No external email or social messaging claim. | P0a/P0b/P4; R01/R15 |
-| DM02: teacher publishes work | Teacher A opens the course, shows one material and creates/opens Integration Reflection with instructions, deadline and score limit. | Full teaching context is retained; assessments are assignments only. No quiz pages are shown. | P0a/P4; R15 |
+| DM02: teacher publishes work | Teacher A opens the course, shows one material and creates/opens Integration Reflection with instructions, deadline and score limit. | Full teaching context is retained; assessments are assignments only. Assignments provide the assessment workflow. | P0a/P4; R15 |
 | DM03: student finds the task | Student A opens/enrolls in the course, sees the material, assignment calendar/deadline and announcement. | The assignment is discoverable within the existing LMS. Do not invent a late-submission policy that was not implemented. | P0a/P0b/P4; R15 |
 | DM04: save before scan | With worker stopped, submit a short response and reflection-v1.txt. | Submission saves and shows pending/checking separately from grading. The HTTP action did not wait for VirusTotal. | P1/P4/P5; R03/R06 |
 | DM05: automatic analysis | Start the worker using the rehearsed fixture sequence; show current advisory update. Also show the sanitized real-provider trace, or one limited live request if practical. | Evidence belongs to this exact file revision. Explain the fixture/live distinction and that No Detections Reported is not a safety guarantee. | P2/P3/P4/P5; R02/R04 |
 | DM06: teacher review and fresh rescan | Teacher A opens the submission, shows reason/counts/time and minimal history, then requests a rescan. | A new attempt/new provider analysis is requested; old evidence remains history. Repeated click/token does not create another job. Same reusable result component serves both workflows. | P1/P2/P3/P4/P5; R04/R06 |
-| DM07: complete academic workflow | Teacher A downloads the authorized attachment, grades it (for example 85/100 as synthetic demo data) and writes feedback. Student A views the grade/feedback and in-app notification. | The integration fits the assignment workflow without replacing grading. Gradebook contains assignment results, not quiz features. | P0a/P4/P5; R05/R15 |
+| DM07: complete academic workflow | Teacher A downloads the authorized attachment, grades it (for example 85/100 as synthetic demo data) and writes feedback. Student A views the grade/feedback and in-app notification. | The integration fits the assignment workflow without replacing grading. Gradebook contains assignment results. | P0a/P4/P5; R05/R15 |
 
 ## Reliability, correctness and security segment
 
@@ -116,13 +116,13 @@ Prepare the following as short controlled scenarios. If time is limited, demonst
 | --- | --- | --- | --- |
 | DM08: replacement-file correctness | Put an older revision's scan in flight, then upload reflection-v2.txt and finish the old response. | Current attachment remains v2 with its own pending/result state; v1's result cannot overwrite it. | P1/P3/P4; R06 |
 | DM09: dependency failure and recovery | Inject timeout, server error and malformed body in separate rehearsed checks; restore valid responses where retry policy permits. | Saved work remains. No false favorable result. Show waiting/Unresolved reason and actual recovery measurements; malformed evidence may need an explicit new attempt. | P2/P3/P5/P6; R03/R09 |
-| DM10: access and scope | As Student B/Teacher B, try a known foreign result/download/rescan. Try an excluded quiz action directly. | Server denies unauthorized objects and excluded actions. A hidden button alone is not proof. | P0b/P5/P6; R05/R15 |
+| DM10: access and scope | As Student B/Teacher B, try a known foreign result/download/rescan. Try an unlisted action directly. | Server denies unauthorized objects and unlisted actions. A hidden button alone is not proof. | P0b/P5/P6; R05/R15 |
 | DM11: advisory meanings | Show clearly labeled fixtures for malicious, suspicious-only, validated no-detection and inconclusive cases. | Flagged / Review Recommended / No Detections Reported / Unresolved are distinct, consistent outcomes. Do not call any file safe. | P2/P3/P4; R03/R04 |
 | DM12: engineering evidence | Open the sanitized evidence summary: load ramp, failure/recovery results, boundary controls, two reusable consumers, trends/lessons, risks/AI-use and setup proof. | Present measured values from actual runs. Explain tested limits, unresolved risks and design effects. Never substitute this script for results. | P6/P7; R01/R07-R14 |
 
 ## Presenter handoffs
 
-**DM13: manual flashcards (short supporting feature).** Use the seeded Panel Demo Integration Cards. Open Flashcards, show two manual cards, start studying, flip/rate and show completion; reopen to establish saved progress. Link to UAT35a-e/FR27 and the flashcard test evidence. Budget **45–60 seconds**, a rehearsal target rather than a measured human presentation time. The initial automated create-and-two-card trial took 28 seconds. Pre-create a fresh small deck for rehearsal if the seeded cards are no longer due; normal seeding deliberately does not reset reviews. No AI-generated content or quizzes. Every main feature is covered in UAT; the short panel sequence need not run every negative variant live.
+**DM13: manual flashcards (short supporting feature).** Use the seeded Panel Demo Integration Cards. Open Flashcards, show two manual cards, start studying, flip/rate and show completion; reopen to establish saved progress. Link to UAT35a-e/FR27 and the flashcard test evidence. Budget **45–60 seconds**, a rehearsal target rather than a measured human presentation time. The initial automated create-and-two-card trial took 28 seconds. Pre-create a fresh small deck for rehearsal if the seeded cards are no longer due; normal seeding deliberately does not reset reviews. The cards are manually authored. Every main feature is covered in UAT; the short panel sequence need not run every negative variant live.
 
 Suggested roles, adjustable by the team: UI owner guides DM01-DM04 and DM07; scanning owner explains DM05/DM11; HTTP/access owner explains DM06/DM10 and local setup; data owner explains DM08/DM09 and connects the evidence story. Practice handoffs on one coherent dataset. Everyone must understand the main workflow and one failure path, not just their page.
 
@@ -136,7 +136,7 @@ Say what failed. Keep the saved submission visible, show its honest waiting/Unre
 - [ ] UAT01-UAT35 and named subcases executed or explicitly reported Blocked/Fail, with actual observations, evidence, defects and retests. No unresolved blocking/required-feature failure is silently called ready.
 - [ ] R01-R15 checked against code/evidence; all required Part A-F artifacts reflect the built system.
 - [ ] Every SRS FR/NFR has a trace to the relevant manual and/or automated evidence. Passing a panel narrative or a manual case does not by itself prove load limits, internal contract reuse or concurrency guarantees.
-- [ ] Supporting retained features pass smoke checks; quizzes and other approved exclusions are absent from assessed navigation and denied by direct routes.
+- [ ] Supporting LMS features pass smoke checks; the supported action map is enforced by navigation and direct routes.
 - [ ] Each member can explain their module, the input/output contract and one failure mode.
 - [ ] Setup and rehearsal fit the panel slot; long quota/poll waits are supported by recorded measurements.
 

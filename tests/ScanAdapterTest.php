@@ -50,6 +50,22 @@ function vtHasApiKey(array $headers): bool
 }
 
 return ['group'=>'adapter','tests'=>[
+    'completed provider upload descriptor aliases require matching timestamp SHA and item MD5' => function (): void {
+        $stamp='1795072950';$md5=str_repeat('b',32);$descriptor=base64_encode($md5.':'.$stamp);
+        $analysis=json_decode(vtFixture('analysis-no-detections'),true);$analysis['data']['id']='f-'.VT_SHA256.'-'.$stamp;
+        $item=json_decode(vtFixture('item-match'),true);$item['data']['attributes']['md5']=$md5;
+        $reply=static fn(array $body):array=>['httpStatus'=>200,'headers'=>[],'body'=>json_encode($body,JSON_THROW_ON_ERROR),'transportError'=>null];
+        $requests=[];$adapter=vtAdapter([$reply($analysis),$reply($item)],$requests);
+        vtAssertResult($adapter->getResult($descriptor,VT_SHA256),'No Detections Reported','no_detections_reported',false,null);
+        foreach ([null,str_repeat('c',32)] as $wrong) {
+            $item['data']['attributes']['md5']=$wrong;$requests=[];$adapter=vtAdapter([$reply($analysis),$reply($item)],$requests);
+            if($adapter->getResult($descriptor,VT_SHA256)['status']!=='Unresolved')throw new RuntimeException('Unverified descriptor MD5 alias became favorable.');
+        }
+        foreach (['f-'.VT_SHA256.'-1795072951','f-'.str_repeat('d',64).'-'.$stamp] as $wrong) {
+            $analysis['data']['id']=$wrong;$requests=[];$adapter=vtAdapter([$reply($analysis)],$requests);
+            vtAssertResult($adapter->getResult($descriptor,VT_SHA256),'Unresolved','analysis_mismatch',false,null);
+        }
+    },
     'CT01 completed matching analysis returns normalized no-detection advisory' => function (): void {
         $requests=[];$adapter=vtAdapter([vtResponse('analysis-no-detections'),vtResponse('item-match')],$requests);
         $result=$adapter->getResult(VT_ANALYSIS_ID,VT_SHA256);

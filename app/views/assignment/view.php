@@ -33,7 +33,7 @@ $a = $assignment;
   </div>
 </div>
 
-<div class="grid" style="grid-template-columns: 2fr 1fr; gap: 24px; align-items: flex-start;">
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:flex-start;">
   <div class="card card-pad">
     <h3 style="margin-bottom: 12px;">Instructions</h3>
     <div style="line-height:1.7;"><?= nl2br(e($a['description'] ?? 'No instructions provided.')) ?></div>
@@ -41,6 +41,7 @@ $a = $assignment;
 
   <aside>
     <?php if (Auth::isStudent() && $submission): ?>
+      <?php renderSubmissionScan($submission); ?>
       <div class="card card-pad">
         <h3 style="margin-bottom: 12px;">Your submission</h3>
         <?php if ($submission['status'] === 'graded'): ?>

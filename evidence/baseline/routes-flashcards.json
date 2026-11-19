@@ -63,7 +63,7 @@
     ],
     "automated_elapsed_seconds": 28,
     "human_demo_budget_seconds": "45-60 (planning estimate; rehearse)",
-    "screenshot": "flashcard-trial.jpg"
+    "screenshot": null
   },
   "seeder": {
     "command": "php bin/seed-demo.php",
@@ -100,5 +100,6 @@
     "merged_source_revision": "8d15034",
     "merged_main_verification": "16 PHP passed; JavaScript check passed",
     "cleanup": "Not started; next chat waits for continue"
-  }
+  },
+  "artifactCleanup": "2026-11-19: superseded screenshot archived in ignored local tmp; historical observations retained. Current representative screenshots are under evidence/validation."
 }

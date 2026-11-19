@@ -4,7 +4,7 @@ return [
     'Scan' => ['status','history','rescan'],
     'SubmissionFile' => ['download'],
     'Home' => ['index'],
-    'Auth' => ['login', 'register', 'logout', 'profile', 'settheme', 'setup2fa'],
+    'Auth' => ['login', 'register', 'logout', 'profile', 'settheme'],
     'Admin' => ['index', 'users', 'createuser', 'edituser', 'deleteuser', 'courses', 'categories', 'deletecategory', 'announcements', 'deleteannouncement', 'settings', 'importusers', 'exportusers'],
     'Teacher' => ['index', 'courses', 'createcourse', 'editcourse', 'addmodule', 'deletemodule', 'addlesson', 'deletelesson', 'assignment', 'createassignment', 'gradesubmission', 'gradebook', 'gradebookcourse'],
     'Student' => ['index', 'grades', 'submitassignment'],

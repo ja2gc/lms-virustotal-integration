@@ -1,0 +1,104 @@
+{
+  "mode": "live",
+  "date": "2026-11-19T07:22:28+00:00",
+  "syntheticOnly": true,
+  "requests": [
+    {
+      "type": "lookup",
+      "httpStatus": 404,
+      "transportError": null,
+      "milliseconds": 927.7
+    },
+    {
+      "type": "start",
+      "httpStatus": 200,
+      "transportError": null,
+      "milliseconds": 1108.1
+    },
+    {
+      "type": "analysis",
+      "httpStatus": 200,
+      "transportError": null,
+      "milliseconds": 872.8
+    },
+    {
+      "type": "analysis",
+      "httpStatus": 200,
+      "transportError": null,
+      "milliseconds": 855.1
+    },
+    {
+      "type": "analysis",
+      "httpStatus": 200,
+      "transportError": null,
+      "milliseconds": 746.9
+    },
+    {
+      "type": "analysis",
+      "httpStatus": 200,
+      "transportError": null,
+      "milliseconds": 870.2
+    },
+    {
+      "type": "analysis",
+      "httpStatus": 200,
+      "transportError": null,
+      "followup": true
+    },
+    {
+      "type": "identity",
+      "httpStatus": 200,
+      "transportError": null,
+      "pendingRelationshipCheck": true
+    },
+    {
+      "type": "analysis",
+      "httpStatus": 200,
+      "transportError": null,
+      "followup": true
+    },
+    {
+      "type": "analysis",
+      "httpStatus": 200,
+      "transportError": null,
+      "followup": true
+    },
+    {
+      "type": "identity",
+      "httpStatus": 200,
+      "transportError": null,
+      "followup": true
+    }
+  ],
+  "status": {
+    "processingState": "waiting",
+    "advisoryStatus": "Unresolved",
+    "reason": "analysis_pending",
+    "checkedAt": null,
+    "evidenceMode": "provider"
+  },
+  "fileSha256": "a81f7a8f8522fe3c5ff90f2e9fd264622fce694d76750d52b6752e90b95ae097",
+  "analysisId": "ZjBlYWU1MzYxZjgwYWNlMzYyOWMyNjVlZTBmN2QxMzk6MTc5NTA3Mjk1MA==",
+  "limitations": "One real synthetic upload/start and bounded follow-up reads. Completed advisory retrieved later for the same analysis, with exact SHA-256/MD5/timestamp alias validation. Original worker observation was pending; a later component read is not proof of continuous live UI/scheduled deadline acceptance. No malware or provider load test.",
+  "followupResult": {
+    "status": "Unresolved",
+    "reason": "inconclusive_engines",
+    "retryable": false,
+    "retryAfter": null,
+    "stats": {
+      "malicious": 0,
+      "suspicious": 0,
+      "harmless": 0,
+      "undetected": 60,
+      "timeout": 0,
+      "confirmed-timeout": 0,
+      "failure": 0,
+      "type-unsupported": 14
+    }
+  },
+  "followupAt": "2026-11-19T13:27:49+00:00",
+  "identityVerified": true,
+  "relationshipVerified": true,
+  "relationshipCheckedAt": "2026-11-19T07:36:36+00:00",
+  "compatibilityCorrection": "Provider upload descriptor may become canonical f-SHA256-timestamp ID on completion. Patch 1.1.1 validates strict alias plus item MD5/SHA-256; negative fixtures remain Unresolved."
+}

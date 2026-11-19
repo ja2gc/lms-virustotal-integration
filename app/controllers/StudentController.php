@@ -99,40 +99,34 @@ class StudentController extends Controller
         if (!$a) { $this->flash('error', 'Assignment not found.'); $this->redirect('student'); }
         if (!Auth::isEnrolled($a['course_id'])) { $this->flash('error', 'You must be enrolled to submit.'); $this->redirect('course/view/' . $a['course_id']); }
         $existing = Database::fetch('SELECT * FROM submissions WHERE assignment_id = :aid AND student_id = :sid', ['aid' => $id, 'sid' => Auth::id()]);
+        $uploadError = null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $content = trim($this->input('content', ''));
-            $filePath = $existing['file_path'] ?? null;
-            $fileName = $existing['file_name'] ?? null;
-            if (!empty($_FILES['file']['name']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-                $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
-                if (isset(ALLOWED_UPLOAD_TYPES[$ext]) && $_FILES['file']['size'] <= MAX_UPLOAD_SIZE) {
-                    $safeName = 'submission_' . Auth::id() . '_' . time() . '.' . $ext;
-                    if (!is_dir(UPLOAD_DIR . '/submissions')) mkdir(UPLOAD_DIR . '/submissions', 0755, true);
-                    move_uploaded_file($_FILES['file']['tmp_name'], UPLOAD_DIR . '/submissions/' . $safeName);
-                    $filePath = 'submissions/' . $safeName;
-                    $fileName = $_FILES['file']['name'];
+            $rawContent=$this->input('content','');
+            $content=is_string($rawContent)?trim($rawContent):'';
+            try {
+                if (!is_string($rawContent)) throw new InvalidArgumentException('Enter a written response as text.');
+                if (empty($_POST) && empty($_FILES) && (int)($_SERVER['CONTENT_LENGTH']??0)>0) throw new InvalidArgumentException('The request exceeded the server upload limit. Select a smaller attachment.');
+                $file=$_FILES['file']??null;
+                if ($file!==null && !is_array($file)) throw new InvalidArgumentException('Invalid attachment upload.');
+                $upload=ScanSubmissionService::validateHttpUpload($file);
+                $service=new ScanSubmissionService(Database::getInstance(),getenv('SCAN_PRIVATE_DIR')?:ROOT_DIR.'/private/submissions');
+                $service->saveAcademicSubmission($id,(int)Auth::id(),$content,$upload);
+                // Supporting awards must not turn a committed academic save into an apparent failure.
+                if (!$existing) {
+                    try { Gamification::award(Auth::id(),'assignment_submit',$id); }
+                    catch (Throwable) { error_log('Submission award unavailable'); }
                 }
+                $this->flash('success','Assignment submitted. Your teacher will grade it soon.');
+                $this->redirect('course/view/'.$a['course_id']);
+            } catch (InvalidArgumentException $error) {
+                $uploadError=$error->getMessage();
+                http_response_code(422);
+            } catch (Throwable) {
+                $uploadError='Your submission could not be saved. Please try again. File uploads require the scan migration and writable private storage.';
+                error_log('Academic submission save failed');
+                http_response_code(503);
             }
-            if ($existing) {
-                Database::update('submissions', [
-                    'content' => $content,
-                    'file_path' => $filePath,
-                    'file_name' => $fileName,
-                    'submitted_at' => date('Y-m-d H:i:s'),
-                    'status' => 'submitted',
-                ], 'id = :id', ['id' => $existing['id']]);
-            } else {
-                Database::insert('submissions', [
-                    'assignment_id' => $id,
-                    'student_id' => Auth::id(),
-                    'content' => $content,
-                    'file_path' => $filePath,
-                    'file_name' => $fileName,
-                ]);
-                Gamification::award(Auth::id(), 'assignment_submit', $id);
-            }
-            $this->flash('success', 'Assignment submitted. Your teacher will grade it soon.');
-            $this->redirect('course/view/' . $a['course_id']);
+            $existing=array_replace($existing??[],['content'=>$content]);
         }
         $course = Database::fetch('SELECT * FROM courses WHERE id = :id', ['id' => $a['course_id']]);
         $this->render('student/submit_assignment', [
@@ -140,6 +134,7 @@ class StudentController extends Controller
             'assignment' => $a,
             'course' => $course,
             'existing' => $existing,
+            'uploadError' => $uploadError,
         ]);
     }
 }

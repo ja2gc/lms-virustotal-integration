@@ -26,14 +26,12 @@ $theme = Auth::check() && !empty(Auth::user()['theme_preference']) ? Auth::user(
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4F46E5">
+<link rel="icon" href="data:,">
 <meta name="description" content="<?= e(APP_NAME) ?> — assignment-focused LMS. By <?= e(APP_TEAM) ?>.">
-<link rel="manifest" href="<?= asset('manifest.json') ?>">
-<link rel="icon" type="image/png" href="<?= asset('favicon.png') ?>">
-<link rel="apple-touch-icon" href="<?= asset('apple-touch-icon.png') ?>">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="<?= e(APP_NAME) ?>">
-<title><?= e($data['pageTitle'] ?? $data['appName'] ?? 'doodle') ?> · <?= e(APP_NAME) ?></title>
+<title><?= e($data['pageTitle'] ?? $data['appName'] ?? APP_NAME) ?> · <?= e(APP_NAME) ?></title>
 <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
@@ -58,7 +56,6 @@ if ('caches' in window) caches.keys().then(keys => Promise.all(
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="mark">d</div>
       <div>
         <h1><?= e(APP_NAME) ?></h1>
         <p>by <?= e(APP_TEAM) ?></p>
@@ -105,7 +102,6 @@ if ('caches' in window) caches.keys().then(keys => Promise.all(
 
         <div class="sidebar-section">Account</div>
         <a href="<?= url('auth/profile') ?>" class="<?= $currentUri === 'auth/profile' ? 'active' : '' ?>"><span class="material-icons">person</span> Profile</a>
-        <a href="<?= url('auth/setup2fa') ?>" class="<?= $currentUri === 'auth/setup2fa' ? 'active' : '' ?>"><span class="material-icons">verified_user</span> Two-factor (2FA)</a>
         <a href="#" onclick="toggleTheme(); return false;"><span class="material-icons">dark_mode</span> Toggle theme</a>
         <a href="<?= url('auth/logout') ?>"><span class="material-icons">logout</span> Sign out</a>
       <?php else: ?>

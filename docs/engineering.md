@@ -1,6 +1,6 @@
 # Engineering and security
 
-Existing-code notes describe the inspected baseline. Integration UI/security controls are the target unless executed evidence is cited; they do not claim VirusTotal/private downloads exist. Step C owns verification/evidence.
+Existing-code notes describe the inspected baseline. Current controls and executed checks are recorded below and in the validation guide. Step C owns verification/evidence.
 
 ## Existing patterns to reuse
 
@@ -23,7 +23,7 @@ Proposed shared view: `app/views/scan/_status.php`; JavaScript polling: `public/
 
 ## Screen behavior
 
-Read [approved features](SRS.md#cleanup-action-matrix): retain courses/materials/enrollment, assignments/deadlines, grading/feedback, dashboards, announcements, in-app notifications, existing calendar and basic profile/theme behavior. Exclude quiz creation/taking/auto-grading and the listed unrelated modules. No source removal has occurred in this planning session.
+The [supported action matrix](SRS.md#cleanup-action-matrix) defines the public interface: courses/materials/enrollment, assignments/grading, dashboards, calendar, notices and profiles.
 
 Check [file ownership](team-plan.md#ownership) before editing shared code or interfaces.
 
@@ -43,9 +43,7 @@ The shared runner discovers tests/*Test.php. Each file returns `['group'=>'<grou
 
 The boundary table specifies target controls. Reassess each against final code and attach evidence before submission.
 
-**Baseline serving control implemented:** `router.local.php` denies source/configuration/database/documentation/evidence/test/dot paths and arbitrary PHP entry points; its automated HTTP checks pass with the documented loopback command. See [baseline results](../evidence/baseline/localhost-smoke.json). Legacy assignment-upload static paths are denied by P5; P1b import/P4 file-ID links remain required. P0b now enforces the explicit SRS action allowlist in `config/routes.php` before loading controllers; excluded actions and aliases return 404. P5 authorizes private fixture downloads; real upload migration and the full security assessment remain open.
-
-Apply [approved assignment-only scope](SRS.md#cleanup-action-matrix) through explicit allowed actions as well as menus. Deny quiz actions on the retained Teacher controller. Preserve authorized calendar, announcements, notifications and course-material actions; scope reduction must not become an access-control bypass or unapproved removal. P0b/P5 own route/access controls; P4 owns navigation/templates; both verify ST04.
+**Serving controls:** `router.local.php` blocks private/source/configuration/database/test/dot paths. `config/routes.php` applies the supported action allowlist before loading controllers. Object authorization and file-ID downloads are exercised by access and connected tests. Status reads never start provider work.
 
 ## Boundary assessment
 
@@ -65,22 +63,32 @@ Apply [approved assignment-only scope](SRS.md#cleanup-action-matrix) through exp
 
 ## Local demonstration policy
 
-Use fictional accounts and synthetic, non-sensitive attachments only. Neither consent wording nor hash-first lookup makes public scanning suitable for confidential coursework. No real student work or PII is sent or queried. An initial small upload limit of **10 MiB (10,485,760 bytes)** and allowlist of **PDF, TXT and DOCX** are proposed defaults; the first contract PR must verify MIME mappings and align browser, application and PHP limits. Other upstream lesson uploads are outside the assessment scope; the demo must not expose the installation beyond loopback.
+Use fictional accounts and synthetic, non-sensitive attachments only. Neither consent wording nor hash-first lookup makes public scanning suitable for confidential coursework. No real student work or PII is sent or queried. An initial small upload limit of **10 MiB (10,485,760 bytes)** and allowlist of **PDF, TXT and DOCX** are implemented limits, with MIME validation and aligned browser/application/PHP settings. Other upstream lesson uploads are outside the assessment scope; the demo must not expose the installation beyond loopback.
 
 Source: [VirusTotal upload documentation and data-sharing warning](https://docs.virustotal.com/reference/files-scan). Direct file upload has its own documented limit; this smaller application limit is a team policy, not a provider requirement.
 
 ## Secrets and local serving
 
-Manual flashcards now check deck owner/public/course scope before viewing/studying/reviewing. Course-deck creation checks accessible courses; review updates require the current user's review record and current deck access. Delete is a CSRF-protected POST for owner/admin. Failed study requests keep visible progress unchanged. This is scoped flashcard proof, not certification of the still-pending integration boundaries. Public synthetic localhost demo credentials are an explicitly authorized exception; real credentials/provider keys remain prohibited.
+Manual flashcards now check deck owner/public/course scope before viewing/studying/reviewing. Course-deck creation checks accessible courses; review updates require the current user's review record and current deck access. Delete is a CSRF-protected POST for owner/admin. Failed study requests keep visible progress unchanged. Integration boundaries have their own connected checks. Public synthetic localhost demo credentials are an explicitly authorized exception; real credentials/provider keys remain prohibited.
 
 `config/config.php` loads the root ignored `.env` through `config/environment.php` before reading configuration. The loader accepts allowlisted simple INI-style values without executing/interpolating them and keeps existing process settings in priority. Consumers read `getenv('VT_API_KEY')`; no browser bundle, settings row or committed file contains the key. The tracked `.env.example` has an empty key and fixture mode. Agents must not inspect real `.env` contents or log credentials/HTTP headers. Members enter their own key locally following README; Git ignores real environment variants and release packaging excludes them. The class-only scan bootstrap still starts no session and reads no environment file; CLI entry points load shared configuration explicitly.
 
-PHP's built-in server does not enforce Apache `.htaccess`. The implemented local router blocks `.git`, configuration, private storage, database, documentation and evidence paths, and exposes intended entry points and allowlisted static assets. P0b scope/action restrictions are implemented; P5 private-file authorization is implemented and fixture-verified. P1b real upload/backfill and P4 links remain pending. Bind to `127.0.0.1`, not all network interfaces. Private files belong outside the served root or are denied by a tested router, with no alternate static path. Do not rely on an `index.php` returning 404 to protect sibling files.
+PHP's built-in server does not enforce Apache `.htaccess`. The implemented local router blocks `.git`, configuration, private storage, database, documentation and evidence paths, and exposes intended entry points and allowlisted static assets. The public action map, private upload/backfill, authorized downloads and file-ID links pass connected checks. Bind to `127.0.0.1`, not all network interfaces. Private files belong outside the served root or are denied by a tested router, with no alternate static path. Do not rely on an `index.php` returning 404 to protect sibling files.
 
-Do not add PWA, offline or two-factor features. P0b removed offline registration, retires the old worker and Doodle caches, and sends private/no-store headers on front-controller responses including logout. HTTP logout denial and worker retirement logic pass automated checks. A real upgrade from an already installed historical worker remains unexecuted; P5 private downloads are verified with harmless fixture files; integrated attachment acceptance remains P1b/P4/P6 work. See [cleanup evidence](../evidence/cleanup/p0b.json).
+Private responses use no-store headers. Browser status polling reads persisted results; fixture provenance remains visible after configuration changes.
 
 No automatic deletion of submissions, grading changes or favorable advisory follows from a provider result. Treat the output as evidence at a particular time. Warn on unresolved/flagged findings; never execute uploaded content on the server. The project does not certify attachments as safe.
 
 ## Required proof and release review
 
 Exercise wrong-role and cross-object reads, downloads and rescan POSTs; CSRF rejection; path traversal; MIME mismatch; oversized/upload failure; malformed provider replies; key redaction; static access to protected paths; and late-response ownership. Test against the actual local serving command. Record each implemented control, command, result and accepted residual risk here at release. Until then, residual risks are identified, not accepted on the team's behalf.
+
+## Integrated implementation
+
+`ScanSubmissionService` replaces public assignment uploads with immutable private revisions; `StudentController` preserves input and prior files on rejected replacements. Use the README server command for writable upload/session temporary directories and the 10M/12M PHP limits. DOCX validation uses the built-in Phar module and bounded temporary ZIP inspection; it adds no package dependency.
+
+The two worker consumers share one adapter and durable metered transport. Result reads reserve at most two calls, validate leases/deadlines before each request and release unused capacity. Unknown scan-start outcomes terminate without replay. The worker CLI supports fixture scenarios and explicit operator resume.
+
+Student/teacher views use private file-ID downloads, advisory/history partials and same-origin status polling. The browser pauses polling while hidden, backs off refresh errors and stops at terminal states. Uncertain rescan requests retain their operation token for idempotent replay. Failed/unknown state never displays a favorable advisory.
+
+Executed checks: `php tests/run.php`, three Node checks, `php tests/reliability/runner.php --write`, and disposable native-browser inspection. Load runner: `php tests/load/submissions.php`; outputs and environment are recorded in its summary. These runs do not replace unexecuted manual acceptance or independent setup. See the [validation guide](final-project/step-c-performance-reliability-security-validation.md).

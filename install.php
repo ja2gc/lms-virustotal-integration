@@ -82,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors) && $step === 'instal
 
             // Persist site settings
             $settings = [
-                'site_name'     => trim($_POST['site_name'] ?? 'doodle'),
-                'site_tagline'  => trim($_POST['site_tagline'] ?? 'Personalized learning, by Death Legion Team'),
+                'site_name'     => trim($_POST['site_name'] ?? APP_NAME),
+                'site_tagline'  => trim($_POST['site_tagline'] ?? 'Personalized learning, by '.APP_TEAM),
                 'contact_email' => $adminEmail,
                 'installed_at'  => $now,
                 'installed_by'  => $adminUser,
@@ -126,7 +126,8 @@ $csrf = Session::get('_install_csrf');
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Install · doodle</title>
+<link rel="icon" href="data:,">
+<title>Install · <?= e(APP_NAME) ?></title>
 <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/style.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
@@ -135,10 +136,9 @@ $csrf = Session::get('_install_csrf');
 <div class="auth-wrap">
   <div class="auth-card installer">
     <div class="brand">
-      <div class="brand-mark">d</div>
       <div class="brand-text">
-        <h1>doodle</h1>
-        <p>by Death Legion Team · GPL-3.0</p>
+        <h1><?= e(APP_NAME) ?></h1>
+        <p>by <?= e(APP_TEAM) ?> · GPL-3.0</p>
       </div>
     </div>
 
@@ -146,7 +146,7 @@ $csrf = Session::get('_install_csrf');
       <div class="install-success">
         <span class="material-icons">check_circle</span>
         <h2>Installation Complete</h2>
-        <p>Your doodle LMS is ready. Log in with your administrator account to begin creating courses.</p>
+        <p>Your <?= e(APP_NAME) ?> LMS is ready. Log in with your administrator account to begin creating courses.</p>
         <a class="btn btn-primary btn-block" href="<?= BASE_URL ?>">Go to Login</a>
       </div>
     <?php else: ?>
@@ -179,11 +179,11 @@ $csrf = Session::get('_install_csrf');
             <div class="form-grid">
               <div class="form-group">
                 <label>Site name</label>
-                <input type="text" name="site_name" value="doodle" required>
+                <input type="text" name="site_name" value="<?= e(APP_NAME) ?>" required>
               </div>
               <div class="form-group">
                 <label>Site tagline</label>
-                <input type="text" name="site_tagline" value="Personalized learning, by Death Legion Team">
+                <input type="text" name="site_tagline" value="Personalized learning, by <?= e(APP_TEAM) ?>">
               </div>
             </div>
             <h3 style="margin-top:24px;">Administrator account</h3>
@@ -210,13 +210,13 @@ $csrf = Session::get('_install_csrf');
                 <input type="password" name="admin_pass2" required>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Install doodle</button>
+            <button type="submit" class="btn btn-primary btn-block">Install <?= e(APP_NAME) ?></button>
           </form>
         </div>
       <?php endif; ?>
 
     <?php endif; ?>
-    <p class="auth-foot">doodle v<?= APP_VERSION ?> · GPL-3.0 · Death Legion Team</p>
+    <p class="auth-foot"><?= e(APP_NAME) ?> v<?= APP_VERSION ?> · GPL-3.0 · <?= e(APP_TEAM) ?></p>
   </div>
 </div>
 </body>

@@ -1,8 +1,8 @@
 # Data model and states
 
-P1a defines scan schema/repository behavior; publication and executed evidence are tracked in the team plan. P1b file storage/backfill remains separate. No project migration has been applied to the coordinator's local database. Reuse existing users, courses, assignments and submissions. Keep `submissions.status` for the existing academic workflow (`submitted` / `graded`); never write a scan verdict into it.
+The schema/repository and private storage/backfill are implemented; the team record tracks verification. Existing local databases are upgraded only through the explicit migration command. Reuse existing users, courses, assignments and submissions. Keep `submissions.status` for the existing academic workflow (`submitted` / `graded`); never write a scan verdict into it.
 
-Member 4 owns P1a scan migrations and submission/revision/attempt repository SQL. Member 1 owns P1b private upload storage and calls that repository. Consumers use the [shared host repository contract](integrations.md#shared-host-repository-contract); it maps stored snake_case to published camelCase. Scanning owns provider-budget access to the separately defined singleton. No quiz schema expansion or destructive deletion of upstream schema is required by the assignment-only scope.
+Member 4 maintains the integrated scan migrations, storage service and submission/revision/attempt repository. Consumers use the [shared host repository contract](integrations.md#shared-host-repository-contract); it maps stored snake_case to published camelCase. Scanning owns provider-budget access to the separately defined singleton. Existing schema history is preserved.
 
 ## ERD
 
@@ -57,12 +57,12 @@ erDiagram
 `current_file_id` and `active_scan_attempt_id` are nullable pointers, set transactionally only to rows belonging to the same submission/revision. Validate this invariant in the service and tests; simple foreign keys alone do not enforce ownership across those pointers.
 
 - `submission_files`: immutable file contents and identity; unique `(submission_id, revision_number)` and unique random `storage_key`. SHA-256 is indexed if useful, never unique across submissions. Use a 64-character lowercase hexadecimal representation. `original_name` is display-only, escaped on output; it is never a disk path.
-- `scan_attempts`: `origin` is `automatic` or `teacher_rescan`; automatic has nullable `requested_by`, rescan requires an authorized actor at insertion. Deleting that account sets the historical requester reference to null while preserving scan history. Existing course/student deletion cascades through submission file/attempt metadata; P1b owns corresponding private-byte cleanup. Add an `idempotency_key` (unique, server-issued per requested operation), `contract_version` (`1`), `stats_json` (nullable validated counts only), `last_http_code`, `updated_at`, and `lease_token` to the implemented migration. Index due work on `(state, next_run_at)`.
+- `scan_attempts`: `origin` is `automatic` or `teacher_rescan`; automatic has nullable `requested_by`, rescan requires an authorized actor at insertion. Deleting that account sets the historical requester reference to null while preserving scan history. Existing course/student deletion cascades through submission file/attempt metadata; private bytes remain for reviewed operator cleanup after a matched backup. The migration includes an `idempotency_key` (unique, server-issued per requested operation), `contract_version` (`1`), `stats_json` (nullable validated counts only), `last_http_code`, `updated_at`, and `lease_token` and indexes due work on `(state, next_run_at)`.
 - `step`: `lookup`, `start`, `poll`, `verify`, or `persist`. Save step progress and analysis ID before yielding. Preserve enough evidence to resume polling without starting a second scan.
 - Persist `start_in_flight` before sending upload/re-analysis POSTs. Save the returned analysis ID, `poll_deadline_at` (UTC, 30 minutes after that ID is stored) and cleared marker atomically. An expired lease with this marker and no analysis ID becomes `failed` with `Unresolved/start_outcome_unknown`; it is not replayed even if the crash may have occurred before bytes were sent. `scan_provider_state` is a separate singleton table for persisted shared budget reservations/counters and provider pause time, without credentials.
 - `advisory_status` is nullable until evidence exists and thereafter uses the four exact public strings in [integrations](integrations.md#published-reusable-component). `reason` is a stable machine code; views map it to useful text.
 - All stored application timestamps use UTC. Format local dates for users; durations use one clock/unit. Size is bytes; `retryAfter` is seconds.
-- Existing `submissions.file_path`/`file_name` need a documented migration bridge. Backfill known local files into private revisions, verify counts, then switch all scoped readers. Never keep a public legacy download path as an access-control bypass.
+- The explicit legacy importer bridges `submissions.file_path`/`file_name` to private revisions, defaults to dry-run and preserves originals. Scoped readers use file IDs; public legacy download paths are denied.
 
 ## Processing state machine
 
@@ -74,7 +74,7 @@ stateDiagram-v2
     running --> waiting: pending analysis or retryable failure
     running --> completed: validated completed analysis
     running --> failed: permanent error or retry budget exhausted
-    running --> queued: lease expires on replay-safe step
+    running --> running: expired replay-safe lease reclaimed
     running --> failed: start outcome unknown or polling deadline expired
     completed --> [*]
     failed --> [*]
@@ -90,4 +90,4 @@ Test identical hashes on different submissions, a replacement arriving mid-scan,
 
 Recovery inspects `start_in_flight`, analysis ID and `poll_deadline_at` before requeueing. Quota waits before a scan starts can remain queued; once an ID exists, quota deferral does not extend the wall-clock polling deadline. An overdue attempt becomes `Unresolved/polling_exhausted` without another provider request.
 
-Add new versioned forward migrations under `database/migrations/`; no existing migration runner is assumed. The implementation task must provide a repeatable runner and schema-version record. Do not rely on web requests silently applying project migrations. Fresh install and upgrade of a disposable baseline database both need proof. Backup/restore includes the database **and** private files.
+Versioned forward migrations live under `database/migrations/`; `php bin/migrate.php` applies them explicitly and records schema versions. Fresh installation, repeated migration and disposable upgrade/restore checks are recorded in validation. Backup/restore includes the database **and** private files.

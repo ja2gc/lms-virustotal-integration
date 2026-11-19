@@ -1,18 +1,13 @@
 # Step C — Performance, Reliability and Security Validation
 
-## Original submission instruction — Part C
+## Overview
 
-> Deliver evidence, not assertion. Performance: a load test stating the environment, the variable increased, the measurements, the degradation point, and the failure mode. Reliability: failure-injection results showing what the system does when an external dependency times out, returns an error, or returns malformed data, together with measured recovery behavior. Security: an assessment of every integration point covering authentication, authorization, transport protection, input validation, and logging, with the specific control implemented at each point and any accepted residual risk.
-
-## Project response
-
-The catalogue/experiment settings below are checks/plans, not results. Manual acceptance and the panel script live only in [the demo/UAT manual](../demo-manual.md).
+Executed results are distinguished from the remaining acceptance catalogue. Manual acceptance and the panel script live in [the demo/UAT manual](../demo-manual.md).
 
 ## Baseline verification
 
 | Evidence snapshot | What was actually checked | Limit |
 | --- | --- | --- |
-| [Original source checks](../../evidence/baseline/php-checks.json), [initial installer check](../../evidence/baseline/localhost-check.json) | Upstream inspection and reproduced startup failures before repair | Historical input, not a current failure list |
 | [Local baseline smoke](../../evidence/baseline/localhost-smoke.json) | Installation, three role logins, course/enrollment, written submission, grading/feedback | Written-only baseline, not attachment or VirusTotal acceptance |
 | [Route/flashcard/seeder follow-up](../../evidence/baseline/routes-flashcards.json) | 16 PHP checks, JavaScript review checks, 131 syntax checks; role routes, private flashcards, repeatable fictional seeding | Snapshot only; final integrated UAT/load/fault/security/restore still pending |
 | [P0b cleanup](../../evidence/cleanup/p0b.json) | Final action allowlist, retained/denied routes and three-role dashboard inspection | Full UAT and historical-worker browser upgrade not claimed |
@@ -20,11 +15,11 @@ The catalogue/experiment settings below are checks/plans, not results. Manual ac
 | [P5 HTTP](../../evidence/access/p5.json) | Authorized status/history/rescan/download fixtures, static-path bypass regressions, 42-check PHP suite | Connected upload/UI/worker acceptance remains open |
 | [P2 adapter](../../evidence/contracts/p2.json) | 21 offline adapter cases, 69-check PHP regression suite and disposable localhost role-page inspection; PR #7 reviewed and merged | No live exchange, actual cURL transfer, metered worker or two real consumers verified |
 
-P1b private attachment storage/MIME/move enforcement and P3 orchestration remain to build. P2 result normalization is offline-verified; P1a revision/attempt persistence is implemented and P5 HTTP access is fixture-verified. P0b action exclusions and retained-route checks are recorded in [cleanup evidence](../../evidence/cleanup/p0b.json); these do not certify the final integrated system. Baseline passes do not close them. The team plan owns completion; add raw evidence only when runs occur.
+Private attachment validation/storage, the worker/two real consumers and scan UI are implemented. Connected fixture tests cover actual multipart upload, result processing, authorized download, teacher rescan/replay and distinct analysis IDs. Provider and final human acceptance remain separately recorded. Earlier action-map checks remain in [baseline routing evidence](../../evidence/cleanup/p0b.json). The team record and integrated verification below describe the completed implementation and remaining human acceptance.
 
 ## Required test catalogue
 
-Current command: `php tests/run.php` runs baseline, repeatable demo seeding, routing/three-role HTTP, flashcard, persistence, adapter and HTTP status/access checks without provider credentials. Focused groups include `--group=adapter`, `--group=persistence`, `--group=access` and `--group=status`. Optional JavaScript checks: `node tests/flashcard-study.test.cjs` and `node tests/service-worker.test.cjs` (standard Node only; Node is not an app runtime dependency). Evidence snapshots above record their actual results and limits. These checks do not complete final scan/security/load/UAT acceptance.
+Current command: `php tests/run.php` runs baseline, fresh installation, role workflows, seeding, flashcards, uploads, persistence, worker, adapter, connected HTTP and scan-view checks without provider credentials. Focused groups include `--group=adapter`, `--group=persistence`, `--group=access` and `--group=status`. Optional JavaScript checks: `node tests/flashcard-study.test.cjs`, `node tests/service-worker.test.cjs` and `node tests/scan-status.test.cjs` (standard Node only; Node is not an app runtime dependency). Evidence snapshots above record their actual results and limits. Full manual and independent acceptance remain separate from automated checks.
 
 Requirements authority: [SRS](../SRS.md) defines FR01-FR27 and NFR01-NFR12; the Step A-F files in this folder define assessment criteria R01-R15. The catalogue below defines implementation/measurement checks. The [demo/manual UAT guide](../demo-manual.md) separately defines full manual feature acceptance, its actual-result/defect log, and the short panel sequence.
 
@@ -49,7 +44,7 @@ Requirements authority: [SRS](../SRS.md) defines FR01-FR27 and NFR01-NFR12; the 
 | ST02 | CSRF rejected, rescan requires POST, forged file paths/IDs denied, MIME mismatch and oversized uploads rejected, failed move does not report success. |
 | ST03 | Serving command denies direct `.git`, DB, configuration and private-file paths. Logs/status HTML/JSON contain no API key/cookie/raw file or provider body. |
 | UI01 | Student and teacher screens show pending, retry, unresolved, malicious, suspicious and no-detection labels; grade state stays separate; narrow/keyboard/error states work. |
-| UI02 | Course catalog/enrollment/materials, assignment calendar/deadlines, dashboards, announcements, notifications, profiles, submissions/grading/feedback remain reachable for correct roles. No quiz or excluded-module links appear in assessed menus, gradebook or dashboards. |
+| UI02 | Course catalog/enrollment/materials, assignment calendar/deadlines, dashboards, announcements, notifications, profiles, submissions/grading/feedback remain reachable for correct roles. Menus, gradebooks and dashboards use only supported destinations. |
 | ST04 | Excluded direct routes and quiz actions within retained controllers are denied. Hiding links alone cannot pass. Retained course/calendar/announcement/notification and new scan/download routes still enforce authorization. |
 | LIVE01 | One limited real synthetic-file flow obtains a real analysis ID, retrieves evidence, and verifies file relationship. Record sanitized request types/status/times; redact credentials. |
 | RESTORE01 | Restore a disposable copy of DB + private files; verify a harmless attachment's bytes/hash, ownership and advisory linkage. |
@@ -87,7 +82,7 @@ Retain failed results and defect reports, then add retest results on the fixed r
 Producer and consumer run the same fixture/JSON examples before merge. Check application camelCase versus SQL columns, nullability, exact status strings, seconds/bytes/UTC, identity types and normalized errors. Both reusable consumers exercise the same classifier. Test rescan token replay returns the original attempt and actual state, and result/lifecycle writes are atomic under the lease. Each stream adds focused test files to the common discovery runner. Final proof is an integrated role workflow and actual provider evidence, not four independently green modules.
 
 
-## Assessment traceability
+## Verification mapping
 
 | ID | Observable acceptance criterion | Final part | Design and required proof |
 | --- | --- | --- | --- |
@@ -96,3 +91,29 @@ Producer and consumer run the same fixture/JSON examples before merge. Check app
 | R06 | Replacement files and late results cannot overwrite the latest revision's advisory | B/C | `data-model.md`; concurrency, duplicate-job and stale-response tests |
 | R08 | Load test identifies environment, increased variable, measurements, degradation point and failure mode | C | Raw measurements and analysis; app capacity separated from provider quota |
 | R09 | Fault injection measures recovery after timeout, error and malformed data | C | Timestamped state and recovery evidence |
+
+## Integrated verification
+
+- `php tests/run.php`: 106 passed, 0 failed at the integrated source snapshot; synthetic/disposable data only.
+- Three Node checks pass, including actual polling/visibility/backoff/rescan replay behavior.
+- `php tests/reliability/runner.php --write`: nine deterministic trials pass, with three trials each for timeout, HTTP 503 and malformed evidence. Recovery is measured with an injected clock; malformed evidence requires an explicit teacher rescan. [Sanitized results](../../evidence/reliability/summary.json).
+- Submission tests restore a matched disposable database/private-file backup and verify bytes/hash/pointers/history and access context. This is not a second-person setup result.
+- Native browser QA verifies student text-only update retains its attachment/advisory, private file-ID links, teacher fresh-request queued state and prior completed result/history. Narrow and wide screen views were inspected; screenshot evidence is retained selectively.
+- Live requests and performance measurements have separate sanitized records; no fixture result is counted as a live exchange.
+
+Full UAT01–UAT35 with every variant, second-member setup/rehearsal, final source reconciliation and stakeholder acceptance remain open where no executed run is recorded. Automated coverage is not silently substituted for full manual acceptance.
+
+## Measured load and live exchange
+
+The [full load record](../../evidence/performance/summary.json) uses a 30-second warmup and 120-second measurement at each level, real 4 KiB synthetic multipart uploads and a disposable Windows PHP/SQLite server.
+
+| Concurrent clients | Accepted measured uploads | Errors | Accepted/second | p95 milliseconds |
+| --- | --- | --- | --- | --- |
+| 1 | 2,294 | 0 | 19.111 | 72.174 |
+| 5 | 2,672 | 0 | 22.230 | 277.360 |
+| 10 | 2,747 | 0 | 22.780 | 507.522 |
+| 20 | 2,808 | 0 | 23.247 | 937.413 |
+
+Including warmups, all 12,991 accepted revisions had matching private files/queued attempts; sizes and hashes verified. Latency includes loopback transfer, so it is a conservative upper bound for the transfer-excluded target. No failure boundary was reached through 20 clients. The single-thread development server and unrelated host memory/CPU load limit generalization. The worker was deliberately stopped: backlog growth was measured, not provider completion throughput or queue-drain capacity. Raw per-request CSV/database/files remain ignored under tmp; the sanitized summary records the source fingerprint and measurements.
+
+[Live synthetic evidence](../../evidence/live/synthetic-check.json) records an actual hash lookup, upload/start, returned analysis ID and matching analysis/item SHA-256. A later read of the same analysis completed with Unresolved / inconclusive_engines (60 undetected, 14 type-unsupported); exact file relationship and the upload-descriptor alias were verified. The first worker observation was pending; this follow-up is not a continuous live UI/deadline acceptance claim. This real exchange is separate from deterministic fixture outcomes. No real malware, private coursework or credentials were recorded.

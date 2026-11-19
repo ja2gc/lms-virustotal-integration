@@ -33,14 +33,15 @@ $a = $assignment;
         <tr>
           <th>Student</th>
           <th>Submitted</th>
-          <th>Status</th>
+          <th>Grade status</th>
           <th>Score</th>
+          <th>Security</th>
           <th class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody>
         <?php if (empty($submissions)): ?>
-          <tr><td colspan="5" class="text-center text-muted" style="padding:30px;">No submissions yet.</td></tr>
+          <tr><td colspan="6" class="text-center text-muted" style="padding:30px;">No submissions yet.</td></tr>
         <?php else: foreach ($submissions as $s): ?>
           <tr>
             <td>
@@ -67,6 +68,7 @@ $a = $assignment;
                 <span class="text-muted">—</span>
               <?php endif; ?>
             </td>
+            <td><?php renderSubmissionScan($s); ?></td>
             <td class="text-right">
               <a href="<?= url('teacher/gradeSubmission/' . $s['id']) ?>" class="btn btn-primary btn-sm">
                 <?= $s['status'] === 'graded' ? 'View' : 'Grade' ?>

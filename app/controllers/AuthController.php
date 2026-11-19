@@ -155,7 +155,7 @@ class AuthController extends Controller
                     'role'      => $role,
                 ]);
                 Auth::login($username, $password);
-                $this->flash('success', 'Account created! Welcome to doodle.');
+                $this->flash('success', 'Account created! Welcome to '.APP_NAME.'.');
                 $this->redirect($role === 'teacher' ? 'teacher' : 'student');
             }
         }

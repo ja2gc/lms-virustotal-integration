@@ -15,7 +15,7 @@ $s = $sub;
   </div>
 </div>
 
-<div class="grid" style="grid-template-columns: 2fr 1fr; gap: 24px; align-items: flex-start;">
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:flex-start;">
   <div>
     <div class="card card-pad mb-3">
       <h3 style="margin-bottom: 12px;">Student's submission</h3>
@@ -25,16 +25,7 @@ $s = $sub;
         <p class="text-muted">No written submission.</p>
       <?php endif; ?>
 
-      <?php if (!empty($s['file_path'])): ?>
-        <a href="<?= uploadUrl($s['file_path']) ?>" download class="file-attachment" style="text-decoration:none;color:inherit;">
-          <div class="file-icon"><span class="material-icons"><?= fileIcon(pathinfo($s['file_name'], PATHINFO_EXTENSION)) ?></span></div>
-          <div class="file-meta">
-            <strong><?= e($s['file_name']) ?></strong>
-            <span class="size">Click to download and review</span>
-          </div>
-          <span class="material-icons">download</span>
-        </a>
-      <?php endif; ?>
+      <?php renderSubmissionScan($s,true); ?>
 
       <p class="text-muted" style="font-size:.82rem;margin-top:14px;">Submitted <?= timeAgo($s['submitted_at']) ?></p>
     </div>

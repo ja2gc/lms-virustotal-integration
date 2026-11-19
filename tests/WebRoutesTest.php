@@ -17,6 +17,7 @@ return ['group' => 'routing', 'tests' => [
         require_once APP_DIR . '/core/Controller.php';
         require_once APP_DIR . '/core/Router.php';
         $excluded = static function (string $route): bool {
+            if (preg_match('~^auth/setup2fa(?:/|$)~i', $route)) return true;
             return (bool) preg_match('~^(?:(?:ai|analytics|api|certificate|certificates|code|forum|gamification|group|learningpath|learning_paths|message|messages|oauth|poll|push|quiz|review|whiteboard|wiki)(?:/|$)|teacher/(?:quizzes|createQuiz|quiz|addQuestion|deleteQuestion)(?:/|$)|flashcards?/generateFromCourse(?:/|$))~i', $route);
         };
         $failures = [];
