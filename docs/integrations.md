@@ -1,6 +1,6 @@
 # Integration register and contracts
 
-Target contracts, not implemented endpoints. `index.php?r=...` matches Doodle's existing router style; do not invent a separate `/api/v1` gateway for this project. Current session login is reused for the scoped browser routes. Public routing must use an explicit safe action set and correct HTTP methods.
+Shared contracts cover implemented and planned boundaries; the team plan records current completion. `index.php?r=...` matches Doodle's existing router style; do not invent a separate `/api/v1` gateway for this project. Current session login is reused for the scoped browser routes. Public routing must use an explicit safe action set and correct HTTP methods.
 
 ## Integration-point register
 
@@ -33,7 +33,7 @@ interface FileScanProvider
 }
 ```
 
-Proposed files: `app/scan/FileScanProvider.php` and `app/scan/VirusTotalAdapter.php`. The host must explicitly load the `app/scan/` bootstrap in web and CLI entry points; the current autoloader does not discover that directory. No framework migration is required.
+Implemented files: `app/scan/FileScanProvider.php` and `app/scan/VirusTotalAdapter.php`. The host must explicitly load the `app/scan/` bootstrap in web and CLI entry points; the current autoloader does not discover that directory. No framework migration is required.
 
 Inputs: analysis ID is 1-512 printable ASCII bytes without whitespace; SHA-256 is exactly 64 hexadecimal characters, normalized lowercase. URL-encode the ID as one path segment. Invalid inputs make no network request.
 
@@ -52,7 +52,11 @@ The adapter is a named **Adapter pattern**: provider HTTP/JSON becomes an applic
 
 The adapter issues at most one analysis read and, for completed usable evidence, one identity read per call. The worker reserves the possible two-call quota budget before invoking it and the transport enforces each request reservation. Unused reservations are released. Never hide unmetered HTTP inside a helper.
 
-P2 consumption: explicitly require `app/scan/bootstrap.php`, then construct `new VirusTotalAdapter($serverKey, $meteredTransport)` and call `getResult($analysisId, $expectedSha256)`. `CurlTransport` implements the underlying HTTP callable; the worker must wrap it with budget reservations before use. Offline adapter tests inject fixture responses instead. The additive `quotaKind` field is a proposed compatible 1.1.0 addition pending Member 4's contract review; consumers must handle its absence as unknown. This does not establish live provider access or a working worker.
+P2 consumption: explicitly require `app/scan/bootstrap.php`, then construct `new VirusTotalAdapter($serverKey, $meteredTransport)` and call `getResult($analysisId, $expectedSha256)`. `CurlTransport` implements the underlying HTTP callable; the worker must wrap it with budget reservations before use. Offline adapter tests inject fixture responses instead. Member 4 accepted the additive `quotaKind` field in component version **1.1.0** during PR #7 review; consumers must handle its absence as unknown. The four required fields and `FileScanProvider` signature remain unchanged. This does not establish live provider access or a working worker.
+
+For HTTP 429, `TooManyRequestsError` maps to `rate`, `QuotaExceededError` to `quota`, and other/missing codes to `unknown`. `quota` does not identify the reset window: VirusTotal documents minute, daily and monthly quota limits. P3 must apply the shared conservative pause/defer policy rather than infer a daily reset from this hint. See [provider errors](https://docs.virustotal.com/reference/errors).
+
+The underlying transport refuses redirects and non-provider origins, verifies TLS, caps each request at 30 seconds and each response body at 2 MiB. These controls were inspected; offline tests exercise URL rejection and injected responses, not actual cURL transfers. P3 metering and LIVE01 remain separate gates. [P2 evidence](../evidence/contracts/p2.json) records the tested revision and limits.
 
 ### Classification policy
 

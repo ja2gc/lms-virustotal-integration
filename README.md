@@ -82,7 +82,7 @@ In another terminal, run `php tests/run.php`. Optional developer UI logic check:
 
 Installer, three role logins/navigation, course/enrollment, written submissions, grading/feedback, manual flashcards and repeatable fictional seeding have executed checks. [Step C](docs/final-project/step-c-performance-reliability-security-validation.md#baseline-verification) links actual evidence and limits.
 
-P0b feature/menu/action cleanup is complete. P1a shared persistence, P1b private upload delivery, P2/P3 VirusTotal processing, P4 scan UI, P5 private HTTP access and P6/P7 integrated acceptance have separate statuses in the [team plan](docs/team-plan.md#completion-record). The localhost router denies old public assignment-upload URLs. P1b legacy import and P4 file-ID links are required before real attachment delivery is accepted. Use synthetic files and loopback only. A running baseline is not the final integrated release.
+P0b feature/menu/action cleanup, P1a shared persistence and the P2 result adapter are complete within their recorded scope. P2 passes offline provider fixtures; P3 worker/two consumers, P1b private upload delivery, P4 scan UI, P5 connected HTTP acceptance and P6/P7 integrated acceptance remain open in the [team plan](docs/team-plan.md#completion-record). The localhost router denies old public assignment-upload URLs. P1b legacy import and P4 file-ID links are required before real attachment delivery is accepted. Use synthetic files and loopback only. A running baseline is not the final integrated release.
 
 ## VirusTotal API key on your own computer
 
@@ -95,7 +95,7 @@ if (-not (Test-Path -LiteralPath .env)) { Copy-Item -LiteralPath .env.example -D
 notepad .env
 ```
 
-In your own editor, set `VT_API_KEY=your_actual_key` and save. Keep `SCAN_MODE=fixture` during offline development; set `SCAN_MODE=live` when running the completed live adapter/worker. Do not paste your key into chat, screenshots, source code or a terminal command. Restart the PHP server/worker after changing local settings. The live adapter/worker remains Member 2's implementation task; configuring a key alone does not implement scanning.
+In your own editor, set `VT_API_KEY=your_actual_key` and save. Keep `SCAN_MODE=fixture` during offline development; set `SCAN_MODE=live` when running the completed live adapter/worker. Do not paste your key into chat, screenshots, source code or a terminal command. Restart the PHP server/worker after changing local settings. Member 2's result adapter is offline-verified; the P3 worker and live integration remain unfinished. Configuring a key alone does not start scanning.
 
 PHP's shared configuration loads the root `.env` for web and CLI entry points. Use simple `NAME=value` lines, `#` comment lines, and **double quotes** around values containing spaces. This is a small INI-style configuration file: no shell commands, `export` or variable interpolation. Existing process environment settings take priority. The session-free scan class bootstrap remains side-effect free; a worker entry point loads `config/config.php` before constructing its services.
 

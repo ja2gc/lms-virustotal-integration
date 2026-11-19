@@ -12,7 +12,7 @@ Use the canonical artifacts rather than copying contracts here:
 | --- | --- |
 | Corrected integration/context/sequence models | [Architecture](../architecture.md), [ERD/state model](../data-model.md); reconcile original Technical 1 |
 | Integration register and failure/version semantics | [Integration contracts](../integrations.md); verify each point against built code |
-| Reusable Technical 3 component/interface and two consumers | [Component contract](../integrations.md#published-reusable-component); implementation/live proof pending |
+| Reusable Technical 3 component/interface and two consumers | [Component contract](../integrations.md#published-reusable-component); P2 adapter offline-verified via PR #7; P3 real consumers/live proof pending; original source comparison unavailable |
 | Release/deployment plan | [Step A delivery](step-a-working-integrated-system.md); localhost selected, no cloud deployment |
 | Divergences from technical activities | [Architecture decisions/divergences](../architecture.md#decisions-and-divergences); add reasons and source/evidence as built |
 

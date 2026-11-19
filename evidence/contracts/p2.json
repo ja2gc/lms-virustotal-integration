@@ -1,0 +1,123 @@
+{
+  "task": "P2 offline result adapter review and integration",
+  "owner": "Member 2",
+  "reviewer": "Member 4",
+  "date": "2026-11-19",
+  "mode": "offline fixtures; disposable localhost; no live provider calls",
+  "teamBaseRevision": "e3ecbbc0c3577fef91448edf551f3276e824008a",
+  "reviewedRevision": "8d6d45390166b6eebfd60de2937a01079594a420",
+  "mergedMainRevision": "a6285be37b90e16ba6f8ed3b92ec2953b864c1e6",
+  "pullRequest": "https://github.com/ja2gc/lms-virustotal-integration/pull/7",
+  "requirements": [
+    "FR15",
+    "FR16",
+    "NFR02",
+    "NFR03",
+    "NFR09",
+    "NFR11",
+    "NFR12",
+    "CT01",
+    "CT02",
+    "CT03"
+  ],
+  "changes": [
+    "VirusTotalAdapter implements unchanged FileScanProvider result signature",
+    "CurlTransport fixed HTTPS origin, verified TLS, no redirects, 30-second request timeout, 2 MiB response cap",
+    "Class-only bootstrap explicitly loads adapter and transport",
+    "Provider fixtures exercise the production classifier"
+  ],
+  "coordinatorChanges": [
+    "Accepted optional quotaKind in component 1.1.0; no required field/signature/classification changes",
+    "Clarified quota hint does not identify minute/daily/monthly reset window",
+    "Updated current ownership/status, consumption instructions, validation evidence and AI disclosure"
+  ],
+  "coordinatorRuntimeFixes": [],
+  "removals": [],
+  "verification": [
+    {
+      "result": "21 passed; 0 failed",
+      "command": "php tests/run.php --group=adapter",
+      "revision": "8d6d453 and a6285be"
+    },
+    {
+      "result": "69 passed; 0 failed",
+      "command": "php tests/run.php",
+      "revision": "8d6d453 and merged main a6285be",
+      "rawOutput": "PASS every controller can load with its base class\r\nPASS installer GET renders a form without an installed database\r\nPASS teacher grade links and form resolve to a public grading action\r\nPASS SQLite schemas and initial data install without external services\r\nPASS course-management and gradebook links reach their detail actions\r\nPASS sidebar highlights the current section without its role dashboard\r\nPASS demo seeding is repeatable, preserves existing users and supplies connected role logins\r\nPASS committed environment example contains no API credential\r\nPASS HTTP fixtures isolate developer keys live mode and database settings\r\nPASS local configuration loads literal values without shell interpolation or overriding process settings\r\nPASS local configuration ignores unrelated variables and handles an absent file\r\nPASS invalid key arrays fail with a sanitized error\r\nPASS web and CLI configuration load a disposable env while HTTP denies env files\r\nPASS manual deck creation, study and review persist through real HTTP\r\nPASS private deck view and study reject a different student and teacher\r\nPASS deck creation validates content and course scope; deletion requires CSRF POST\r\nPASS local server serves assets and routes without exposing project files\r\nPASS status and history enforce guest owner teacher course and admin boundaries\r\nPASS rescan uses authorized CSRF POST and server token with idempotent replay\r\nPASS private attachments stream only to owner course teacher admin and never static URLs\r\nPASS CT01 completed matching analysis returns normalized no-detection advisory\r\nPASS pending analyses remain unresolved and do not request file identity\r\nPASS invalid inputs return invalid_input without making HTTP requests\r\nPASS CT02 malformed and incomplete analysis evidence stays unresolved\r\nPASS CT02 mismatched analysis and file identities cannot become favorable\r\nPASS CT03 malicious suspicious and inconclusive engine counts follow exact policy\r\nPASS provider failures return sanitized stable reasons and bounded retry hints\r\nPASS completed analysis with unavailable identity remains unresolved and retryable\r\nPASS empty engine evidence and wrong item type never produce favorable results\r\nPASS uppercase expected hash is normalized and identity authentication failure is not hidden\r\nPASS transport rejects non-provider URLs without issuing a request\r\nPASS invalid API key cannot inject request headers\r\nPASS missing or empty completed engine results cannot be favorable\r\nPASS quota error codes distinguish request rate and exhausted quota without exposing messages\r\nPASS NotAvailableYet is retryable on analysis or identity reads\r\nPASS dot-only analysis IDs remain one encoded path segment\r\nPASS malformed engine results cannot produce a favorable advisory\r\nPASS conflicting or missing file object ID cannot produce favorable results\r\nPASS HTTP-date retry hints are converted to seconds\r\nPASS contradictory engine categories and counters remain unresolved\r\nPASS obsolete HTTP-date retry hints are honored\r\nPASS documented CLI migration runs twice on a disposable installed baseline\r\nPASS retained account and course deletes preserve existing cascade behavior\r\nPASS nested registration failure preserves caller transaction and prior pointer\r\nPASS legacy attachments are unresolved until Member 1 imports them\r\nPASS two independent worker processes cannot claim the same attempt\r\nPASS expired leases cannot publish results even before another worker claims\r\nPASS Member 1 can compose academic saves and revision registration in one transaction\r\nPASS invalid metadata and result transitions reject without changing stored state\r\nPASS overdue polls terminate and old revision results never replace the current projection\r\nPASS forward migration repeats without data loss and CLI bootstrap has no session\r\nPASS revision registration separates hashes, preserves history and queues once\r\nPASS rescan tokens replay actual state and reject another actor or submission\r\nPASS claims and result writes guard leases and retain normalized projections\r\nPASS uncertain starts fail after expiry and safe polling resumes with its handle\r\nPASS failed revision transaction rolls back rows and current pointers\r\nPASS status JSON distinguishes queued and no-file records and contains public fields only\r\nPASS unknown stored status is conservative and status GET never queues work\r\nPASS empty retained workflows do not advertise quizzes\r\nPASS historical excluded notification links cannot promote denied actions\r\nPASS assignment submission grading feedback and gradebooks survive cleanup\r\nPASS logout and private responses prohibit cache reuse\r\nPASS excluded actions and aliases are denied before authentication or CSRF\r\nPASS retained pages contain no excluded links or quiz assessments\r\nPASS home delegation preserves the one-time login message for every role\r\nPASS every literal application link and redirect resolves to an action\r\nPASS query links keep routing separate from filter parameters\r\nPASS every sidebar destination renders for each of the three roles\r\nPASS restricted role routes stay forbidden and guests are redirected to login\r\n69 passed; 0 failed\r\n"
+    },
+    {
+      "result": "PASS flashcard review failures preserve progress; repeat clicks are blocked; success completes session",
+      "command": "node tests/flashcard-study.test.cjs"
+    },
+    {
+      "result": "PASS service worker retires only Doodle caches and unregisters",
+      "command": "node tests/service-worker.test.cjs"
+    },
+    {
+      "result": "152 PHP files; 0 failures",
+      "command": "php -l on every git ls-files *.php path"
+    },
+    {
+      "result": "PASS",
+      "command": "git diff --check"
+    },
+    {
+      "result": "Only .env.example tracked; local .env ignored; real contents never tool-read",
+      "command": "git ls-files env patterns; git check-ignore .env"
+    },
+    {
+      "command": "python tmp/pr7-links.py",
+      "result": "90 local Markdown links checked; 0 errors"
+    }
+  ],
+  "negativeCheck": {
+    "provenance": "Review-time test effectiveness check, followed by green adapter run on merged main. Does not prove historical implementation order. Tracked runtime files untouched.",
+    "setup": "Disposable copy of tests/ScanAdapterTest.php, tests/run.php and provider fixtures; scan class files copied with bootstrap taken from pre-P2 team main e3ecbbc",
+    "observed": "0 passed; 21 failed with missing VirusTotalAdapter/CurlTransport classes",
+    "command": "php tests/run.php --group=adapter in disposable copy"
+  },
+  "review": {
+    "checked": [
+      "analysis ID and expected hash",
+      "all eight integer counters and agreement with engine categories",
+      "pending/error normalization and retry hints",
+      "at most two result-read requests",
+      "TLS/origin/redirect/body-size/timeout configuration",
+      "class-only bootstrap and no adapter SQL/session/upload/retry loop"
+    ],
+    "additionalReviewerCheck": "Reviewer reported 90 in-memory malformed analysis/item shape variants returned Unresolved without warnings; exploratory result, not a committed regression suite",
+    "continuousIntegration": "GitHub reported no check runs for reviewed head; local executed checks supply verification",
+    "verdict": "No blocking runtime findings after coordinator review and separate read-only review"
+  },
+  "localhost": {
+    "fixtureOrigin": "http://127.0.0.1:64175",
+    "setup": "WebFixture disposable database/private root; forced fixture mode and empty API key; documented offline demo seeder and scan migration run only in that disposable target",
+    "screenshot": "p2-localhost.png",
+    "limits": "Visible retained-page smoke check only; no new scan UI, full manual UAT or attachment acceptance claimed",
+    "browser": "native in-app browser",
+    "observed": [
+      "Student login and My Learning dashboard",
+      "Student Integration Reflection submission form renders; no attachment submitted",
+      "Student logout and teacher login",
+      "Teacher Studio dashboard rendered and screenshot inspected",
+      "Teacher logout and administrator login",
+      "Admin Dashboard rendered and screenshot saved"
+    ],
+    "previewStopped": true
+  },
+  "providerReferences": [
+    "https://docs.virustotal.com/reference/analyses-object",
+    "https://docs.virustotal.com/reference/analysis-object-item",
+    "https://docs.virustotal.com/reference/files",
+    "https://docs.virustotal.com/reference/errors"
+  ],
+  "limits": [
+    "No actual cURL success/timeout/size-limit network transfer exercised",
+    "No live VirusTotal exchange or account capability validated",
+    "P3 metered worker, scan start, recovery and two real consumers remain unfinished",
+    "P1b upload/backfill, P4 UI and P5 connected acceptance remain open",
+    "P6 load/reliability/security/full-UAT/restore and P7 final artifacts remain open",
+    "Original Technical 3 PHP and AI transcript unavailable for comparison",
+    "No user database migrated/reset and no user upload/private file changed"
+  ]
+}
