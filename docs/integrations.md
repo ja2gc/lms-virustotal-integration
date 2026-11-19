@@ -46,11 +46,13 @@ Required result fields:
 | `retryable` | Boolean; whether another scheduled result-read could help |
 | `retryAfter` | Null or nonnegative integer seconds; scheduling hint only |
 
-Optional additive fields: `stats` with validated counters; `observedAt` as an ISO-8601 UTC timestamp; `analysisId` for diagnostic correlation. Required fields and status meanings are stable in component version 1.0.0. Patch releases preserve behavior; compatible optional fields are minor; required-input/field/status-meaning changes require a major version and consumer migration.
+Optional additive fields: `stats` with validated counters; `observedAt` as an ISO-8601 UTC timestamp; `analysisId` for diagnostic correlation; and `quotaKind` for quota-deferred results (`rate`, `quota`, or `unknown`). `quotaKind` is a sanitized scheduling hint; unknown quota windows require conservative operator review. Required fields and status meanings are stable in component version 1.0.0. Patch releases preserve behavior; compatible optional fields are minor; required-input/field/status-meaning changes require a major version and consumer migration.
 
 The adapter is a named **Adapter pattern**: provider HTTP/JSON becomes an application-owned result. It does not authorize, query SQL, upload files, initiate scans, retry, sleep, enqueue jobs or select which attempt is current. Construction accepts one injected HTTP callable plus a server-held API key. Transport contract: `(string $method, string $url, array $headers, ?array $multipart): array`, returning `httpStatus` (integer, 0 on transport failure), `headers` (normalized lower-case names), `body` (string), and `transportError` (null or normalized reason). Fixtures replace that transport, not the classification logic.
 
 The adapter issues at most one analysis read and, for completed usable evidence, one identity read per call. The worker reserves the possible two-call quota budget before invoking it and the transport enforces each request reservation. Unused reservations are released. Never hide unmetered HTTP inside a helper.
+
+P2 consumption: explicitly require `app/scan/bootstrap.php`, then construct `new VirusTotalAdapter($serverKey, $meteredTransport)` and call `getResult($analysisId, $expectedSha256)`. `CurlTransport` implements the underlying HTTP callable; the worker must wrap it with budget reservations before use. Offline adapter tests inject fixture responses instead. The additive `quotaKind` field is a proposed compatible 1.1.0 addition pending Member 4's contract review; consumers must handle its absence as unknown. This does not establish live provider access or a working worker.
 
 ### Classification policy
 
