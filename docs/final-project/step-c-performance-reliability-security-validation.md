@@ -2,20 +2,20 @@
 
 ## Overview
 
-Executed results are distinguished from the remaining acceptance catalogue. Manual acceptance and the panel script live in [the demo/UAT manual](../demo-manual.md).
+Executed results are distinguished from the acceptance test catalogue. Manual acceptance and the panel script live in [the demo/UAT manual](../demo-manual.md).
 
 ## Baseline verification
 
 | Evidence snapshot | What was actually checked | Limit |
 | --- | --- | --- |
 | [Local baseline smoke](../../evidence/baseline/localhost-smoke.json) | Installation, three role logins, course/enrollment, written submission, grading/feedback | Written-only baseline, not attachment or VirusTotal acceptance |
-| [Route/flashcard/seeder follow-up](../../evidence/baseline/routes-flashcards.json) | 16 PHP checks, JavaScript review checks, 131 syntax checks; role routes, private flashcards, repeatable fictional seeding | Snapshot only; final integrated UAT/load/fault/security/restore still pending |
+| [Route/flashcard/seeder follow-up](../../evidence/baseline/routes-flashcards.json) | 16 PHP checks, JavaScript review checks, 131 syntax checks; role routes, private flashcards, repeatable fictional seeding | Historical baseline snapshot; integrated results are recorded below |
 | [P0b cleanup](../../evidence/cleanup/p0b.json) | Final action allowlist, retained/denied routes and three-role dashboard inspection | Full UAT and historical-worker browser upgrade not claimed |
 | [P1a foundation](../../evidence/foundation/p1a.json) | 15 persistence checks, repeatable CLI migration, concurrent claims, lease/pointer/rollback checks | Repository fixtures do not prove P1b private upload/backfill or P3 processing |
-| [P5 HTTP](../../evidence/access/p5.json) | Authorized status/history/rescan/download fixtures, static-path bypass regressions, 42-check PHP suite | Connected upload/UI/worker acceptance remains open |
+| [P5 HTTP](../../evidence/access/p5.json) | Authorized status/history/rescan/download fixtures, static-path bypass regressions, 42-check PHP suite | HTTP-boundary snapshot; connected integration checks are recorded below |
 | [P2 adapter](../../evidence/contracts/p2.json) | 21 offline adapter cases, 69-check PHP regression suite and disposable localhost role-page inspection; PR #7 reviewed and merged | No live exchange, actual cURL transfer, metered worker or two real consumers verified |
 
-Private attachment validation/storage, the worker/two real consumers and scan UI are implemented. Connected fixture tests cover actual multipart upload, result processing, authorized download, teacher rescan/replay and distinct analysis IDs. Provider and final human acceptance remain separately recorded. Earlier action-map checks remain in [baseline routing evidence](../../evidence/cleanup/p0b.json). The team record and integrated verification below describe the completed implementation and remaining human acceptance.
+Private attachment validation/storage, the worker/two real consumers and scan UI are implemented. Connected fixture tests cover actual multipart upload, result processing, authorized download, teacher rescan/replay and distinct analysis IDs. Provider and final human acceptance remain separately recorded. Earlier action-map checks remain in [baseline routing evidence](../../evidence/cleanup/p0b.json). The integrated verification below describes the tested implementation.
 
 ## Required test catalogue
 
@@ -101,7 +101,7 @@ Producer and consumer run the same fixture/JSON examples before merge. Check app
 - Native browser QA verifies student text-only update retains its attachment/advisory, private file-ID links, teacher fresh-request queued state and prior completed result/history. Narrow and wide screen views were inspected; screenshot evidence is retained selectively.
 - Live requests and performance measurements have separate sanitized records; no fixture result is counted as a live exchange.
 
-Full UAT01–UAT35 with every variant, second-member setup/rehearsal, final source reconciliation and stakeholder acceptance remain open where no executed run is recorded. Automated coverage is not silently substituted for full manual acceptance.
+Verification scope: recorded automated checks, disposable local browser observations, measured fixture load/fault trials, and a limited synthetic live exchange. These records do not establish exhaustive human UAT, independent-machine reproduction, legacy source comparison, or stakeholder acceptance.
 
 ## Measured load and live exchange
 

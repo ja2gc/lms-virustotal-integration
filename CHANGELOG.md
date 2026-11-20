@@ -1,3 +1,5 @@
+> Historical upstream Doodle documentation, preserved for attribution and release history. For current LMSTotal features, supported setup and verification, see the [README](README.md).
+
 # Changelog
 
 All notable changes to **doodle** will be documented in this file.

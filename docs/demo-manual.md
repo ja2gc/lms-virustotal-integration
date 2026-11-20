@@ -1,19 +1,19 @@
 # Demo manual and manual UAT
 
-This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. The integrated workflow, limited real provider exchange and browser recording rehearsal are verified in the validation guide. Full manual acceptance remains open. New test records start Not run; use actual evidence rather than copying expected outcomes.
+This manual serves two purposes: a **full manual acceptance/UAT checklist** for all approved main features, and a **shorter panel presentation sequence** referencing those same cases. It describes target behavior, not executed results. The integrated workflow, limited real provider exchange and browser recording rehearsal are verified in the validation guide. New test records start Not run; use actual evidence rather than copying expected outcomes.
 
 The [SRS](SRS.md) is the requirements authority; the [feature overview](SRS.md#cleanup-action-matrix) explains the approved assignment-focused LMS. This manual is a shared end goal: build toward its scenarios and SRS requirements, not extra modules. Successful presentation does not replace load, reliability, security, risk and AI-use evidence. Team-run manual tests are rehearsal/acceptance evidence; do not claim independent stakeholder sign-off unless a real stakeholder reviews and accepts the results.
 
 ## Setup and rehearsal checklist
 
-- [ ] Use the actual verified commands in [local release instructions](final-project/step-a-working-integrated-system.md#overview), on the same tagged/reviewed revision on all machines. The installer, migration, seeder and worker commands pass disposable setup checks.
-- [ ] Prepare fictional Admin Demo, Teacher A, Teacher B, Student A and Student B accounts. Keep passwords local; do not put credentials in slides, source or this manual.
-- [ ] Prepare a course named Systems Integration Lab, a short lesson/material, an assignment named Integration Reflection, a visible future deadline, and maximum score 100. Teacher B owns another course for access-control testing. Student A and Student B remain distinct owners.
-- [ ] Prepare harmless synthetic `reflection-v1.txt` and `reflection-v2.txt` with different contents/hashes. No private coursework or real malware. Keep fixtures and any retained downloads in the agreed private/test locations.
-- [ ] Use separate browser profiles/private sessions for roles; two ordinary tabs in one profile share login state. Keep navigation ready without exposing credentials or provider configuration.
-- [ ] Prepare the worker and deterministic fixture modes for pending, each advisory, timeout/error/malformed response and recovery. Label fixtures visibly in the presentation; do not represent a crafted flagged response as real malware detection.
-- [ ] Preserve sanitized evidence from a limited real VirusTotal request with matching analysis/file identity. A live call is useful if internet/quota permit, but long provider waits must not derail the narrative.
-- [ ] Have a second member reproduce setup, verify private-path/role restrictions and restore a disposable DB/private-file copy. All members know the same file IDs, advisory labels and workflow.
+- Use the actual verified commands in [local release instructions](final-project/step-a-working-integrated-system.md#overview), on the same tagged/reviewed revision on all machines. The installer, migration, seeder and worker commands pass disposable setup checks.
+- Prepare fictional Admin Demo, Teacher A, Teacher B, Student A and Student B accounts. Keep passwords local; do not put credentials in slides, source or this manual.
+- Prepare a course named Systems Integration Lab, a short lesson/material, an assignment named Integration Reflection, a visible future deadline, and maximum score 100. Teacher B owns another course for access-control testing. Student A and Student B remain distinct owners.
+- Prepare harmless synthetic `reflection-v1.txt` and `reflection-v2.txt` with different contents/hashes. No private coursework or real malware. Keep fixtures and any retained downloads in the agreed private/test locations.
+- Use separate browser profiles/private sessions for roles; two ordinary tabs in one profile share login state. Keep navigation ready without exposing credentials or provider configuration.
+- Prepare the worker and deterministic fixture modes for pending, each advisory, timeout/error/malformed response and recovery. Label fixtures visibly in the presentation; do not represent a crafted flagged response as real malware detection.
+- Preserve sanitized evidence from a limited real VirusTotal request with matching analysis/file identity. A live call is useful if internet/quota permit, but long provider waits must not derail the narrative.
+- Have a second member reproduce setup, verify private-path/role restrictions and restore a disposable DB/private-file copy. All members know the same file IDs, advisory labels and workflow.
 
 ## Full manual acceptance catalogue
 
@@ -130,14 +130,6 @@ Suggested roles, adjustable by the team: UI owner guides DM01-DM04 and DM07; sca
 
 Say what failed. Keep the saved submission visible, show its honest waiting/Unresolved state, switch to explicitly labeled fixture behavior, and show previously captured real-provider evidence if available. If the group has no real integration evidence, report that limitation; do not claim a simulated response demonstrates live API exchange. Do not show credentials, private logs, actual student files or provider account settings to fill waiting time.
 
-## Definition of ready and stop rule
+## Verification references
 
-- [ ] DM01-DM13 executed on the integrated release, with pass/fail notes and real evidence linked. Any exception is explicit, not silently skipped.
-- [ ] UAT01-UAT35 and named subcases executed or explicitly reported Blocked/Fail, with actual observations, evidence, defects and retests. No unresolved blocking/required-feature failure is silently called ready.
-- [ ] R01-R15 checked against code/evidence; all required Part A-F artifacts reflect the built system.
-- [ ] Every SRS FR/NFR has a trace to the relevant manual and/or automated evidence. Passing a panel narrative or a manual case does not by itself prove load limits, internal contract reuse or concurrency guarantees.
-- [ ] Supporting LMS features pass smoke checks; the supported action map is enforced by navigation and direct routes.
-- [ ] Each member can explain their module, the input/output contract and one failure mode.
-- [ ] Setup and rehearsal fit the panel slot; long quota/poll waits are supported by recorded measurements.
-
-If a proposed feature does not serve a scenario here, a required assessment item or a concrete security/correctness control, propose it first and defer it unless approved. Internal implementation choices remain with each member and their agent; this manual is an acceptance goal, not a mandate to add new frameworks, dashboards or services.
+Use the [validation guide](final-project/step-c-performance-reliability-security-validation.md) for recorded checks and their scope, and the [team delivery record](team-plan.md) for completed deliverables. The UAT cases above are reusable test procedures, not prefilled pass records.

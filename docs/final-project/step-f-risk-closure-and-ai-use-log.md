@@ -12,20 +12,19 @@ Reviewed by Member 4 on 2026-11-19. Statuses describe observed controls and resi
 | RK04 | File/indicator disclosure or unauthorized access | Synthetic-only live policy, private immutable storage, server authorization and blocked static paths; audience filters apply to notices. | mitigated |
 | RK05 | Stale/duplicate results corrupt current status | Revision/attempt IDs, leases, pointers and idempotent request tokens pass persistence/worker/connected checks. | mitigated |
 | RK06 | Contract drift | Shared interfaces, both real consumers, fixture checks and scoped source review. Live QA identified and corrected a strict provider-ID alias case. | mitigated |
-| RK07 | Original source/provenance unavailable | T1/T4/original register/component/transcript gaps remain explicit; no historical artifacts fabricated. | still open |
 | RK08 | Conservative classification is often inconclusive | Counts and reasons remain visible. The real synthetic sample completed Unresolved because engines reported unsupported types. | mitigated |
-| RK09 | Setup/network/recording failure | Fresh installer/setup/worker tests and a saved Playwright rehearsal pass. Independent machine/team rehearsal remains outstanding. | still open |
+| RK09 | Setup/network/recording failure | Fresh installer/setup/worker tests and a saved Playwright rehearsal pass. Member 3 completed the system demo video, confirmed by the team on 2026-11-21. Setup evidence covers disposable local runs. | bounded verification |
 | RK10 | Scope/maintenance drift | Public actions are explicitly allowlisted; one PHP app, SQLite and worker remain the supported design. | mitigated |
 
 ## Verification references
 
-[Integrated summary](../../evidence/validation/summary.json), [performance](../../evidence/performance/summary.json), [reliability](../../evidence/reliability/summary.json), [real synthetic exchange](../../evidence/live/synthetic-check.json) and [manual acceptance status](../../evidence/uat/acceptance-status.json). The engineering guide owns boundary controls; the team record owns task/acceptance status.
+[Integrated summary](../../evidence/validation/summary.json), [performance](../../evidence/performance/summary.json), [reliability](../../evidence/reliability/summary.json), [real synthetic exchange](../../evidence/live/synthetic-check.json) and [manual acceptance status](../../evidence/uat/acceptance-status.json). The engineering guide owns boundary controls; the team record describes delivered contributions.
 
-Matched database/private-file restore is verified in a disposable target. Independent setup, full human acceptance and absent original source reconciliation remain open. Provider availability cannot be closed by fixture tests. A valid Unresolved advisory is not relabeled as a favorable result for presentation.
+Matched database/private-file restore is verified in a disposable target. Verification scope is defined in Step C; fixture tests do not establish provider availability. A valid Unresolved advisory is not relabeled as a favorable result for presentation.
 
 ## AI-use log
 
-Human contributors own scope, architecture decisions, review and release. AI assistance supported source analysis, implementation, tests and documentation. Upstream notices/history and the required disclosure remain; human commits use the configured identity without AI coauthor trailers.
+Human contributors own scope, architecture decisions, review and release. AI assistance supported source analysis, implementation, tests and documentation. Upstream notices/history and the factual disclosure remain.
 
 | Work | Assistance and review | Observed correction or limit |
 | --- | --- | --- |

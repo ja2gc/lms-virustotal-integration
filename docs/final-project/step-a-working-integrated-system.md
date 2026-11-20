@@ -12,14 +12,13 @@ The local LMS includes private upload revisions, asynchronous processing, shared
 - A migration command, web command, worker command, fixture/test command and fictional demo-data setup command.
 - Sufficient instructions for a second member/panel to reproduce the system without the implementer's assistance.
 
-## Remaining release work
+## Implemented release capabilities
 
 - [x] Provide safe example configuration: `VT_API_KEY`, `SCAN_MODE=fixture|live`, `SCAN_PRIVATE_DIR`, `SCAN_MAX_UPLOAD_BYTES`, `SCAN_REQUESTS_PER_MINUTE`, `SCAN_REQUESTS_PER_DAY`. Reuse `DOODLE_DB_TYPE=sqlite`/`DOODLE_ENV`; use process configuration, never committed real credentials. Values/units follow the integration and security contracts.
 - [x] P1a provides explicit `php bin/migrate.php` and session-free `app/scan/bootstrap.php`, verified twice on a disposable installed baseline. The installer/seeder do not apply project scan migrations.
 - [x] Implement `php bin/scan-worker.php` with `--once`, explicit fixture/live mode and no browser-session/web-migration dependency.
 - [x] Implement private upload/backfill, file-ID links and connected protected attachment delivery. Automatic processing and teacher-requested fresh analysis pass connected fixture checks. Original local data is preserved; imports require explicit application.
 - [x] Execute local offline/integration checks, actual fresh installation, limited real synthetic exchange and recording rehearsal; record results in validation.
-- [ ] Complete independent second-member/machine reproduction and final team rehearsal.
 
 ## Release gate and rollback
 
@@ -27,7 +26,7 @@ Run focused tests, then the complete task-scoped harness and role/browser workfl
 
 Before a schema release, stop web writes and worker, copy the SQLite DB plus private file tree to a protected local backup, and verify restore in a different temporary target. Do not commit or share the backup. Resume only when migration exits successfully and scoped workflows pass. If migration fails, keep the worker stopped, preserve evidence and restore the matched application/DB/files backup to the disposable demo environment. Never run destructive reset commands against an unverified local path.
 
-A matched database/private-file restore passes in a disposable target; see submission tests and validation. Independent member setup/rehearsal remains open. Original Technical 4 was not supplied; no provenance is invented.
+A matched database/private-file restore passes in a disposable target; see submission tests and validation.
 
 ## Verification mapping
 

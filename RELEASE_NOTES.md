@@ -1,3 +1,5 @@
+> Historical upstream Doodle documentation, preserved for attribution and release history. For current LMSTotal features, supported setup and verification, see the [README](README.md).
+
 # doodle v0.2-beta — Security hardening + 11 new features
 
 The second beta of **doodle** — your open-source LMS with built-in AI. By **Death Legion Team**. GPL-3.0. PHP 8+.

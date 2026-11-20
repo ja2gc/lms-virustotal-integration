@@ -4,7 +4,7 @@
 
 Extend Doodle with a durable, advisory scanning workflow while preserving submission and grading behavior. Four students share one repository. The agreed demo runs locally. PHP views, vanilla CSS/JavaScript, PDO and the existing auth model remain the baseline. Use PHP 8.3 and SQLite for the assessed local target; MySQL support is not claimed until separately exercised.
 
-This document describes the architecture; the team record distinguishes implemented components from remaining acceptance gates. See [baseline audit](final-project/step-c-performance-reliability-security-validation.md#baseline-verification) for inspected behavior and [scope](SRS.md) for requirements.
+This document describes the architecture; the team record summarizes delivered contributions and validation records the scope of executed checks. See [baseline audit](final-project/step-c-performance-reliability-security-validation.md#baseline-verification) for inspected behavior and [scope](SRS.md) for requirements.
 
 The [supported action matrix](SRS.md#cleanup-action-matrix) defines the public pages/routes. Assignment grading and student feedback are separate from file security advisories.
 
@@ -83,7 +83,7 @@ Before a scan-start POST, persist an in-flight marker. If the worker crashes wit
 | D01 | Doodle; one app with worker; localhost | Coordinator selections. Deployment and schema complexity fit a four-person course project. |
 | D02 | Database-backed attempts and expiring leases | Implemented durable due-work queries and short SQLite transactions support restart recovery. |
 | D03 | Keep Technical 3 advisory meanings and separate job state from verdict | Earlier Technical 2 grouped suspicious findings with malicious and mixed processing labels with conclusions. |
-| D04 | Preserve the narrow Technical 3 result interface; host owns start/upload/retry/persistence | Reuse without coupling the component to LMS sessions or SQL. PHP source and original transcript still need reconciliation. |
+| D04 | Preserve the narrow Technical 3 result interface; host owns start/upload/retry/persistence | Reuse without coupling the component to LMS sessions or SQL. |
 | D05 | Hash lookup never masquerades as a new analysis | Known hash uses explicit re-analysis; absent hash uploads the synthetic file. Always persist the returned analysis ID. Verify account capability in a limited live smoke check. |
 | D06 | Private revision storage and an authorized download endpoint | Upstream public URLs bypass the intended per-submission access boundary. |
 | D07 | Synthetic data only; no production school rollout | External data-sharing restrictions and course demonstration scope. |
@@ -100,4 +100,4 @@ Builders may choose internal SQL/query organization and test harness details con
 
 The built system uses the selected single PHP application, SQLite revision/attempt repository, private storage and CLI worker. `ScanSubmissionService` commits uploads before asynchronous work; `ScanWorker` routes both origins through the shared adapter/result processor. Status polling and private downloads use authenticated existing routes. No queue broker, frontend framework, microservice, container or additional provider was introduced.
 
-The reserved fixture analysis-handle namespace supplies durable demo provenance without a schema rewrite. Conservative engine classification and the explicit migration/version-1 schema remain unchanged. Existing private bytes are retained after metadata deletion for reviewed operator cleanup. Read-only reviews and connected fixture checks verify the implemented boundaries; live, performance and remaining human acceptance are separately recorded in validation.
+The reserved fixture analysis-handle namespace supplies durable demo provenance without a schema rewrite. Conservative engine classification and the explicit migration/version-1 schema remain unchanged. Existing private bytes are retained after metadata deletion for reviewed operator cleanup. Read-only reviews and connected fixture checks verify the implemented boundaries; live and performance evidence are separately recorded in validation.

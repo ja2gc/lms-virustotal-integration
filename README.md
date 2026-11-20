@@ -62,7 +62,7 @@ node tests/service-worker.test.cjs
 node tests/scan-status.test.cjs
 ```
 
-Tests use disposable databases/private files. [Validation](docs/final-project/step-c-performance-reliability-security-validation.md) records measured results and remaining acceptance gates. Small sanitized `evidence/` records support validation; generated diagnostics, recordings, databases and private files belong in ignored local folders.
+Tests use disposable databases/private files. [Validation](docs/final-project/step-c-performance-reliability-security-validation.md) records measured results and verification scope. Small sanitized `evidence/` records support validation; generated diagnostics, recordings, databases and private files belong in ignored local folders.
 
 ## Project documents
 
@@ -70,7 +70,7 @@ Tests use disposable databases/private files. [Validation](docs/final-project/st
 | --- | --- |
 | [Requirements](docs/SRS.md) | Scope, behavior and acceptance criteria |
 | [Architecture](docs/architecture.md), [data model](docs/data-model.md), [integration contracts](docs/integrations.md) | Components, persistence and provider/HTTP semantics |
-| [Engineering](docs/engineering.md), [team record](docs/team-plan.md), [demo/UAT guide](docs/demo-manual.md) | Development, ownership, verification and demonstration |
+| [Engineering](docs/engineering.md), [team record](docs/team-plan.md), [demo/UAT guide](docs/demo-manual.md) | Development, delivered contributions, verification and demonstration |
 | [A — System delivery](docs/final-project/step-a-working-integrated-system.md) | Local setup, configuration and recovery |
 | [B — Integration design](docs/final-project/step-b-integration-documentation.md) | Boundaries and reusable component |
 | [C — Validation](docs/final-project/step-c-performance-reliability-security-validation.md) | Performance, reliability and security |

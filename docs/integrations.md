@@ -1,6 +1,6 @@
 # Integration register and contracts
 
-Shared contracts describe the integrated boundaries; the team plan records current completion. `index.php?r=...` matches Doodle's existing router style; do not invent a separate `/api/v1` gateway for this project. Current session login is reused for the scoped browser routes. Public routing must use an explicit safe action set and correct HTTP methods.
+Shared contracts describe the integrated boundaries; the team record summarizes delivered contributions. `index.php?r=...` matches Doodle's existing router style; do not invent a separate `/api/v1` gateway for this project. Current session login is reused for the scoped browser routes. Public routing must use an explicit safe action set and correct HTTP methods.
 
 ## Integration-point register
 
@@ -86,7 +86,7 @@ Status JSON v1 contains `contractVersion`, `submissionId`, nullable `fileId`, nu
 
 ### Shared host repository contract
 
-**P1a implementation handoff:** Member 4 owns scan schema/repository/bootstrap; Member 4 maintains the integrated upload/storage/backfill implementation. Current publication/readiness is recorded in the team plan. Requiring `app/scan/bootstrap.php` loads classes only: no configuration, sessions, database connection, migration or processing side effect. Run `php bin/migrate.php` explicitly against an installed SQLite baseline; it is repeatable and does not import legacy files. MySQL scan migrations are not supported by the tested runtime.
+**P1a implementation handoff:** Member 4 owns scan schema/repository/bootstrap; Member 4 maintains the integrated upload/storage/backfill implementation. Executed checks are recorded in the validation guide. Requiring `app/scan/bootstrap.php` loads classes only: no configuration, sessions, database connection, migration or processing side effect. Run `php bin/migrate.php` explicitly against an installed SQLite baseline; it is repeatable and does not import legacy files. MySQL scan migrations are not supported by the tested runtime.
 
 Local configuration: entry points require `config/config.php`, which loads the ignored root `.env`. The worker entry point reads `getenv('VT_API_KEY')` and `getenv('SCAN_MODE')` when constructing the adapter/worker; do not add a second dotenv parser or expose the key through an endpoint. Existing process values win. Offline tests force fixture mode and do not inherit the developer's API key. README owns the setup instructions; configuring a key does not certify live processing.
 

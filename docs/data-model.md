@@ -1,6 +1,6 @@
 # Data model and states
 
-The schema/repository and private storage/backfill are implemented; the team record tracks verification. Existing local databases are upgraded only through the explicit migration command. Reuse existing users, courses, assignments and submissions. Keep `submissions.status` for the existing academic workflow (`submitted` / `graded`); never write a scan verdict into it.
+The schema/repository and private storage/backfill are implemented; the validation guide records executed checks. Existing local databases are upgraded only through the explicit migration command. Reuse existing users, courses, assignments and submissions. Keep `submissions.status` for the existing academic workflow (`submitted` / `graded`); never write a scan verdict into it.
 
 Member 4 maintains the integrated scan migrations, storage service and submission/revision/attempt repository. Consumers use the [shared host repository contract](integrations.md#shared-host-repository-contract); it maps stored snake_case to published camelCase. Scanning owns provider-budget access to the separately defined singleton. Existing schema history is preserved.
 

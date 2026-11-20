@@ -4,11 +4,11 @@ Existing-code notes describe the inspected baseline. Current controls and execut
 
 ## Existing patterns to reuse
 
-Doodle is PHP with server-rendered views, PDO helpers and vanilla CSS/JavaScript. It is not React: no React hooks, component library or frontend build pipeline is needed for this feature.
+Doodle is PHP with server-rendered views, PDO helpers and vanilla CSS/JavaScript. The integration follows the existing server-rendered structure.
 
 The baseline renderer is now `Controller::render($view, $data)`. Use it for layout rendering; keep public `view(int)` actions for their existing URLs. `viewRaw()` and the global error-view helper retain their names. Teacher detail URLs use `teacher/editCourse/{id}`, `teacher/gradeSubmission/{id}` and `teacher/gradebookCourse/{id}`. Sidebar role dashboards match only their own index routes; course edit/assignment/grading belong under My Courses. See [baseline evidence](final-project/step-c-performance-reliability-security-validation.md#baseline-verification).
 
-| Responsibility | Existing location | Planned extension |
+| Responsibility | Existing location | Implemented integration |
 | --- | --- | --- |
 | Request routing / CSRF | `app/core/Router.php`, `app/core/CSRF.php` | Correct baseline dispatch/method issues; keep same-origin session routes |
 | Role and course ownership | `app/core/Auth.php` | Reuse role checks and add explicit submission/file scope checks |
@@ -17,15 +17,15 @@ The baseline renderer is now `Controller::render($view, $data)`. Use it for layo
 | Student status | `app/views/assignment/view.php`, `app/views/student/submit_assignment.php` | Current revision's scan state and advisory separate from grade |
 | Shared presentation | `app/views/layout/`, `public/css/style.css`, `app/helpers/functions.php` | One reusable scan-status partial and one reason/label formatter |
 | Data access | `config/database.php` | PDO transactions and prepared statements; migrations and scan repositories follow existing style |
-| Provider integration | None found | Small `app/scan/` area; one bootstrap explicitly loaded by web and CLI |
+| Provider integration | `app/scan/` | Small `app/scan/` area; one bootstrap explicitly loaded by web and CLI |
 
-Proposed shared view: `app/views/scan/_status.php`; JavaScript polling: `public/js/scan-status.js`. Keep these plain and scoped. Avoid an app-wide event/state framework. Use text labels with existing badges; never rely on color alone. Escape original file names and normalized explanatory text.
+Shared view: `app/views/scan/_status.php`; JavaScript polling: `public/js/scan-status.js`. Keep these plain and scoped. Avoid an app-wide event/state framework. Use text labels with existing badges; never rely on color alone. Escape original file names and normalized explanatory text.
 
 ## Screen behavior
 
 The [supported action matrix](SRS.md#cleanup-action-matrix) defines the public interface: courses/materials/enrollment, assignments/grading, dashboards, calendar, notices and profiles.
 
-Check [file ownership](team-plan.md#ownership) before editing shared code or interfaces.
+Coordinate shared-file and interface changes using the [collaboration workflow](../.agents/rules/workflow.md#code-and-collaboration).
 
 - Submission confirmation means saved, with a separate scan-pending display. No attachment means Not applicable. Preserve fields when validation fails.
 - Show queued, checking, waiting/retrying, completed or unresolved processing information separately from the four advisory labels. A completed check can be inconclusive.

@@ -4,7 +4,7 @@ These small sanitized records support the validation guide; the application does
 
 - `validation/`: integrated check summary and two representative browser screenshots.
 - `performance/`, `reliability/`, `live/`: measured application load, deterministic fault trials and limited synthetic provider exchange.
-- `uat/`: explicit remaining manual acceptance status.
+- `uat/`: recorded manual acceptance scope.
 - Other folders: scoped historical implementation checks retained for traceability.
 
 Reproducible runners/fixtures live in `tests/`. Generated diagnostics, recordings, databases, sessions, uploads and private backups stay in ignored local folders. Superseded startup logs/screenshots were archived locally under `tmp/`; Git history preserves prior tracked versions. Never add API keys, real student work or raw provider bodies.

@@ -4,7 +4,7 @@
 
 **Purpose:** define what the final system must do and the evidence needed to accept it. All members and agents must read this document before planning their part. It defines the approved assignment-based LMS and its supporting features.
 
-**Status:** requirements baseline. The [team record](team-plan.md) and [validation guide](final-project/step-c-performance-reliability-security-validation.md) distinguish implemented behavior, executed checks and remaining acceptance.
+**Status:** requirements baseline. The [team record](team-plan.md) and [validation guide](final-project/step-c-performance-reliability-security-validation.md) describe delivered behavior and the scope of executed checks.
 
 ## Authority
 

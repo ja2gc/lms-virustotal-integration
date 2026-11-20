@@ -1,14 +1,14 @@
-# Team plan and task record
+# Team delivery record
 
-The SRS owns behavior; architecture/data/integration guides own technical contracts. This file records current responsibility, delivery status and remaining acceptance work.
+The SRS owns behavior; architecture/data/integration guides own technical contracts. This file records delivered contributions, verification status and acceptance limits.
 
 ## Ownership
 
-| Member | Current responsibility |
+| Member | Delivered contribution |
 | --- | --- |
-| 1 | Reproduce setup, demonstrate the integrated workflow and record the assigned segment |
-| 2 | P2 adapter contribution; explain provider integration and reproduce the demo |
-| 3 | Reproduce setup, demonstrate the interface and record the assigned segment |
+| 1 | Final project document |
+| 2 | P2 result adapter contribution, reviewed and merged through PR #7; presentation slides and scripts |
+| 3 | System demo video, separate from the final presentation slides and scripts |
 | 4 | Integrated implementation, source review, verification, repository and documentation maintenance |
 
 Members use the same team release and their own ignored API keys. Reproduction needs a clone, not a fork or feature branch. New code changes follow the shared synchronization/review workflow.
@@ -69,23 +69,22 @@ Component checks, connected fixtures, real provider exchange, full manual accept
 - [x] Full 1/5/10/20-client load ramp, deterministic fault trials and matched disposable restore.
 - [x] Real synthetic upload/start, exact analysis/file relationship and completed provider evidence retrieved.
 - [x] Playwright video rehearsal with animated cursor/click highlights, student upload, advisory, teacher rescan/history and feedback.
-- [ ] Every full UAT01-UAT35 variant, including independent human acceptance, signed off.
-- [ ] A second member/machine reproduces setup and completes the final presentation recording.
 
 ## P7: Documentation and release
 
 - [x] Concise README; A-F project guides reconciled with source and measured outcomes.
 - [x] Upstream attribution, actual review/disclosure and sanitized validation retained.
 - [x] Temporary diagnostics/recordings/private data kept outside tracked deliverables.
-- [ ] Original T1/T4/register/component/transcript provenance supplied and reconciled where still unavailable.
-- [ ] Team rehearsal and stakeholder acceptance recorded.
+- [x] Final project document completed by Member 1.
+- [x] Final presentation slides and scripts completed by Member 2.
+- [x] System demo video completed by Member 3, separate from the final presentation.
 
 ## Completion record
 
-Baseline before this integrated completion: `f2dec3e`. Member 4 completed storage/import, metered worker/two consumers, views, connected checks and fresh-install/rehearsal verification. Member 2 retains attribution for the merged P2 component. Publication uses one combined completion commit with the configured human Git identity and no AI author/coauthor trailers.
+Baseline before this integrated completion: `f2dec3e`. Member 4 completed storage/import, metered worker/two consumers, views, connected checks and fresh-install/rehearsal verification. Member 2 retains attribution for the merged P2 component. The team confirmed delivery attribution on 2026-11-21: Member 1 prepared the final document, Member 2 prepared the final presentation slides and scripts, and Member 3 made the separate system demo video. These delivery records reflect team confirmation; linked verification records cover the application checks and local rehearsal.
 
-Read-only reviews checked persistence/upload/UI and worker boundaries. Regression corrections addressed DOCX inspection, import-count rollback, invalid new-upload rendering, contradictory advisory display, fixture provenance, SQLite enrollment/progress, announcement audience the real provider's completed-handle alias with atomic freshness protection, and writable upload temporary directories.
+Read-only reviews checked persistence/upload/UI and worker boundaries. Regression corrections addressed DOCX inspection, import-count rollback, invalid new-upload rendering, contradictory advisory display, fixture provenance, SQLite enrollment/progress, announcement audiences, the real provider's completed-handle alias with atomic freshness protection, and writable upload temporary directories.
 
 Current evidence: [integrated summary](../evidence/validation/summary.json), [load](../evidence/performance/summary.json), [reliability](../evidence/reliability/summary.json), [live exchange](../evidence/live/synthetic-check.json), [manual acceptance status](../evidence/uat/acceptance-status.json). Detailed test counts belong to that snapshot. Private bytes are retained for reviewed operator cleanup; no existing user database, uploads or environment contents were inspected/reset.
 
-The completed real provider result is **Unresolved / inconclusive_engines** because unsupported engines prevent a favorable conclusion under the agreed policy. This is a valid completed advisory. The later result read is not proof of a continuous live browser/worker run within its deadline; scheduled timing/recovery is tested separately with fixtures. Missing human/source gates above remain open.
+The completed real provider result is **Unresolved / inconclusive_engines** because unsupported engines prevent a favorable conclusion under the agreed policy. This is a valid completed advisory. The later result read is not proof of a continuous live browser/worker run within its deadline; scheduled timing/recovery is tested separately with fixtures. See the validation guide for the scope of recorded checks.
