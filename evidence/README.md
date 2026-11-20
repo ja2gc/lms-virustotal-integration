@@ -7,4 +7,4 @@ These small sanitized records support the validation guide; the application does
 - `uat/`: recorded manual acceptance scope.
 - Other folders: scoped historical implementation checks retained for traceability.
 
-Reproducible runners/fixtures live in `tests/`. Generated diagnostics, recordings, databases, sessions, uploads and private backups stay in ignored local folders. Superseded startup logs/screenshots were archived locally under `tmp/`; Git history preserves prior tracked versions. Never add API keys, real student work or raw provider bodies.
+Reproducible runners/fixtures live in `tests/`. The published [system demo](../docs/demo/lmstotal-final-demo.mp4) is a presentation artifact, separate from verification results. Generated diagnostics, rehearsal recordings, databases, sessions, uploads and private backups stay in ignored local folders. Superseded startup logs/screenshots were archived locally under `tmp/`; Git history preserves prior tracked versions. Never add API keys, real student work or raw provider bodies.

@@ -8,7 +8,7 @@ The SRS owns behavior; architecture/data/integration guides own technical contra
 | --- | --- |
 | 1 | Final project document |
 | 2 | P2 result adapter contribution, reviewed and merged through PR #7; presentation slides and scripts |
-| 3 | System demo video, separate from the final presentation slides and scripts |
+| 3 | [System demo video](demo/lmstotal-final-demo.mp4), separate from the final presentation slides and scripts |
 | 4 | Integrated implementation, source review, verification, repository and documentation maintenance |
 
 Members use the same team release and their own ignored API keys. Reproduction needs a clone, not a fork or feature branch. New code changes follow the shared synchronization/review workflow.

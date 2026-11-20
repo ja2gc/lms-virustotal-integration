@@ -6,6 +6,10 @@ An assignment-focused LMS extending [Doodle](https://github.com/deathlegionteaml
 
 Advisories are **Flagged**, **Review Recommended**, **No Detections Reported**, or **Unresolved**. They do not guarantee a file is safe. Use fictional accounts and synthetic files for this local demonstration.
 
+## System demo
+
+[Watch or download the system demo](docs/demo/lmstotal-final-demo.mp4) (MP4, approximately 13 MB), prepared by Member 3.
+
 ## Run the current LMS on localhost
 
 Requirements: Git, PHP 8.3 with extensions in [runtime-requirements.json](runtime-requirements.json), and SQLite. Node.js is optional for JavaScript checks and browser recording.
