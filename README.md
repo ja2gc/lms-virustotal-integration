@@ -8,7 +8,7 @@ Advisories are **Flagged**, **Review Recommended**, **No Detections Reported**, 
 
 ## System demo
 
-[Watch or download the system demo](docs/demo/lmstotal-final-demo.mp4) (MP4, approximately 13 MB), prepared by Member 3.
+[Download the system demo](https://github.com/ja2gc/lms-virustotal-integration/raw/refs/heads/main/docs/demo/lmstotal-final-demo.mp4) (MP4, approximately 13 MB), prepared by Member 3.
 
 ## Run the current LMS on localhost
 
